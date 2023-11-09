@@ -7,6 +7,12 @@ public class InputManager : GameControls.IPlayerActions
     public Vector2 Move;
     public Vector2 Look;
 
+    // Button
+    public bool Jump;
+
+    //Pass Through
+    public bool Sprint;
+
     public bool CursorLocked { get; private set; } = true;
 
     private GameControls _controls;
@@ -37,7 +43,7 @@ public class InputManager : GameControls.IPlayerActions
 
     public void ResetActions()
     {
-        
+        _controls.Player.Jump.Reset();
     }
 
     public void Clear()
@@ -60,6 +66,16 @@ public class InputManager : GameControls.IPlayerActions
         {
             Look = Vector2.zero;
         }
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        Jump = context.ReadValueAsButton();
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        Sprint = context.ReadValueAsButton();
     }
 
     private void SetCursorState(bool newState)
