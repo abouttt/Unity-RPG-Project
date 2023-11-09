@@ -8,3 +8,10 @@ public enum UIType
     Popup,
     Top = 1000,
 }
+
+public enum SoundType
+{
+    Bgm,
+    Effect,
+    UI,
+}
