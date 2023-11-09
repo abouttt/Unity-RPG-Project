@@ -15,3 +15,18 @@ public enum SoundType
     Effect,
     UI,
 }
+
+public enum AddressableLabel
+{
+    Default,
+    Game,
+}
+
+public enum SceneType
+{
+    Unknown,
+    MainMenuScene,
+    LoadingScene,
+    VillageScene,
+    DungeonScene,
+}
