@@ -78,6 +78,21 @@ public class InputManager : GameControls.IPlayerActions
         Sprint = context.ReadValueAsButton();
     }
 
+    public void OnCursorToggle(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+        {
+            return;
+        }
+
+        if (Managers.UI.IsOnSelfishPopup)
+        {
+            return;
+        }
+
+        ToggleCursor(CursorLocked);
+    }
+
     private void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;

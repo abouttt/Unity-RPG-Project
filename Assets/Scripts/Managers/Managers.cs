@@ -19,6 +19,13 @@ public class Managers : Singleton<Managers>
     private readonly SoundManager _sound = new();
     private readonly UIManager _ui = new();
 
+    private readonly WaitForEndOfFrame _waitForEndOfFrame = new();
+
+    private void Start()
+    {
+        StartCoroutine(EndOfFrame());
+    }
+
     public static void Init()
     {
         if (s_isInit)
@@ -48,6 +55,19 @@ public class Managers : Singleton<Managers>
         UI.Clear();
 
         s_isInit = false;
+    }
+
+    private IEnumerator EndOfFrame()
+    {
+        while (true)
+        {
+            yield return _waitForEndOfFrame;
+
+            if (s_isInit)
+            {
+                _input.ResetActions();
+            }
+        }
     }
 
     private void OnApplicationQuit()
