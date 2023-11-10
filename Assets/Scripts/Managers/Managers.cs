@@ -10,6 +10,8 @@ public class Managers : Singleton<Managers>
     public static SoundManager Sound => GetInstance._sound;
     public static UIManager UI => GetInstance._ui;
 
+    private static bool s_isInit = false;
+
     private readonly InputManager _input = new();
     private readonly PoolManager _pool = new();
     private readonly ResourceManager _resource = new();
@@ -19,19 +21,33 @@ public class Managers : Singleton<Managers>
 
     public static void Init()
     {
+        if (s_isInit)
+        {
+            Clear();
+        }
+
         Input.Init();
         Pool.Init();
         Sound.Init();
         UI.Init();
+
+        s_isInit = true;
     }
 
     public static void Clear()
     {
+        if (!s_isInit)
+        {
+            return;
+        }
+
         Input.Clear();
         Pool.Clear();
         Resource.Clear();
         Sound.Clear();
         UI.Clear();
+
+        s_isInit = false;
     }
 
     private void OnApplicationQuit()
