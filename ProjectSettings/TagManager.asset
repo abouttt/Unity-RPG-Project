@@ -11,11 +11,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Ignore Camera Collision
+  - Obstacle
+  - LockOnTarget
+  - Monster
   - 
   - 
   - 

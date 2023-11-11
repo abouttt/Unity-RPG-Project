@@ -9,6 +9,7 @@ public class InputManager : GameControls.IPlayerActions
 
     // Button
     public bool Jump;
+    public bool LockOn;
 
     //Pass Through
     public bool Sprint;
@@ -44,6 +45,7 @@ public class InputManager : GameControls.IPlayerActions
     public void ResetActions()
     {
         _controls.Player.Jump.Reset();
+        _controls.Player.LockOn.Reset();
     }
 
     public void Clear()
@@ -91,6 +93,14 @@ public class InputManager : GameControls.IPlayerActions
         }
 
         ToggleCursor(CursorLocked);
+    }
+
+    public void OnLockOn(InputAction.CallbackContext context)
+    {
+        if (CursorLocked)
+        {
+            LockOn = context.ReadValueAsButton();
+        }
     }
 
     private void SetCursorState(bool newState)

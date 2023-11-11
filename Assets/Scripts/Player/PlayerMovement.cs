@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool _isJumpLand;
     private bool _isGrounded;
+    private bool _isPrevLockOn;
 
     private CharacterController _controller;
 
@@ -173,9 +174,39 @@ public class PlayerMovement : MonoBehaviour
             _lockOffRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
         }
 
+        if (Player.Camera.IsLockOn)
+        {
+            if (!_isPrevLockOn)
+            {
+                _lockOnRotation = _lockOffRotation;
+                _isPrevLockOn = true;
+            }
+
+            if (!Managers.Input.Sprint && !IsJumping)
+            {
+                if (Managers.Input.Move != Vector2.zero)
+                {
+                    Vector3 dir = Player.Camera.LockOnTarget.transform.position - transform.position;
+                    _lockOnRotation = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                }
+            }
+            else
+            {
+                _lockOnRotation = _lockOffRotation;
+            }
+        }
+        else
+        {
+            if (_isPrevLockOn)
+            {
+                _lockOffRotation = _lockOnRotation;
+                _isPrevLockOn = false;
+            }
+        }
+
         // 회전.
-        //float finalTargetRotation = Player.Camera.IsLockOn ? _lockOnRotation : _lockOffRotation;
-        var rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _lockOffRotation, ref _rotationVelocity, RotationSmoothTime);
+        float finalTargetRotation = Player.Camera.IsLockOn ? _lockOnRotation : _lockOffRotation;
+        var rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, finalTargetRotation, ref _rotationVelocity, RotationSmoothTime);
         transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 
         // 움직임.
