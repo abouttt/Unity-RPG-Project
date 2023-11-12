@@ -6,6 +6,7 @@ public class MainMenuScene : BaseScene
     {
         base.Init();
 
+        Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
         Managers.Input.ToggleCursor(true);
     }
 }

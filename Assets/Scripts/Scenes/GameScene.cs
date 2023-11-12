@@ -23,6 +23,7 @@ public class GameScene : BaseScene
         InitPlayer();
         InitUI();
 
+        Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
         Managers.Input.ToggleCursor(false);
     }
 

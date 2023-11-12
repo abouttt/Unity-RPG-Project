@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 054719af473341d4481bd12cbd657cbb, type: 3}
   m_Name: LoadSetting
   m_EditorClassIdentifier: 
-  <DefaultPrefabs>k__BackingField: []
+  <DefaultPrefabs>k__BackingField:
+  - {fileID: 1230225493840174317, guid: a540f529dc365334e964d4ba1c7fa1c2, type: 3}
   <LoadResourceLabels>k__BackingField:
     _serializedList:
     - Key: 1

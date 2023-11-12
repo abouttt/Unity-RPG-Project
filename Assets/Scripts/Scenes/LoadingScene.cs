@@ -13,8 +13,7 @@ public class LoadingScene : BaseScene
     protected override void Init()
     {
         base.Init();
-
-        //Managers.UI.Get<UI_TopCanvas>().ActiveFalseInitBG();
+        Managers.UI.Get<UI_TopCanvas>().ActiveFalseInitBG();
     }
 
     private void Start()
