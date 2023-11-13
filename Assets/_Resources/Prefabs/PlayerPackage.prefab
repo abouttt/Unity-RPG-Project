@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 1466335506153813565}
   - component: {fileID: 1466335506153813564}
   - component: {fileID: 1466335506153813537}
+  - component: {fileID: 3044611854374840128}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -173,6 +174,32 @@ MonoBehaviour:
   _stateDrivenCameraAnimator: {fileID: 1466335506231219131}
   _followCamera: {fileID: 1466335506189952439}
   _targetCamera: {fileID: 1466335506426504036}
+--- !u!114 &3044611854374840128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466335506153813543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc02d547e4c059044a4922d9829cf92d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inventories:
+    _serializedList:
+    - Key: 0
+      Value:
+        Capacity: 30
+        Count: 0
+    - Key: 1
+      Value:
+        Capacity: 30
+        Count: 0
+    - Key: 2
+      Value:
+        Capacity: 30
+        Count: 0
 --- !u!1 &1466335506189952438
 GameObject:
   m_ObjectHideFlags: 0

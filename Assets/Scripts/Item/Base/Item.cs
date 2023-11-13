@@ -4,8 +4,8 @@ using UnityEngine;
 public abstract class Item
 {
     public ItemData Data { get; private set; }
-    public event Action ItemChanged;
     public bool IsDestroyed { get; private set; } = false;
+    public event Action ItemChanged;
 
     public Item(ItemData data)
     {
