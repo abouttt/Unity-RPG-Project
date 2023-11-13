@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Managers : Singleton<Managers>
 {
+    public static CooldownManager Cooldown => GetInstance._cooldown;
     public static InputManager Input => GetInstance._input;
     public static PoolManager Pool => GetInstance._pool;
     public static ResourceManager Resource => GetInstance._resource;
@@ -12,6 +13,7 @@ public class Managers : Singleton<Managers>
 
     private static bool s_isInit = false;
 
+    private readonly CooldownManager _cooldown = new();
     private readonly InputManager _input = new();
     private readonly PoolManager _pool = new();
     private readonly ResourceManager _resource = new();
@@ -24,6 +26,11 @@ public class Managers : Singleton<Managers>
     private void Start()
     {
         StartCoroutine(EndOfFrame());
+    }
+
+    private void LateUpdate()
+    {
+        _cooldown.LateUpdate();
     }
 
     public static void Init()
@@ -48,6 +55,7 @@ public class Managers : Singleton<Managers>
             return;
         }
 
+        Cooldown.Clear();
         Input.Clear();
         Pool.Clear();
         Resource.Clear();
