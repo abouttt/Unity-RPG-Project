@@ -9,6 +9,8 @@ public class ConsumableItemData : CountableItemData, ICooldownable
 
     [field: SerializeField]
     public string ItemClassName { get; private set; }
+
+    [field: SerializeField]
     public Cooldown Cooldown { get; set; }
 
     public ConsumableItemData()

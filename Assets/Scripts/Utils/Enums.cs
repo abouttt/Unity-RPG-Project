@@ -1,4 +1,14 @@
 
+public enum SlotType
+{
+    Item,
+    Equipment,
+    Skill,
+    Quick,
+    Shop,
+    QuestReward,
+}
+
 public enum ItemType
 {
     Equipment,

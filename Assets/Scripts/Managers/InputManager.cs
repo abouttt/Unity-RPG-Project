@@ -103,8 +103,45 @@ public class InputManager : GameControls.IPlayerActions
         }
     }
 
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+        {
+            return;
+        }
+
+        if (Managers.UI.ActivePopupCount > 0)
+        {
+            Managers.UI.CloseTopPopup();
+        }
+        else
+        {
+            //Managers.UI.Show<UI_GameMenuPopup>();
+        }
+    }
+
+    public void OnItemInventory(InputAction.CallbackContext context)
+    {
+        ShowOrClosePopup<UI_ItemInventoryPopup>(context);
+    }
+
     private void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
+    private void ShowOrClosePopup<T>(InputAction.CallbackContext context) where T : UI_Popup
+    {
+        if (!context.performed)
+        {
+            return;
+        }
+
+        if (Managers.UI.IsOn<UI_ItemSplitPopup>())
+        {
+            return;
+        }
+
+        Managers.UI.ShowOrClose<T>();
     }
 }

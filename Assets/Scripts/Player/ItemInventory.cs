@@ -31,7 +31,7 @@ public class ItemInventory : MonoBehaviour
         }
     }
 
-    public int Additem(ItemData itemData, int count = 1)
+    public int AddItem(ItemData itemData, int count = 1)
     {
         Debug.Assert(count > 0, "[ItemInventory/AddItem] count must be > 0");
 

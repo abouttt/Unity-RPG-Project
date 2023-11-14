@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afce8032c6a48704183c8ef94e0caca2, type: 3}
+  m_Name: Item_Equipment_Axe
+  m_EditorClassIdentifier: 
+  <ItemID>k__BackingField: EQUIPMENT_AXE
+  <ItemName>k__BackingField: "\uB3C4\uB07C"
+  <ItemImage>k__BackingField: {fileID: 21300000, guid: 6a20f4dbf06be284e860c0bf6799923a, type: 3}
+  <ItemQuality>k__BackingField: 1
+  <Description>k__BackingField: "\uD3C9\uBC94\uD55C \uB3C4\uB07C\uB2E4"
+  <LimitLevel>k__BackingField: 1
+  <Price>k__BackingField: 900
+  <EquipmentType>k__BackingField: 4
+  <ItemPrefab>k__BackingField: {fileID: 197142, guid: eca7ededb3db2234c90bef2213ce5799, type: 3}
+  <HP>k__BackingField: 0
+  <MP>k__BackingField: 0
+  <SP>k__BackingField: 0
+  <Damage>k__BackingField: 10
+  <Defense>k__BackingField: 0
+  <AttackRadius>k__BackingField: 1

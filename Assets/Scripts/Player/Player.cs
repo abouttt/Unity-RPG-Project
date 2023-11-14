@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
     public static Animator Animator { get; private set; }
     public static PlayerMovement Movement { get; private set; }
     public static PlayerCameraController Camera { get; private set; }
+    public static ItemInventory ItemInventory { get; private set; }
 
     private void Awake()
     {
@@ -13,5 +14,6 @@ public class Player : MonoBehaviour
         Animator = GetComponent<Animator>();
         Movement = GetComponent<PlayerMovement>();
         Camera = GetComponent<PlayerCameraController>();
+        ItemInventory = GetComponent<ItemInventory>();
     }
 }

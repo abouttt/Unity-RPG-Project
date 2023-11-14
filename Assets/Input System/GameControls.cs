@@ -80,6 +80,24 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""760664a7-dbf4-4838-912a-8e7e39bc0172"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ItemInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""e564f4b7-e840-4692-ae12-5602ef2f686f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -192,6 +210,28 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""action"": ""LockOn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54b3aacb-6344-438b-b719-da7071ed8a40"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard/Mouse"",
+                    ""action"": ""ItemInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d76953dd-725f-4856-9e5e-462a806bb9f2"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard/Mouse"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -223,6 +263,8 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_CursorToggle = m_Player.FindAction("CursorToggle", throwIfNotFound: true);
         m_Player_LockOn = m_Player.FindAction("LockOn", throwIfNotFound: true);
+        m_Player_Cancel = m_Player.FindAction("Cancel", throwIfNotFound: true);
+        m_Player_ItemInventory = m_Player.FindAction("ItemInventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -290,6 +332,8 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_CursorToggle;
     private readonly InputAction m_Player_LockOn;
+    private readonly InputAction m_Player_Cancel;
+    private readonly InputAction m_Player_ItemInventory;
     public struct PlayerActions
     {
         private @GameControls m_Wrapper;
@@ -300,6 +344,8 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @CursorToggle => m_Wrapper.m_Player_CursorToggle;
         public InputAction @LockOn => m_Wrapper.m_Player_LockOn;
+        public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
+        public InputAction @ItemInventory => m_Wrapper.m_Player_ItemInventory;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -327,6 +373,12 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @LockOn.started += instance.OnLockOn;
             @LockOn.performed += instance.OnLockOn;
             @LockOn.canceled += instance.OnLockOn;
+            @Cancel.started += instance.OnCancel;
+            @Cancel.performed += instance.OnCancel;
+            @Cancel.canceled += instance.OnCancel;
+            @ItemInventory.started += instance.OnItemInventory;
+            @ItemInventory.performed += instance.OnItemInventory;
+            @ItemInventory.canceled += instance.OnItemInventory;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -349,6 +401,12 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @LockOn.started -= instance.OnLockOn;
             @LockOn.performed -= instance.OnLockOn;
             @LockOn.canceled -= instance.OnLockOn;
+            @Cancel.started -= instance.OnCancel;
+            @Cancel.performed -= instance.OnCancel;
+            @Cancel.canceled -= instance.OnCancel;
+            @ItemInventory.started -= instance.OnItemInventory;
+            @ItemInventory.performed -= instance.OnItemInventory;
+            @ItemInventory.canceled -= instance.OnItemInventory;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -383,5 +441,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnCursorToggle(InputAction.CallbackContext context);
         void OnLockOn(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
+        void OnItemInventory(InputAction.CallbackContext context);
     }
 }
