@@ -34,7 +34,7 @@ public abstract class ConsumableItem : CountableItem, IUsable
 
         if (IsEmpty)
         {
-            //Player.ItemInventory.RemoveItem(Data.ItemType, Index);
+            Player.ItemInventory.RemoveItem(Data.ItemType, Index);
         }
 
         ConsumableData.Cooldown.OnCooldowned();

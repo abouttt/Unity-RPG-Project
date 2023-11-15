@@ -14,7 +14,7 @@ public class Test : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             foreach (var itemData in ItemDatas)
             {

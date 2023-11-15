@@ -16,7 +16,7 @@ public class BaseScene : MonoBehaviour
     private void Awake()
     {
         Managers.Init();
-        InitDefaultPrefab();
+        InitDefaultPrefabs();
         InitResources(Init);
     }
 
@@ -30,10 +30,10 @@ public class BaseScene : MonoBehaviour
             Managers.Resource.Instantiate("EventSystem");
         }
 
-        InitPrefab();
+        InitPrefabs();
     }
 
-    private void InitDefaultPrefab()
+    private void InitDefaultPrefabs()
     {
         foreach (var prefab in LoadSetting.GetInstance.DefaultPrefabs)
         {
@@ -41,7 +41,7 @@ public class BaseScene : MonoBehaviour
         }
     }
 
-    private void InitPrefab()
+    private void InitPrefabs()
     {
         if (_prefabs != null)
         {

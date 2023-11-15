@@ -34,16 +34,16 @@ public abstract class ItemData : ScriptableObject
             return false;
         }
 
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
         if (GetType() != other.GetType())
         {
             return false;
         }
 
-        return ItemID == other.ItemID;
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return ItemID.Equals(other.ItemID);
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Unity.Collections;
 using AYellowpaper.SerializedCollections;
 
 public class ItemInventory : MonoBehaviour
@@ -48,8 +47,7 @@ public class ItemInventory : MonoBehaviour
         {
             if (countableItemData != null)
             {
-                int sameIndex = GetNoMaxSameCountableItemDataIndex(inventory, countableItemData);
-                if (sameIndex != -1)
+                if (TryGetSameNoMaxCountalbeItemIndex(inventory, countableItemData, out var sameIndex))
                 {
                     var otherItem = inventory.Items[sameIndex] as CountableItem;
                     int prevCount = count;
@@ -58,8 +56,7 @@ public class ItemInventory : MonoBehaviour
                 }
                 else
                 {
-                    int emptyIndex = FindEmptyIndex(itemData.ItemType);
-                    if (emptyIndex != -1)
+                    if (TryGetEmptyIndex(itemData.ItemType, out var emptyIndex))
                     {
                         SetItem(countableItemData, emptyIndex, count);
                         count = Mathf.Clamp(count - countableItemData.MaxCount, 0, countableItemData.MaxCount);
@@ -72,8 +69,7 @@ public class ItemInventory : MonoBehaviour
             }
             else
             {
-                int emptyIndex = FindEmptyIndex(itemData.ItemType);
-                if (emptyIndex != -1)
+                if (TryGetEmptyIndex(itemData.ItemType, out var emptyIndex))
                 {
                     SetItem(itemData, emptyIndex, count);
                     count--;
@@ -106,11 +102,13 @@ public class ItemInventory : MonoBehaviour
         for (int index = 0; index < _inventories[itemType].Items.Count; index++)
         {
             var item = _inventories[itemType].Items[index];
+
             if (item is null)
             {
                 continue;
             }
-            else if (!item.Data.ItemID.Equals(id))
+
+            if (!item.Data.ItemID.Equals(id))
             {
                 continue;
             }
@@ -121,7 +119,6 @@ public class ItemInventory : MonoBehaviour
                 {
                     countableItem.SetCount(countableItem.CurrentCount - count);
                     InventoryChanged?.Invoke(itemType, index);
-                    count = 0;
                     break;
                 }
                 else
@@ -167,7 +164,8 @@ public class ItemInventory : MonoBehaviour
         {
             return;
         }
-        else if (IsNullSlot(itemType, fromIndex) && !IsNullSlot(itemType, toIndex))
+
+        if (IsNullSlot(itemType, fromIndex) && !IsNullSlot(itemType, toIndex))
         {
             return;
         }
@@ -191,6 +189,7 @@ public class ItemInventory : MonoBehaviour
         {
             countableItem.SetCount(nextCount);
             inventory.Items[toIndex] = countableItem.CountableData.CreateItem(count);
+            inventory.Items[toIndex].Index = toIndex;
             inventory.Count++;
         }
 
@@ -227,6 +226,7 @@ public class ItemInventory : MonoBehaviour
             count = 1;
         }
 
+        inventory.Items[index].Index = index;
         InventoryChanged?.Invoke(itemData.ItemType, index);
     }
 
@@ -246,7 +246,8 @@ public class ItemInventory : MonoBehaviour
             {
                 continue;
             }
-            else if (!item.Data.ItemID.Equals(id))
+
+            if (!item.Data.ItemID.Equals(id))
             {
                 continue;
             }
@@ -283,11 +284,13 @@ public class ItemInventory : MonoBehaviour
         {
             return false;
         }
-        else if (!fromItem.Data.Equals(toItem.Data))
+
+        if (!fromItem.Data.Equals(toItem.Data))
         {
             return false;
         }
-        else if (toItem.IsMax)
+
+        if (toItem.IsMax)
         {
             return false;
         }
@@ -316,21 +319,32 @@ public class ItemInventory : MonoBehaviour
         inventory.Count--;
     }
 
-    private int FindEmptyIndex(ItemType itemType)
+    private bool TryGetEmptyIndex(ItemType itemType, out int index)
     {
-        return _inventories[itemType].Items.FindIndex(item => item is null);
+        index = _inventories[itemType].Items.FindIndex(item => item is null);
+        return index != -1;
     }
 
     private void SwapItem(ItemType itemType, int Aindex, int BIndex)
     {
         var inventory = _inventories[itemType];
 
+        if (!IsNullSlot(itemType, Aindex))
+        {
+            inventory.Items[Aindex].Index = BIndex;
+        }
+
+        if (!IsNullSlot(itemType, BIndex))
+        {
+            inventory.Items[BIndex].Index = Aindex;
+        }
+
         (inventory.Items[Aindex], inventory.Items[BIndex]) = (inventory.Items[BIndex], inventory.Items[Aindex]);
     }
 
-    private int GetNoMaxSameCountableItemDataIndex(Inventory inventory, CountableItemData countableItemData)
+    private bool TryGetSameNoMaxCountalbeItemIndex(Inventory inventory, CountableItemData countableItemData, out int index)
     {
-        return inventory.Items.FindIndex(item =>
+        index = inventory.Items.FindIndex(item =>
         {
             if (item is null)
             {
@@ -345,6 +359,8 @@ public class ItemInventory : MonoBehaviour
             var countableItem = item as CountableItem;
             return !countableItem.IsMax;
         });
+
+        return index != -1;
     }
 
     private Type GetItemDataByItemType(ItemType type)

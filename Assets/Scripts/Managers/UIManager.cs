@@ -5,8 +5,8 @@ using Object = UnityEngine.Object;
 
 public class UIManager
 {
-    public bool IsOnSelfishPopup { get; private set; }
     public int ActivePopupCount => _activePopups.Count;
+    public bool IsOnSelfishPopup { get; private set; }
 
     private readonly Dictionary<UIType, Transform> _uiRoots = new();
     private readonly Dictionary<Type, UI_Base> _uiObjects = new();
@@ -77,7 +77,8 @@ public class UIManager
 
     public bool UnRegister<T>() where T : UI_Base
     {
-        if (_uiObjects.TryGetValue(typeof(T), out var ui))
+        bool isRegistered = _uiObjects.TryGetValue(typeof(T), out var ui);
+        if (isRegistered)
         {
             if (ui.UIType == UIType.Popup)
             {
@@ -85,13 +86,13 @@ public class UIManager
             }
 
             _uiObjects.Remove(typeof(T));
-            return true;
         }
         else
         {
             Debug.Log($"[UIManager/UnRegister] The {typeof(T).Name} no registered.");
-            return false;
         }
+
+        return isRegistered;
     }
 
     public T Get<T>() where T : UI_Base
@@ -212,12 +213,11 @@ public class UIManager
     {
         if (ActivePopupCount > 0)
         {
-            if (_activePopups.First.Value.IsSelfish)
+            var popup = _activePopups.First.Value;
+            if (popup.IsSelfish)
             {
                 IsOnSelfishPopup = false;
             }
-
-            var popup = _activePopups.First.Value;
             _activePopups.RemoveFirst();
             popup.gameObject.SetActive(false);
         }
