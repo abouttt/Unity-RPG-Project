@@ -125,6 +125,11 @@ public class InputManager : GameControls.IPlayerActions
         ShowOrClosePopup<UI_ItemInventoryPopup>(context);
     }
 
+    public void OnEquipmentInventory(InputAction.CallbackContext context)
+    {
+        ShowOrClosePopup<UI_EquipmentInventoryPopup>(context);
+    }
+
     private void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;

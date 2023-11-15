@@ -26,7 +26,7 @@ public class UI_BackgroundCanvas : UI_Base, IPointerClickHandler, IDropHandler
                     OnDropItemSlot(otherSlot as UI_ItemSlot);
                     break;
                 case SlotType.Equipment:
-                    //OnDropEquipmentSlot(otherSlot as UI_EquipmentSlot);
+                    OnDropEquipmentSlot(otherSlot as UI_EquipmentSlot);
                     break;
                 case SlotType.Quick:
                     //OnDropQuickSlot(otherSlot as UI_QuickSlot);
@@ -49,13 +49,13 @@ public class UI_BackgroundCanvas : UI_Base, IPointerClickHandler, IDropHandler
         text);
     }
 
-    //private void OnDropEquipmentSlot(UI_EquipmentSlot equipmentSlot)
-    //{
-    //    var equipmentItem = equipmentSlot.ObjectRef as EquipmentItem;
-    //    Player.ItemInventory.AddItem(equipmentItem.Data);
-    //    Player.EquipmentInventory.UnequipItem(equipmentItem.EquipmentData.EquipmentType);
-    //}
-    //
+    private void OnDropEquipmentSlot(UI_EquipmentSlot equipmentSlot)
+    {
+        var equipmentItem = equipmentSlot.ObjectRef as EquipmentItem;
+        Player.ItemInventory.AddItem(equipmentItem.Data);
+        Player.EquipmentInventory.UnequipItem(equipmentItem.EquipmentData.EquipmentType);
+    }
+
     //private void OnDropQuickSlot(UI_QuickSlot quickSlot)
     //{
     //    Player.QuickInventory.Clear(quickSlot.Index);

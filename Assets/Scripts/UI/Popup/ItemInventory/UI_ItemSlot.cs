@@ -102,6 +102,33 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
         {
             return;
         }
+
+        var item = ObjectRef as Item;
+        switch (item.Data.ItemType)
+        {
+            case ItemType.Equipment:
+                if (ObjectRef is EquipmentItem equipmentItem)
+                {
+                    if (Player.EquipmentInventory.IsNullSlot(equipmentItem.EquipmentData.EquipmentType))
+                    {
+                        Player.ItemInventory.RemoveItem(equipmentItem.Data.ItemType, Index);
+                    }
+                    else
+                    {
+                        var otherEquipmentItem = Player.EquipmentInventory.GetItem(equipmentItem.EquipmentData.EquipmentType);
+                        Player.ItemInventory.SetItem(otherEquipmentItem.Data, Index);
+                    }
+
+                    Player.EquipmentInventory.EquipItem(equipmentItem.EquipmentData);
+                }
+                break;
+            default:
+                if (item is IUsable usable)
+                {
+                    usable.Use();
+                }
+                break;
+        }
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -119,7 +146,7 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
                     OnDropItemSlot(otherSlot as UI_ItemSlot);
                     break;
                 case SlotType.Equipment:
-                    //OnDropEquipmentSlot(otherSlot as UI_EquipmentSlot);
+                    OnDropEquipmentSlot(otherSlot as UI_EquipmentSlot);
                     break;
                 default:
                     break;
@@ -154,31 +181,31 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
         }
     }
 
-    //private void OnDropEquipmentSlot(UI_EquipmentSlot otherEquipmentSlot)
-    //{
-    //    var otherEquipmentData = (otherEquipmentSlot.ObjectRef as EquipmentItem).EquipmentData;
+    private void OnDropEquipmentSlot(UI_EquipmentSlot otherEquipmentSlot)
+    {
+        var otherEquipmentData = (otherEquipmentSlot.ObjectRef as EquipmentItem).EquipmentData;
 
-    //    if (HasObject)
-    //    {
-    //        var thisEquipmentData = (ObjectRef as EquipmentItem).EquipmentData;
+        if (HasObject)
+        {
+            var thisEquipmentData = (ObjectRef as EquipmentItem).EquipmentData;
 
-    //        if (thisEquipmentData.EquipmentType != otherEquipmentData.EquipmentType)
-    //        {
-    //            return;
-    //        }
+            if (thisEquipmentData.EquipmentType != otherEquipmentData.EquipmentType)
+            {
+                return;
+            }
 
-    //        if (thisEquipmentData.LimitLevel > Player.Status.Level)
-    //        {
-    //            return;
-    //        }
+            //if (thisEquipmentData.LimitLevel > Player.Status.Level)
+            //{
+            //    return;
+            //}
 
-    //        Player.EquipmentInventory.EquipItem(thisEquipmentData);
-    //    }
-    //    else
-    //    {
-    //        Player.EquipmentInventory.UnequipItem(otherEquipmentSlot.EquipmentType);
-    //    }
+            Player.EquipmentInventory.EquipItem(thisEquipmentData);
+        }
+        else
+        {
+            Player.EquipmentInventory.UnequipItem(otherEquipmentSlot.EquipmentType);
+        }
 
-    //    Player.ItemInventory.SetItem(otherEquipmentData, Index);
-    //}
+        Player.ItemInventory.SetItem(otherEquipmentData, Index);
+    }
 }

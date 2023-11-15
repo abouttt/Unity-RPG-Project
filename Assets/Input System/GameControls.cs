@@ -98,6 +98,15 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EquipmentInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""1f0a41f1-ca5f-4ae4-94a4-6b21bafbbeb0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +241,17 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28712c1a-8d4c-4072-bc9d-9c71ac2b2c25"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard/Mouse"",
+                    ""action"": ""EquipmentInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -265,6 +285,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         m_Player_LockOn = m_Player.FindAction("LockOn", throwIfNotFound: true);
         m_Player_Cancel = m_Player.FindAction("Cancel", throwIfNotFound: true);
         m_Player_ItemInventory = m_Player.FindAction("ItemInventory", throwIfNotFound: true);
+        m_Player_EquipmentInventory = m_Player.FindAction("EquipmentInventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -334,6 +355,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LockOn;
     private readonly InputAction m_Player_Cancel;
     private readonly InputAction m_Player_ItemInventory;
+    private readonly InputAction m_Player_EquipmentInventory;
     public struct PlayerActions
     {
         private @GameControls m_Wrapper;
@@ -346,6 +368,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         public InputAction @LockOn => m_Wrapper.m_Player_LockOn;
         public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
         public InputAction @ItemInventory => m_Wrapper.m_Player_ItemInventory;
+        public InputAction @EquipmentInventory => m_Wrapper.m_Player_EquipmentInventory;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -379,6 +402,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @ItemInventory.started += instance.OnItemInventory;
             @ItemInventory.performed += instance.OnItemInventory;
             @ItemInventory.canceled += instance.OnItemInventory;
+            @EquipmentInventory.started += instance.OnEquipmentInventory;
+            @EquipmentInventory.performed += instance.OnEquipmentInventory;
+            @EquipmentInventory.canceled += instance.OnEquipmentInventory;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -407,6 +433,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @ItemInventory.started -= instance.OnItemInventory;
             @ItemInventory.performed -= instance.OnItemInventory;
             @ItemInventory.canceled -= instance.OnItemInventory;
+            @EquipmentInventory.started -= instance.OnEquipmentInventory;
+            @EquipmentInventory.performed -= instance.OnEquipmentInventory;
+            @EquipmentInventory.canceled -= instance.OnEquipmentInventory;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -443,5 +472,6 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         void OnLockOn(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
         void OnItemInventory(InputAction.CallbackContext context);
+        void OnEquipmentInventory(InputAction.CallbackContext context);
     }
 }
