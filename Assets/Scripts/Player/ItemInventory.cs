@@ -197,8 +197,10 @@ public class ItemInventory : MonoBehaviour
         InventoryChanged?.Invoke(itemType, toIndex);
     }
 
-    public void SetItem(ItemData itemData, int index, int count)
+    public void SetItem(ItemData itemData, int index, int count = 1)
     {
+        Debug.Assert(count > 0, "[ItemInventory/SetItem] count must be > 0");
+
         if (itemData == null)
         {
             Debug.Log("[ItemInventory/SetItem] itemData is null");
