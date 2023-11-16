@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public static PlayerCameraController Camera { get; private set; }
     public static ItemInventory ItemInventory { get; private set; }
     public static EquipmentInventory EquipmentInventory { get; private set; }
+    public static QuickInventory QuickInventory { get; private set; }
 
     private void Awake()
     {
@@ -17,5 +18,6 @@ public class Player : MonoBehaviour
         Camera = GetComponent<PlayerCameraController>();
         ItemInventory = GetComponent<ItemInventory>();
         EquipmentInventory = GetComponent<EquipmentInventory>();
+        QuickInventory = GetComponent<QuickInventory>();
     }
 }

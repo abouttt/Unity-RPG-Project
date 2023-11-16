@@ -130,6 +130,22 @@ public class InputManager : GameControls.IPlayerActions
         ShowOrClosePopup<UI_EquipmentInventoryPopup>(context);
     }
 
+    public void OnQuick(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+        {
+            return;
+        }
+
+        if (Managers.UI.IsOn<UI_ItemSplitPopup>())
+        {
+            return;
+        }
+
+        var index = (int)context.ReadValue<float>();
+        Player.QuickInventory.GetUsable(index)?.Use();
+    }
+
     private void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;

@@ -23,7 +23,6 @@ public class QuickInventory : MonoBehaviour
     {
         if (usable is null)
         {
-            Debug.Log("[QuickInventory/SetUsable] usable is null");
             return;
         }
 
@@ -31,27 +30,14 @@ public class QuickInventory : MonoBehaviour
         InventoryChanged?.Invoke(index);
     }
 
-    public void Clear(int index)
+    public void RemoveUsable(int index)
     {
-        var usable = _intUsable[index];
-        if (usable is null)
+        if (IsNullSlot(index))
         {
             return;
         }
 
         _intUsable[index] = null;
-        InventoryChanged?.Invoke(index);
-    }
-
-    public void Use(int index)
-    {
-        var usable = _intUsable[index];
-        if (usable is null)
-        {
-            return;
-        }
-
-        usable.Use();
         InventoryChanged?.Invoke(index);
     }
 
@@ -65,7 +51,22 @@ public class QuickInventory : MonoBehaviour
         var usableA = _intUsable[indexA];
         var usableB = _intUsable[indexB];
 
+        if (usableA is null)
+        {
+            RemoveUsable(indexB);
+        }
+
+        if (usableB is null)
+        {
+            RemoveUsable(indexA);
+        }
+
         SetUsable(usableA, indexB);
         SetUsable(usableB, indexA);
+    }
+
+    public bool IsNullSlot(int index)
+    {
+        return _intUsable[index] is null;
     }
 }

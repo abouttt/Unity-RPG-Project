@@ -29,7 +29,7 @@ public class UI_BackgroundCanvas : UI_Base, IPointerClickHandler, IDropHandler
                     OnDropEquipmentSlot(otherSlot as UI_EquipmentSlot);
                     break;
                 case SlotType.Quick:
-                    //OnDropQuickSlot(otherSlot as UI_QuickSlot);
+                    OnDropQuickSlot(otherSlot as UI_QuickSlot);
                     break;
                 default:
                     break;
@@ -56,8 +56,8 @@ public class UI_BackgroundCanvas : UI_Base, IPointerClickHandler, IDropHandler
         Player.EquipmentInventory.UnequipItem(equipmentItem.EquipmentData.EquipmentType);
     }
 
-    //private void OnDropQuickSlot(UI_QuickSlot quickSlot)
-    //{
-    //    Player.QuickInventory.Clear(quickSlot.Index);
-    //}
+    private void OnDropQuickSlot(UI_QuickSlot quickSlot)
+    {
+        Player.QuickInventory.RemoveUsable(quickSlot.Index);
+    }
 }
