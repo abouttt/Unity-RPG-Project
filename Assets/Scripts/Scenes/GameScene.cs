@@ -24,6 +24,7 @@ public class GameScene : BaseScene
         InitUI();
 
         Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
+        Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
         Managers.Input.ToggleCursor(false);
     }
 

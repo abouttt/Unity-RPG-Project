@@ -116,7 +116,7 @@ public class InputManager : GameControls.IPlayerActions
         }
         else
         {
-            //Managers.UI.Show<UI_GameMenuPopup>();
+            Managers.UI.Show<UI_GameMenuPopup>();
         }
     }
 
