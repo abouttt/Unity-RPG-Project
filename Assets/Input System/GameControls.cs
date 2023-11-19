@@ -116,6 +116,15 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""f58e6b7d-5ba8-4723-9545-5fcc73dd1c33"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -371,6 +380,17 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""action"": ""Quick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ccdd241c-235b-45ed-b7a4-a5997be9d793"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard/Mouse"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -406,6 +426,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         m_Player_ItemInventory = m_Player.FindAction("ItemInventory", throwIfNotFound: true);
         m_Player_EquipmentInventory = m_Player.FindAction("EquipmentInventory", throwIfNotFound: true);
         m_Player_Quick = m_Player.FindAction("Quick", throwIfNotFound: true);
+        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -477,6 +498,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ItemInventory;
     private readonly InputAction m_Player_EquipmentInventory;
     private readonly InputAction m_Player_Quick;
+    private readonly InputAction m_Player_Interaction;
     public struct PlayerActions
     {
         private @GameControls m_Wrapper;
@@ -491,6 +513,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         public InputAction @ItemInventory => m_Wrapper.m_Player_ItemInventory;
         public InputAction @EquipmentInventory => m_Wrapper.m_Player_EquipmentInventory;
         public InputAction @Quick => m_Wrapper.m_Player_Quick;
+        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -530,6 +553,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Quick.started += instance.OnQuick;
             @Quick.performed += instance.OnQuick;
             @Quick.canceled += instance.OnQuick;
+            @Interaction.started += instance.OnInteraction;
+            @Interaction.performed += instance.OnInteraction;
+            @Interaction.canceled += instance.OnInteraction;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -564,6 +590,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Quick.started -= instance.OnQuick;
             @Quick.performed -= instance.OnQuick;
             @Quick.canceled -= instance.OnQuick;
+            @Interaction.started -= instance.OnInteraction;
+            @Interaction.performed -= instance.OnInteraction;
+            @Interaction.canceled -= instance.OnInteraction;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -602,5 +631,6 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         void OnItemInventory(InputAction.CallbackContext context);
         void OnEquipmentInventory(InputAction.CallbackContext context);
         void OnQuick(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
     }
 }

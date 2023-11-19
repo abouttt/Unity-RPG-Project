@@ -32,8 +32,6 @@ public class ItemInventory : MonoBehaviour
 
     public int AddItem(ItemData itemData, int count = 1)
     {
-        Debug.Assert(count > 0, "[ItemInventory/AddItem] count must be > 0");
-
         if (itemData == null)
         {
             Debug.Log("[ItemInventory/AddItem] itemData is null");
@@ -158,8 +156,6 @@ public class ItemInventory : MonoBehaviour
 
     public void SplitItem(ItemType itemType, int fromIndex, int toIndex, int count)
     {
-        Debug.Assert(count > 0, "[ItemInventory/SplitItem] count must be > 0");
-
         if (fromIndex == toIndex)
         {
             return;
@@ -199,8 +195,6 @@ public class ItemInventory : MonoBehaviour
 
     public void SetItem(ItemData itemData, int index, int count = 1)
     {
-        Debug.Assert(count > 0, "[ItemInventory/SetItem] count must be > 0");
-
         if (itemData == null)
         {
             Debug.Log("[ItemInventory/SetItem] itemData is null");
