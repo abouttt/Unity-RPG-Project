@@ -10,4 +10,9 @@ public abstract class Interactive : MonoBehaviour
     public bool CanInteraction { get; private set; } = true;
 
     public abstract void Interaction();
+
+    protected virtual void Awake()
+    {
+        gameObject.tag = "Interactive";
+    }
 }

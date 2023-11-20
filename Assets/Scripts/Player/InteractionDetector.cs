@@ -1,11 +1,12 @@
 using UnityEngine;
-using UnityEngine.InputSystem.Interactions;
 
 public class InteractionDetector : MonoBehaviour
 {
     private Interactive _target;
     private UI_InteractionKeyGuide _keyGuide;
     private bool _isOnKeyGuide;
+
+    private bool CanInteraction => !Managers.UI.IsOn<UI_LootPopup>();
 
     private void Start()
     {
@@ -19,10 +20,10 @@ public class InteractionDetector : MonoBehaviour
             return;
         }
 
-        //if (!CanInteraction)
-        //{
-        //    return;
-        //}
+        if (!CanInteraction)
+        {
+            return;
+        }
 
         if (Managers.Input.Interaction && _target.CanInteraction)
         {
@@ -41,10 +42,10 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        //if (!CanInteraction)
-        //{
-        //    return;
-        //}
+        if (!CanInteraction)
+        {
+            return;
+        }
 
         if (!other.CompareTag("Interactive"))
         {

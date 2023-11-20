@@ -28,6 +28,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
+  - m_GUID: 9678f9888c159a04f81a3ee7ab555acf
+    m_Address: FieldItem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
   m_SchemaSet:
