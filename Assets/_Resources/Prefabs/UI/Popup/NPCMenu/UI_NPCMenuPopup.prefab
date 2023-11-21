@@ -294,8 +294,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <UIType>k__BackingField: 3
-  <CanFocus>k__BackingField: 1
-  <IsSelfish>k__BackingField: 0
+  <CanFocus>k__BackingField: 0
+  <IsSelfish>k__BackingField: 1
   <IgnoreSelfish>k__BackingField: 0
   <PopupRT>k__BackingField: {fileID: 4276012439684642903}
   <DefaultPosition>k__BackingField: {x: 0, y: -300, z: 0}
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

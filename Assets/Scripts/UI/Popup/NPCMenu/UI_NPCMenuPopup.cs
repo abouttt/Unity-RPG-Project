@@ -60,7 +60,7 @@ public class UI_NPCMenuPopup : UI_Popup
             AddSubtiem("´ëÈ­", () =>
             {
                 ToggleMenu(false);
-                //Managers.UI.Show<UI_ConversationPopup>().SetNPC(npc);
+                Managers.UI.Show<UI_ConversationPopup>().SetNPC(npc);
             });
         }
 
