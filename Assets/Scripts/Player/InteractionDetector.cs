@@ -6,7 +6,7 @@ public class InteractionDetector : MonoBehaviour
     private UI_InteractionKeyGuide _keyGuide;
     private bool _isOnKeyGuide;
 
-    private bool CanInteraction => !Managers.UI.IsOn<UI_LootPopup>();
+    private bool CanInteraction => !(Managers.UI.IsOn<UI_LootPopup>() || Managers.UI.IsOn<UI_NPCMenuPopup>());
 
     private void Start()
     {

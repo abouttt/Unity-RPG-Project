@@ -1,5 +1,5 @@
-using Cinemachine;
 using UnityEngine;
+using Cinemachine;
 
 public class GameScene : BaseScene
 {

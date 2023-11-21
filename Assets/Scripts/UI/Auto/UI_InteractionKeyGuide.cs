@@ -42,14 +42,14 @@ public class UI_InteractionKeyGuide : UI_Base
         GetText((int)Texts.KeyText).text = Managers.Input.GetBindingPath("Interaction");
         GetText((int)Texts.InteractionText).text = target.InteractionMessage;
 
-        //if (target is NPC npc)
-        //{
-        //    GetText((int)Texts.NameText).text = npc.Name;
-        //    GetText((int)Texts.NameText).enabled = true;
-        //}
-        //else
-        //{
-        //    GetText((int)Texts.NameText).enabled = false;
-        //}
+        if (target is NPC npc)
+        {
+            GetText((int)Texts.NameText).text = npc.Name;
+            GetText((int)Texts.NameText).enabled = true;
+        }
+        else
+        {
+            GetText((int)Texts.NameText).enabled = false;
+        }
     }
 }

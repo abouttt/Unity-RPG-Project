@@ -144,7 +144,7 @@ public class InputManager : GameControls.IPlayerActions
             return;
         }
 
-        if (Managers.UI.IsOn<UI_ItemSplitPopup>())
+        if (Managers.UI.IsOn<UI_ItemSplitPopup>() || Managers.UI.IsOn<UI_NPCMenuPopup>())
         {
             return;
         }

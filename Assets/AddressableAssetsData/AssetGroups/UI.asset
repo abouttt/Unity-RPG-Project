@@ -32,6 +32,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
+  - m_GUID: 13249998d3dee444bb645a5a52e1d846
+    m_Address: UI_NPCMenuSubitem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
   m_SchemaSet:

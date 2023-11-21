@@ -43,7 +43,7 @@ public class NPC : Interactive
             return;
         }
 
-        //Managers.UI.Show<UI_NPCMenuPopup>().SetNPC(this);
+        Managers.UI.Show<UI_NPCMenuPopup>().SetNPC(this);
     }
 
     private void OnDestroy()
