@@ -2,26 +2,50 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float MoveSpeed;                         // 기본 속도
-    public float SprintSpeed;                       // 달리기 속도
-    public float RotationSmoothTime;                // 회전 속도
-    public float SpeedChangeRate;                   // 가속 및 감속
-    public float JumpLandDecreaseSpeedPercentage;   // 점프 착지시 속도 감소값
+    public bool CanMove { get; set; } = true;
+    public bool CanSprint { get; set; } = true;
+    public bool CanJump { get; set; } = true;
+    public bool CanRotation { get; set; } = true;
 
-    [Space(10)]
-    public float JumpHeight;                        // 점프 높이
-    public float Gravity;                           // 자체 중력 값
-
-    [Space(10)]
-    public float JumpTimeout;                       // 다시 점프하기까지 시간
-    public float FallTimeout;                       // 낙하 상태에 진입까지 시간
-
-    [Space(10)]
-    public float GroundedOffset;                    // 땅 체크 위치
-    public float GroundedRadius;                    // 땅 체크 구체 반지름
-    public LayerMask GroundLayers;                  // 땅 레이어
-
+    public bool IsGrounded { get; private set; }
     public bool IsJumping { get; private set; }
+
+    [SerializeField]
+    private float _moveSpeed;                         // 기본 속도
+    [SerializeField]
+    private float _sprintSpeed;                       // 달리기 속도
+    [SerializeField]
+    private float _rotationSmoothTime;                // 회전 속도
+    [SerializeField]
+    private float _speedChangeRate;                   // 가속 및 감속
+    [SerializeField]
+    private float _jumpLandDecreaseSpeedPercentage;   // 점프 착지시 속도 감소값
+
+    [Space(10)]
+    [SerializeField]
+    private float _jumpHeight;                        // 점프 높이
+    [SerializeField]
+    private float _gravity;                           // 자체 중력 값
+
+    [Space(10)]
+    [SerializeField]
+    private float _jumpTimeout;                       // 다시 점프하기까지 시간
+    [SerializeField]
+    private float _fallTimeout;                       // 낙하 상태에 진입까지 시간
+
+    [Space(10)]
+    [SerializeField]
+    private float _requiredSprintSP;
+    [SerializeField]
+    private float _requiredJumpSP;
+
+    [Space(10)]
+    [SerializeField]
+    private float _groundedOffset;                    // 땅 체크 위치
+    [SerializeField]
+    private float _groundedRadius;                    // 땅 체크 구체 반지름
+    [SerializeField]
+    private LayerMask _groundLayers;                  // 땅 레이어
 
     // 최종 적용 값
     private float _speed;
@@ -39,7 +63,6 @@ public class PlayerMovement : MonoBehaviour
     private float _fallTimeoutDelta;
 
     private bool _isJumpLand;
-    private bool _isGrounded;
     private bool _isPrevLockOn;
 
     private CharacterController _controller;
@@ -66,9 +89,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void JumpAndGravity()
     {
-        if (_isGrounded)
+        if (IsGrounded)
         {
-            _fallTimeoutDelta = FallTimeout;
+            _fallTimeoutDelta = _fallTimeout;
 
             Player.Animator.SetBool(_animIDJump, false);
             Player.Animator.SetBool(_animIDFreeFall, false);
@@ -80,12 +103,17 @@ public class PlayerMovement : MonoBehaviour
             }
 
             // 점프
-            if (Managers.Input.Jump && _jumpTimeoutDelta <= 0f)
+            if (Managers.Input.Jump && CanJump && _jumpTimeoutDelta <= 0f)
             {
-                // 원하는 높이에 도달하는 데 필요한 속도 = H * -2 * G 의 제곱근.
-                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-                Player.Animator.SetBool(_animIDJump, true);
-                IsJumping = true;
+                if (Player.Status.SP >= _requiredJumpSP)
+                {
+                    Player.Status.SP -= _requiredJumpSP;
+
+                    // 원하는 높이에 도달하는 데 필요한 속도 = H * -2 * G 의 제곱근.
+                    _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+                    Player.Animator.SetBool(_animIDJump, true);
+                    IsJumping = true;
+                }
             }
 
             if (_jumpTimeoutDelta >= 0.0f)
@@ -95,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            _jumpTimeoutDelta = JumpTimeout;
+            _jumpTimeoutDelta = _jumpTimeout;
 
             if (_fallTimeoutDelta >= 0.0f)
             {
@@ -110,35 +138,47 @@ public class PlayerMovement : MonoBehaviour
         // 중력
         if (_verticalVelocity < _terminalVelocity)
         {
-            _verticalVelocity += Gravity * Time.deltaTime;
+            _verticalVelocity += _gravity * Time.deltaTime;
         }
     }
 
     private void GroundedCheck()
     {
         var position = transform.position;
-        var spherePosition = new Vector3(position.x, position.y - GroundedOffset, position.z);
-        _isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
-        Player.Animator.SetBool(_animIDGrounded, _isGrounded);
+        var spherePosition = new Vector3(position.x, position.y - _groundedOffset, position.z);
+        IsGrounded = Physics.CheckSphere(spherePosition, _groundedRadius, _groundLayers, QueryTriggerInteraction.Ignore);
+        Player.Animator.SetBool(_animIDGrounded, IsGrounded);
     }
 
     private void Move()
     {
-        float targetSpeed = MoveSpeed;
+        float targetSpeed = _moveSpeed;
 
         if (_isJumpLand)
         {
-            targetSpeed = MoveSpeed * JumpLandDecreaseSpeedPercentage;
+            targetSpeed = _moveSpeed * _jumpLandDecreaseSpeedPercentage;
         }
         else
         {
-            if (Managers.Input.Sprint)
+            if (Managers.Input.Sprint && CanMove && CanSprint)
             {
-                targetSpeed = SprintSpeed;
+                if (Player.Status.SP > 0)
+                {
+                    targetSpeed = _sprintSpeed;
+
+                    if (IsGrounded && !IsJumping && !_isJumpLand)
+                    {
+                        Player.Status.SP -= _requiredSprintSP * Time.deltaTime;
+                    }
+                }
+                else
+                {
+                    CanSprint = false;
+                }
             }
         }
 
-        if (Managers.Input.Move == Vector2.zero)
+        if (!CanMove || Managers.Input.Move == Vector2.zero)
         {
             targetSpeed = 0f;
         }
@@ -150,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
         if (currentHorizontalSpeed < targetSpeed - speedOffset ||
             currentHorizontalSpeed > targetSpeed + speedOffset)
         {
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, Time.deltaTime * SpeedChangeRate);
+            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, Time.deltaTime * _speedChangeRate);
             // 소수점 이하 3자리까지의 반올림 속도.
             _speed = Mathf.Round(_speed * 1000f) / 1000f;
         }
@@ -159,9 +199,9 @@ public class PlayerMovement : MonoBehaviour
             _speed = targetSpeed;
         }
 
-        _posXBlend = Mathf.Lerp(_posXBlend, Managers.Input.Move.x, Time.deltaTime * SpeedChangeRate);
-        _posZBlend = Mathf.Lerp(_posZBlend, Managers.Input.Move.y, Time.deltaTime * SpeedChangeRate);
-        _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
+        _posXBlend = Mathf.Lerp(_posXBlend, Managers.Input.Move.x, Time.deltaTime * _speedChangeRate);
+        _posZBlend = Mathf.Lerp(_posZBlend, Managers.Input.Move.y, Time.deltaTime * _speedChangeRate);
+        _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * _speedChangeRate);
         if (_animationBlend < 0.01f)
         {
             _animationBlend = 0f;
@@ -169,7 +209,7 @@ public class PlayerMovement : MonoBehaviour
 
         var inputDirection = new Vector3(Managers.Input.Move.x, 0.0f, Managers.Input.Move.y).normalized;
 
-        if (Managers.Input.Move != Vector2.zero)
+        if (CanRotation && Managers.Input.Move != Vector2.zero)
         {
             _lockOffRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
         }
@@ -206,7 +246,7 @@ public class PlayerMovement : MonoBehaviour
 
         // 회전.
         float finalTargetRotation = Player.Camera.IsLockOn ? _lockOnRotation : _lockOffRotation;
-        var rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, finalTargetRotation, ref _rotationVelocity, RotationSmoothTime);
+        var rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, finalTargetRotation, ref _rotationVelocity, _rotationSmoothTime);
         transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 
         // 움직임.

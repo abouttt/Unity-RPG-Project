@@ -201,10 +201,10 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
                 return;
             }
 
-            //if (thisEquipmentData.LimitLevel > Player.Status.Level)
-            //{
-            //    return;
-            //}
+            if (thisEquipmentData.LimitLevel > Player.Status.Level)
+            {
+                return;
+            }
 
             Player.EquipmentInventory.EquipItem(thisEquipmentData);
         }

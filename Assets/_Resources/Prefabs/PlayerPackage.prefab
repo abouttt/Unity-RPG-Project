@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 1466335506153813539}
   - component: {fileID: 1466335506153813538}
   - component: {fileID: 1466335506153813565}
+  - component: {fileID: 3349532148546947253}
   - component: {fileID: 1466335506153813564}
   - component: {fileID: 1466335506153813537}
   - component: {fileID: 3044611854374840128}
@@ -124,6 +125,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb41cb7e2ae207418650116575c9812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3349532148546947253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466335506153813543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c68160de1f5b840a61635c1ad5c3e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExtraStat:
+    HP: 0
+    MP: 0
+    SP: 0
+    XP: 0
+    Damage: 0
+    Defense: 0
+  _recoverySPDelay: 1
+  _recoverySPAmount: 80
+  _playerStatTable: {fileID: 11400000, guid: b87309d911cf67c4697ba33caeaa2ae2, type: 2}
 --- !u!114 &1466335506153813564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,18 +159,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f4986bb38ddf844bbca4d6ddeb209c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 5
-  SprintSpeed: 9
-  RotationSmoothTime: 0.05
-  SpeedChangeRate: 10
-  JumpLandDecreaseSpeedPercentage: 0.7
-  JumpHeight: 1.2
-  Gravity: -20
-  JumpTimeout: 0.7
-  FallTimeout: 0.4
-  GroundedOffset: 0.08
-  GroundedRadius: 0.21
-  GroundLayers:
+  _moveSpeed: 5
+  _sprintSpeed: 9
+  _rotationSmoothTime: 0.05
+  _speedChangeRate: 10
+  _jumpLandDecreaseSpeedPercentage: 0.7
+  _jumpHeight: 1.2
+  _gravity: -20
+  _jumpTimeout: 0.7
+  _fallTimeout: 0.4
+  _requiredSprintSP: 15
+  _requiredJumpSP: 10
+  _groundedOffset: 0.08
+  _groundedRadius: 0.21
+  _groundLayers:
     serializedVersion: 2
     m_Bits: 1
 --- !u!114 &1466335506153813537

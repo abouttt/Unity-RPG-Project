@@ -76,7 +76,7 @@ public class UI_ItemInventoryPopup : UI_Popup
             }
         };
 
-        //Player.Status.GoldChanged += () => GetText((int)Texts.GoldText).text = Player.Status.Gold.ToString();
+        Player.Status.GoldChanged += () => GetText((int)Texts.GoldText).text = Player.Status.Gold.ToString();
 
         InitSlots();
         InitTabs();

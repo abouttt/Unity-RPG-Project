@@ -67,12 +67,12 @@ public class UI_ShopPopup : UI_Popup, IDropHandler
     public void BuyItem(UI_ShopSlot slot, int count)
     {
         int price = slot.ItemData.Price * count;
-        //if (Player.Status.Gold < price)
-        //{
-        //    return;
-        //}
+        if (Player.Status.Gold < price)
+        {
+            return;
+        }
 
-        //Player.Status.Gold -= price;
+        Player.Status.Gold -= price;
         Player.ItemInventory.AddItem(slot.ItemData, count);
         Managers.UI.Get<UI_ItemInventoryPopup>().OpenTheTab(slot.ItemData.ItemType);
     }
@@ -86,7 +86,7 @@ public class UI_ShopPopup : UI_Popup, IDropHandler
             count = countableItem.CurrentCount;
         }
 
-        //Player.Status.Gold += Mathf.RoundToInt((item.Data.Price * count) * _itemSellPercentage);
+        Player.Status.Gold += Mathf.RoundToInt((item.Data.Price * count) * _itemSellPercentage);
         Player.ItemInventory.RemoveItem(item.Data.ItemType, itemSlot.Index);
     }
 

@@ -29,9 +29,9 @@ public class UI_NPCMenuPopup : UI_Popup
 
         Showed += () =>
         {
-            //Player.Status.CanMove = false;
-            //Player.Status.CanRotation = false;
-            //Player.Status.CanJump = false;
+            Player.Movement.CanMove = false;
+            Player.Movement.CanRotation = false;
+            Player.Movement.CanJump = false;
             Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(false);
         };
 
@@ -39,9 +39,9 @@ public class UI_NPCMenuPopup : UI_Popup
         {
             Clear();
 
-            //Player.Status.CanMove = true;
-            //Player.Status.CanRotation = true;
-            //Player.Status.CanJump = true;
+            Player.Movement.CanMove = true;
+            Player.Movement.CanRotation = true;
+            Player.Movement.CanJump = true;
             Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
         };
     }

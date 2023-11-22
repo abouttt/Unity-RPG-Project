@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c5e539e90eb6d647810cd1e36d433c6, type: 3}
+  m_Name: Player Stat Table
+  m_EditorClassIdentifier: 
+  <StatTable>k__BackingField:
+  - HP: 100
+    MP: 100
+    SP: 100
+    XP: 100
+    Damage: 5
+    Defense: 0
+  - HP: 120
+    MP: 120
+    SP: 120
+    XP: 200
+    Damage: 7
+    Defense: 1
+  - HP: 140
+    MP: 140
+    SP: 140
+    XP: 300
+    Damage: 9
+    Defense: 2
+  - HP: 160
+    MP: 160
+    SP: 160
+    XP: 400
+    Damage: 11
+    Defense: 3
+  - HP: 180
+    MP: 180
+    SP: 180
+    XP: 500
+    Damage: 13
+    Defense: 4
+  - HP: 200
+    MP: 200
+    SP: 200
+    XP: 600
+    Damage: 15
+    Defense: 5
+  - HP: 220
+    MP: 220
+    SP: 220
+    XP: 700
+    Damage: 17
+    Defense: 6
+  - HP: 240
+    MP: 240
+    SP: 240
+    XP: 800
+    Damage: 19
+    Defense: 7
+  - HP: 260
+    MP: 260
+    SP: 260
+    XP: 900
+    Damage: 21
+    Defense: 8
+  - HP: 280
+    MP: 280
+    SP: 280
+    XP: 1000
+    Damage: 23
+    Defense: 9
+  - HP: 300
+    MP: 300
+    SP: 300
+    XP: 1100
+    Damage: 25
+    Defense: 10

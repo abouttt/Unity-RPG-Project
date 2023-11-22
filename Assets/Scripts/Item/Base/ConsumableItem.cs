@@ -14,10 +14,10 @@ public abstract class ConsumableItem : CountableItem, IUsable
 
     protected bool CheckCanUseAndSubtractCount()
     {
-        //if (Player.Status.Level < Data.LimitLevel)
-        //{
-        //    return false;
-        //}
+        if (Player.Status.Level < Data.LimitLevel)
+        {
+            return false;
+        }
 
         if (ConsumableData.Cooldown.Current > 0f)
         {

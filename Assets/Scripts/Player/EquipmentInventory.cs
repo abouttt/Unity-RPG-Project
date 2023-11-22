@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EquipmentInventory : MonoBehaviour
 {
-    public event Action<EquipmentType> BeforeChange;
     public event Action<EquipmentType> Changed;
 
     private readonly Dictionary<EquipmentType, EquipmentItem> _items = new();
@@ -49,7 +48,6 @@ public class EquipmentInventory : MonoBehaviour
 
     private void ChangeItem(EquipmentType equipmentType, EquipmentItem item)
     {
-        BeforeChange?.Invoke(equipmentType);
         _items[equipmentType] = item;
         Changed?.Invoke(equipmentType);
     }
