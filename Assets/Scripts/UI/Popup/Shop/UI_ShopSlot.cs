@@ -49,11 +49,11 @@ public class UI_ShopSlot : UI_BaseSlot, IPointerEnterHandler, IPointerExitHandle
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
-        //Managers.UI.Get<UI_ItemTooltipTop>().Target = this;
+        Managers.UI.Get<UI_ItemTooltipTop>().Target = this;
     }
 
     public override void OnPointerExit(PointerEventData eventData)
     {
-        //Managers.UI.Get<UI_ItemTooltipTop>().Target = null;
+        Managers.UI.Get<UI_ItemTooltipTop>().Target = null;
     }
 }

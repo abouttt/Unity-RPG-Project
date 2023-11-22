@@ -163,12 +163,12 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
-        //Managers.UI.Get<UI_ItemTooltipTop>().Target = this;
+        Managers.UI.Get<UI_ItemTooltipTop>().Target = this;
     }
 
     public override void OnPointerExit(PointerEventData eventData)
     {
-        //Managers.UI.Get<UI_ItemTooltipTop>().Target = null;
+        Managers.UI.Get<UI_ItemTooltipTop>().Target = null;
     }
 
     private void OnDropItemSlot(UI_ItemSlot otherItemSlot)
