@@ -103,31 +103,38 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
             return;
         }
 
-        var item = ObjectRef as Item;
-        switch (item.Data.ItemType)
+        if (Managers.UI.IsOn<UI_ShopPopup>())
         {
-            case ItemType.Equipment:
-                if (ObjectRef is EquipmentItem equipmentItem)
-                {
-                    if (Player.EquipmentInventory.IsNullSlot(equipmentItem.EquipmentData.EquipmentType))
+            Managers.UI.Get<UI_ShopPopup>().SellItem(this);
+        }
+        else
+        {
+            var item = ObjectRef as Item;
+            switch (item.Data.ItemType)
+            {
+                case ItemType.Equipment:
+                    if (ObjectRef is EquipmentItem equipmentItem)
                     {
-                        Player.ItemInventory.RemoveItem(equipmentItem.Data.ItemType, Index);
-                    }
-                    else
-                    {
-                        var otherEquipmentItem = Player.EquipmentInventory.GetItem(equipmentItem.EquipmentData.EquipmentType);
-                        Player.ItemInventory.SetItem(otherEquipmentItem.Data, Index);
-                    }
+                        if (Player.EquipmentInventory.IsNullSlot(equipmentItem.EquipmentData.EquipmentType))
+                        {
+                            Player.ItemInventory.RemoveItem(equipmentItem.Data.ItemType, Index);
+                        }
+                        else
+                        {
+                            var otherEquipmentItem = Player.EquipmentInventory.GetItem(equipmentItem.EquipmentData.EquipmentType);
+                            Player.ItemInventory.SetItem(otherEquipmentItem.Data, Index);
+                        }
 
-                    Player.EquipmentInventory.EquipItem(equipmentItem.EquipmentData);
-                }
-                break;
-            default:
-                if (item is IUsable usable)
-                {
-                    usable.Use();
-                }
-                break;
+                        Player.EquipmentInventory.EquipItem(equipmentItem.EquipmentData);
+                    }
+                    break;
+                default:
+                    if (item is IUsable usable)
+                    {
+                        usable.Use();
+                    }
+                    break;
+            }
         }
     }
 
