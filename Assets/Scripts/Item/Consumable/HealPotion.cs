@@ -13,7 +13,7 @@ public class HealPotion : ConsumableItem
             return false;
         }
 
-        //Player.Status.HP += 100;
+        Player.Status.HP += 100;
 
         return true;
     }
