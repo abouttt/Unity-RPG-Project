@@ -4,16 +4,16 @@ using UnityEngine.InputSystem;
 public class InputManager : GameControls.IPlayerActions
 {
     // Value
-    public Vector2 Move;
-    public Vector2 Look;
+    public Vector2 Move { get; private set; }
+    public Vector2 Look { get; private set; }
 
     // Button
-    public bool Jump;
-    public bool Interaction;
-    public bool LockOn;
+    public bool Jump { get; private set; }
+    public bool Interaction { get; private set; }
+    public bool LockOn { get; private set; }
 
     //Pass Through
-    public bool Sprint;
+    public bool Sprint { get; private set; }
 
     public bool CursorLocked { get; private set; } = true;
 
