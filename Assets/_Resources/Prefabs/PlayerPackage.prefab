@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 3044611854374840128}
   - component: {fileID: 3985247554683799744}
   - component: {fileID: 9162409017268964190}
+  - component: {fileID: 9070902638903731522}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -309,6 +310,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Capacity>k__BackingField: 10
+--- !u!114 &9070902638903731522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466335506153813543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 840854af83b59874c8c0e48b6ce9085b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillInits:
+  - Data: {fileID: 11400000, guid: 61820652fd9d0474088f623794e4e778, type: 2}
+    ChildrenData:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 5072d0e2895862845b80f99e8799a0a0, type: 2}
+        Value: 1
+  - Data: {fileID: 11400000, guid: 5072d0e2895862845b80f99e8799a0a0, type: 2}
+    ChildrenData:
+      _serializedList: []
 --- !u!1 &1466335506189952438
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,6 @@ public class InteractionDetector : MonoBehaviour
     private UI_InteractionKeyGuide _keyGuide;
     private bool _isOnKeyGuide;
 
-    private bool CanInteraction => !(Managers.UI.IsOn<UI_LootPopup>() || Managers.UI.IsOn<UI_NPCMenuPopup>());
-
     private void Start()
     {
         _keyGuide = Managers.UI.Get<UI_AutoCanvas>().InteractionKeyGuide;
@@ -20,7 +18,7 @@ public class InteractionDetector : MonoBehaviour
             return;
         }
 
-        if (!CanInteraction)
+        if (!CanInteraction())
         {
             return;
         }
@@ -42,7 +40,7 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!CanInteraction)
+        if (!CanInteraction())
         {
             return;
         }
@@ -88,5 +86,10 @@ public class InteractionDetector : MonoBehaviour
         }
 
         SetTarget(null);
+    }
+
+    public bool CanInteraction()
+    {
+        return !(Managers.UI.IsOn<UI_LootPopup>() || Managers.UI.IsOn<UI_NPCMenuPopup>());
     }
 }

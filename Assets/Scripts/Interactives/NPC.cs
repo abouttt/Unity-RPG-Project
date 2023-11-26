@@ -23,17 +23,17 @@ public class NPC : Interactive
     //[field: SerializeField]
     //public List<QuestData> Quests { get; private set; }
 
-    private static readonly List<NPC> s_npcs = new();
+    private static readonly List<NPC> s_NPCs = new();
 
     protected override void Awake()
     {
         base.Awake();
-        s_npcs.Add(this);
+        s_NPCs.Add(this);
     }
 
     public static NPC GetNPC(string id)
     {
-        return s_npcs.Find(npc => npc.NPCID == id);
+        return s_NPCs.Find(npc => npc.NPCID == id);
     }
 
     public override void Interaction()
@@ -48,6 +48,6 @@ public class NPC : Interactive
 
     private void OnDestroy()
     {
-        s_npcs.Remove(this);
+        s_NPCs.Remove(this);
     }
 }

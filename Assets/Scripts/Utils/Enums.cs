@@ -1,4 +1,10 @@
 
+public enum SkillType
+{
+    Active,
+    Passive,
+}
+
 public enum SlotType
 {
     Item,
