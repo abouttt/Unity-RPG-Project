@@ -42,6 +42,26 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
+  - m_GUID: b60716e3dda291f45be02661924c069c
+    m_Address: UI_QuestRewardSlot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+  - m_GUID: c1159ecc224484343b36d6b088b3361f
+    m_Address: UI_QuestTitleSubitem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+  - m_GUID: c5133b168a3b39145a41805897a5a491
+    m_Address: UI_NPCQuestTitleSubitem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+  - m_GUID: 48c7b2a223f0499478cbaa3ffc4f96a4
+    m_Address: UI_QuestTrackerSubitem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
   m_SchemaSet:

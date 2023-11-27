@@ -105,6 +105,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Quest",
+                    "type": "Button",
+                    "id": "6317b924-7726-49c3-9884-5ed8a698f424",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Quick",
                     "type": "Button",
                     "id": "2dfeb728-f92d-4d20-8446-cecaa0ba65a6",
@@ -387,6 +396,17 @@
                     "processors": "",
                     "groups": "Keyboard/Mouse",
                     "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e548e01-1474-4866-96e5-8d177c4996ec",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard/Mouse",
+                    "action": "Quest",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

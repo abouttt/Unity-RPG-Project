@@ -1,0 +1,205 @@
+using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
+
+public class UI_QuestPopup : UI_Popup
+{
+    enum GameObjects
+    {
+        QuestInfo,
+    }
+
+    enum RectTransforms
+    {
+        QuestTitleSubitems,
+        QuestRewardSlots,
+    }
+
+    enum Buttons
+    {
+        CloseButton,
+        CompleteButton,
+        CancelButton,
+    }
+
+    enum Texts
+    {
+        QuestTitleText,
+        QuestDescriptionText,
+        QuestTargetText,
+        QuestRewardText,
+        NOQuestText,
+    }
+
+    private readonly Dictionary<Quest, UI_QuestTitleSubitem> _titleSubitems = new();
+    private readonly StringBuilder _sb = new(50);
+    private Quest _selectedQuest;
+
+    protected override void Init()
+    {
+        base.Init();
+
+        BindObject(typeof(GameObjects));
+        BindRT(typeof(RectTransforms));
+        BindButton(typeof(Buttons));
+        BindText(typeof(Texts));
+
+        GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_QuestPopup>);
+        GetButton((int)Buttons.CompleteButton).onClick.AddListener(() => Managers.Quest.Complete(_selectedQuest));
+        GetButton((int)Buttons.CancelButton).onClick.AddListener(() => Managers.Quest.Unregister(_selectedQuest));
+
+        Managers.Quest.QuestRegistered += OnQuestRegisterd;
+        Managers.Quest.QuestCompletabled += OnQuestCompletabled;
+        Managers.Quest.QuestCompletableCanceled += OnQuestCompletableCanceld;
+        Managers.Quest.QuestCompleted += OnQuestCompletedOrCanceled;
+        Managers.Quest.QuestUnRegistered += OnQuestCompletedOrCanceled;
+        Managers.Quest.QuestTargetCountChanged += RefreshTargetText;
+
+        foreach (var quest in Managers.Quest.Quests)
+        {
+            OnQuestRegisterd(quest);
+            if (quest.State == QuestState.Completable)
+            {
+                OnQuestCompletabled(quest);
+            }
+        }
+
+        Clear();
+    }
+
+    private void Start()
+    {
+        Managers.UI.Register<UI_QuestPopup>(this);
+    }
+
+    public void SetQuestDescription(Quest quest)
+    {
+        if (_selectedQuest == quest)
+        {
+            return;
+        }
+
+        Clear();
+
+        _selectedQuest = quest;
+        GetObject((int)GameObjects.QuestInfo).SetActive(true);
+        GetText((int)Texts.QuestTitleText).text = quest.Data.QuestName;
+        GetText((int)Texts.QuestDescriptionText).text = quest.Data.Description;
+        RefreshTargetText(quest);
+        SetRewardText(quest.Data);
+        ShowCompleteButton(quest, quest.State == QuestState.Completable);
+        GetButton((int)Buttons.CancelButton).gameObject.SetActive(true);
+        GetText((int)Texts.NOQuestText).gameObject.SetActive(false);
+    }
+
+    public void QuestTrackerToggle(Quest quest, bool toggle)
+    {
+        if (_titleSubitems.TryGetValue(quest, out var subitem))
+        {
+            subitem.QuestTrackerToggle(toggle);
+        }
+    }
+
+    private void OnQuestRegisterd(Quest quest)
+    {
+        var go = Managers.Resource.Instantiate("UI_QuestTitleSubitem", GetRT((int)RectTransforms.QuestTitleSubitems), true);
+        var questTitleSubitem = go.GetComponent<UI_QuestTitleSubitem>();
+        questTitleSubitem.SetQuestTitle(quest);
+        _titleSubitems.Add(quest, questTitleSubitem);
+    }
+
+    private void OnQuestCompletabled(Quest quest)
+    {
+        if (_titleSubitems.TryGetValue(quest, out var subitem))
+        {
+            subitem.ToggleCompleteText(true);
+            ShowCompleteButton(quest, _selectedQuest == quest);
+        }
+    }
+
+    private void OnQuestCompletableCanceld(Quest quest)
+    {
+        if (_titleSubitems.TryGetValue(quest, out var subitem))
+        {
+            subitem.ToggleCompleteText(false);
+            ShowCompleteButton(quest, !(_selectedQuest == quest));
+        }
+    }
+
+    private void OnQuestCompletedOrCanceled(Quest quest)
+    {
+        if (_titleSubitems.TryGetValue(quest, out var subitem))
+        {
+            subitem.ToggleCompleteText(false);
+            subitem.QuestTrackerToggle(false);
+            Managers.Resource.Destroy(subitem.gameObject);
+            _titleSubitems.Remove(quest);
+            Clear();
+        }
+    }
+
+    private void RefreshTargetText(Quest quest)
+    {
+        _sb.Clear();
+        _sb.AppendLine("[목적]");
+
+        foreach (var target in quest.Targets)
+        {
+            var completeCount = target.Key.CompleteCount;
+            var currentCount = Mathf.Clamp(target.Value, 0, completeCount);
+            _sb.AppendLine($"{target.Key.Description} ({currentCount}/{completeCount})");
+        }
+
+        GetText((int)Texts.QuestTargetText).text = _sb.ToString();
+    }
+
+    private void SetRewardText(QuestData questData)
+    {
+        _sb.Clear();
+        _sb.AppendLine("[보상]");
+
+        if (questData.RewardGold > 0)
+        {
+            _sb.AppendLine($"{questData.RewardGold} Gold");
+        }
+
+        if (questData.RewardXP > 0)
+        {
+            _sb.AppendLine($"{questData.RewardXP} XP");
+        }
+
+        GetText((int)Texts.QuestRewardText).text = _sb.ToString();
+
+        foreach (var element in questData.RewardItems)
+        {
+            var go = Managers.Resource.Instantiate("UI_QuestRewardSlot", GetRT((int)RectTransforms.QuestRewardSlots), true);
+            go.GetComponent<UI_QuestRewardSlot>().SetReward(element.Key, element.Value);
+        }
+    }
+
+    private void ShowCompleteButton(Quest quest, bool condition)
+    {
+        if (quest.Data.CanRemoteComplete)
+        {
+            GetButton((int)Buttons.CompleteButton).gameObject.SetActive(condition);
+        }
+    }
+
+    private void Clear()
+    {
+        _selectedQuest = null;
+        GetObject((int)GameObjects.QuestInfo).SetActive(false);
+        GetButton((int)Buttons.CompleteButton).gameObject.SetActive(false);
+        GetButton((int)Buttons.CancelButton).gameObject.SetActive(false);
+        GetText((int)Texts.NOQuestText).gameObject.SetActive(true);
+        foreach (Transform reward in GetRT((int)RectTransforms.QuestRewardSlots))
+        {
+            if (reward.gameObject == GetText((int)Texts.QuestRewardText).gameObject)
+            {
+                continue;
+            }
+
+            Managers.Resource.Destroy(reward.gameObject);
+        }
+    }
+}

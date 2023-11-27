@@ -142,6 +142,11 @@ public class InputManager : GameControls.IPlayerActions
         ShowOrClosePopup<UI_SkillTreePopup>(context);
     }
 
+    public void OnQuest(InputAction.CallbackContext context)
+    {
+        ShowOrClosePopup<UI_QuestPopup>(context);
+    }
+
     public void OnQuick(InputAction.CallbackContext context)
     {
         if (!context.performed)

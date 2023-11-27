@@ -78,7 +78,7 @@ public class UI_NPCMenuPopup : UI_Popup
             AddSubtiem("Äù½ºÆ®", () =>
             {
                 ToggleMenu(false);
-                //Managers.UI.Show<UI_NPCQuestPopup>().SetNPCQuest(npc);
+                Managers.UI.Show<UI_NPCQuestPopup>().SetNPCQuest(npc);
             });
         }
 
