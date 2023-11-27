@@ -129,12 +129,12 @@ public class UI_SkillSlot : UI_BaseSlot
             return;
         }
 
-        //Managers.UI.Get<UI_SkillTooltipTop>().Target = this;
+        Managers.UI.Get<UI_SkillTooltipTop>().Target = this;
     }
 
     public override void OnPointerExit(PointerEventData eventData)
     {
-        //Managers.UI.Get<UI_SkillTooltipTop>().Target = null;
+        Managers.UI.Get<UI_SkillTooltipTop>().Target = null;
     }
 
     private bool IsPointerOn(PointerEventData eventData, GameObject gameObject)

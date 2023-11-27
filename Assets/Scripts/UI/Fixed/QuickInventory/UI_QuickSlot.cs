@@ -137,11 +137,13 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
     public override void OnPointerEnter(PointerEventData eventData)
     {
         Managers.UI.Get<UI_ItemTooltipTop>().Target = this;
+        Managers.UI.Get<UI_SkillTooltipTop>().Target = this;
     }
 
     public override void OnPointerExit(PointerEventData eventData)
     {
         Managers.UI.Get<UI_ItemTooltipTop>().Target = null;
+        Managers.UI.Get<UI_SkillTooltipTop>().Target = null;
     }
 
     public void OnDrop(PointerEventData eventData)
