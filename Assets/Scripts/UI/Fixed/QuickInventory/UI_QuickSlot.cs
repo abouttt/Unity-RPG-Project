@@ -68,10 +68,22 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
                 if (item is CountableItem countableItem)
                 {
                     item.ItemChanged += RefreshCountText;
-                    item.ItemChanged += CheckDestroyed;
+                    item.ItemChanged += CheckItemDestroyed;
                 }
 
                 if (item.Data is ICooldownable cooldownable)
+                {
+                    cooldownable.Cooldown.Cooldowned += ActiveCooldownImage;
+                    Get<UI_CooldownImage>((int)CooldownImages.CooldownImage).SetCooldown(cooldownable.Cooldown);
+                }
+            }
+            else if (usable is Skill skill)
+            {
+                SetObject(usable, skill.Data.SkillImage);
+
+                skill.SkillChanged += CheckSkillLocked;
+
+                if (skill.Data is ICooldownable cooldownable)
                 {
                     cooldownable.Cooldown.Cooldowned += ActiveCooldownImage;
                     Get<UI_CooldownImage>((int)CooldownImages.CooldownImage).SetCooldown(cooldownable.Cooldown);
@@ -85,9 +97,18 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
         if (ObjectRef is Item item)
         {
             item.ItemChanged -= RefreshCountText;
-            item.ItemChanged -= CheckDestroyed;
+            item.ItemChanged -= CheckItemDestroyed;
 
             if (item.Data is ICooldownable cooldownable)
+            {
+                cooldownable.Cooldown.Cooldowned -= ActiveCooldownImage;
+            }
+        }
+        else if (ObjectRef is Skill skill)
+        {
+            skill.SkillChanged -= CheckSkillLocked;
+
+            if (skill.Data is ICooldownable cooldownable)
             {
                 cooldownable.Cooldown.Cooldowned -= ActiveCooldownImage;
             }
@@ -111,9 +132,17 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
         }
     }
 
-    private void CheckDestroyed()
+    private void CheckItemDestroyed()
     {
         if (ObjectRef is Item item && item.IsDestroyed)
+        {
+            Player.QuickInventory.RemoveUsable(Index);
+        }
+    }
+
+    private void CheckSkillLocked()
+    {
+        if (ObjectRef is Skill skill && skill.IsLock)
         {
             Player.QuickInventory.RemoveUsable(Index);
         }
@@ -166,7 +195,7 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
                     OnDropItemSlot(otherSlot as UI_ItemSlot);
                     break;
                 case SlotType.Skill:
-                    //OnDropSkillSlot(otherSlot as UI_SkillSlot);
+                    OnDropSkillSlot(otherSlot as UI_SkillSlot);
                     break;
                 case SlotType.Quick:
                     OnDropQuickSlot(otherSlot as UI_QuickSlot);
@@ -190,20 +219,20 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
         Player.QuickInventory.SetUsable(usable, Index);
     }
 
-    //private void OnDropSkillSlot(UI_SkillSlot otherSkillSlot)
-    //{
-    //    if (otherSkillSlot.ObjectRef is not IUsable usable)
-    //    {
-    //        return;
-    //    }
+    private void OnDropSkillSlot(UI_SkillSlot otherSkillSlot)
+    {
+        if (otherSkillSlot.ObjectRef is not IUsable usable)
+        {
+            return;
+        }
 
-    //    if (ObjectRef == otherSkillSlot.ObjectRef)
-    //    {
-    //        return;
-    //    }
+        if (ObjectRef == otherSkillSlot.ObjectRef)
+        {
+            return;
+        }
 
-    //    Player.QuickInventory.SetUsable(usable, Index);
-    //}
+        Player.QuickInventory.SetUsable(usable, Index);
+    }
 
     private void OnDropQuickSlot(UI_QuickSlot otherQuickSlot)
     {
