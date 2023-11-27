@@ -49,8 +49,6 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
-    // 현재 경험치가 최대를 넘으면 레벨업하고 최대 경험치 이상의 나머지 경험치는 재귀적으로 다시 메서드 호출.
-
     public int XP
     {
         get => _currentStat.XP;
@@ -62,16 +60,11 @@ public class PlayerStatus : MonoBehaviour
             }
 
             _currentStat.XP = value;
-            if (_currentStat.XP >= MaxStat.XP)
+
+            while(_currentStat.XP >= MaxStat.XP)
             {
                 _currentStat.XP -= MaxStat.XP;
                 LevelUp();
-
-                if (_currentStat.XP > 0)
-                {
-                    XP += _currentStat.XP;
-                    return;
-                }
             }
 
             XPChanged?.Invoke();
@@ -108,6 +101,13 @@ public class PlayerStatus : MonoBehaviour
     private readonly PlayerStat _currentStat = new();
     private int _currentGold = 0;
 
+    private void Awake()
+    {
+        RefreshAllStat();
+        FillAllStat();
+        StatChanged?.Invoke();
+    }
+
     private void Start()
     {
         Player.EquipmentInventory.Changed += (equipmentType) =>
@@ -128,10 +128,6 @@ public class PlayerStatus : MonoBehaviour
             }
             StatChanged?.Invoke();
         };
-
-        RefreshAllStat();
-        FillAllStat();
-        StatChanged?.Invoke();
     }
 
     private void Update()
