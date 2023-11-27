@@ -50,6 +50,7 @@ public class ItemInventory : MonoBehaviour
                     var otherItem = inventory.Items[sameIndex] as CountableItem;
                     int prevCount = count;
                     count = otherItem.AddCountAndGetExcess(count);
+                    Managers.Quest.ReceiveReport(Category.Item, itemData.ItemID, prevCount - count);
                     InventoryChanged?.Invoke(itemData.ItemType, sameIndex);
                 }
                 else
@@ -223,6 +224,7 @@ public class ItemInventory : MonoBehaviour
         }
 
         inventory.Items[index].Index = index;
+        Managers.Quest.ReceiveReport(Category.Item, itemData.ItemID, count);
         InventoryChanged?.Invoke(itemData.ItemType, index);
     }
 
@@ -313,6 +315,7 @@ public class ItemInventory : MonoBehaviour
         item.Destroy();
         inventory.Items[index] = null;
         inventory.Count--;
+        Managers.Quest.ReceiveReport(Category.Item, item.Data.ItemID, -count);
     }
 
     private bool TryGetEmptyIndex(ItemType itemType, out int index)

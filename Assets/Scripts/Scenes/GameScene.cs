@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Cinemachine;
 
@@ -22,10 +23,14 @@ public class GameScene : BaseScene
 
         InitPlayer();
         InitUI();
+        StartCoroutine(GameStart());
 
         Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
         Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
         Managers.Input.ToggleCursor(false);
+        Managers.Game.IsDefaultSpawnPosition = false;
+        Managers.Game.IsPortalSpawnPosition = false;
+        Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
 
         Player.Status.Gold += 10000;
         Player.Status.XP += 700;
@@ -57,16 +62,23 @@ public class GameScene : BaseScene
         Destroy(UIPackage);
     }
 
+    private IEnumerator GameStart()
+    {
+        yield return null;
+
+        Managers.Game.OnGameStarted();
+    }
+
     private void GetPositionAndRotation(out Vector3 position, out float yaw)
     {
         position = DefaultSpawnPosition;
         yaw = DefaultSpawnRotationYaw;
 
-        //if (Managers.Game.IsPortalSpawnPosition)
-        //{
-        //    position = PortalSpawnPosition;
-        //    yaw = PortalSpawnRotationYaw;
-        //}
+        if (Managers.Game.IsPortalSpawnPosition)
+        {
+            position = PortalSpawnPosition;
+            yaw = PortalSpawnRotationYaw;
+        }
         //else if (Managers.Data.TryGetSaveData(SavePath.PlayerTransformSavePath, out string json))
         //{
         //    var saveData = JsonUtility.FromJson<PlayerTransformSaveData>(json);

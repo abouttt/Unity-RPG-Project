@@ -4,8 +4,10 @@ using UnityEngine;
 public class Managers : Singleton<Managers>
 {
     public static CooldownManager Cooldown => GetInstance._cooldown;
+    public static GameManager Game => GetInstance._game;
     public static InputManager Input => GetInstance._input;
     public static PoolManager Pool => GetInstance._pool;
+    public static QuestManager Quest => GetInstance._quest;
     public static ResourceManager Resource => GetInstance._resource;
     public static SceneManagerEx Scene => GetInstance._scene;
     public static SoundManager Sound => GetInstance._sound;
@@ -14,8 +16,10 @@ public class Managers : Singleton<Managers>
     private static bool s_isInit = false;
 
     private readonly CooldownManager _cooldown = new();
+    private readonly GameManager _game = new();
     private readonly InputManager _input = new();
     private readonly PoolManager _pool = new();
+    private readonly QuestManager _quest = new();
     private readonly ResourceManager _resource = new();
     private readonly SceneManagerEx _scene = new();
     private readonly SoundManager _sound = new();
@@ -42,6 +46,7 @@ public class Managers : Singleton<Managers>
 
         Input.Init();
         Pool.Init();
+        Quest.Init();
         Sound.Init();
         UI.Init();
 
@@ -58,6 +63,7 @@ public class Managers : Singleton<Managers>
         Cooldown.Clear();
         Input.Clear();
         Pool.Clear();
+        Quest.Clear();
         Resource.Clear();
         Sound.Clear();
         UI.Clear();

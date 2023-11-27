@@ -38,7 +38,7 @@ public abstract class ConsumableItem : CountableItem, IUsable
         }
 
         ConsumableData.Cooldown.OnCooldowned();
-        //Managers.Quest.ReceiveReport(Category.Item, Data.ItemID, -ConsumableData.RequiredCount);
+        Managers.Quest.ReceiveReport(Category.Item, Data.ItemID, -ConsumableData.RequiredCount);
 
         return true;
     }

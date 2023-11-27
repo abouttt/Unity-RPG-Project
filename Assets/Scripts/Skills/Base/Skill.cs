@@ -25,6 +25,7 @@ public abstract class Skill : IUsable
         if (IsLock)
         {
             IsLock = false;
+            Managers.Quest.ReceiveReport(Category.Skill, Data.SkillID, 1);
         }
 
         CurrentLevel++;
@@ -102,6 +103,7 @@ public abstract class Skill : IUsable
         IsLock = true;
         IsAcquirable = false;
         SkillChanged?.Invoke();
+        Managers.Quest.ReceiveReport(Category.Skill, Data.SkillID, -1);
 
         return skillPoint;
     }
