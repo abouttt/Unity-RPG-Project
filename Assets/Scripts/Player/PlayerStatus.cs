@@ -175,6 +175,7 @@ public class PlayerStatus : MonoBehaviour
     private void LevelUp()
     {
         Level++;
+        Player.SkillTree.SkillPoint++;
         RefreshAllStat();
         FillAllStat();
         LevelChanged?.Invoke();

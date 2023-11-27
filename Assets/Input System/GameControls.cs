@@ -64,6 +64,15 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""f58e6b7d-5ba8-4723-9545-5fcc73dd1c33"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""CursorToggle"",
                     ""type"": ""Button"",
                     ""id"": ""11b76afa-69e7-4a07-ba64-c3800beea9da"",
@@ -109,18 +118,18 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Quick"",
+                    ""name"": ""SkillTree"",
                     ""type"": ""Button"",
-                    ""id"": ""2dfeb728-f92d-4d20-8446-cecaa0ba65a6"",
+                    ""id"": ""b3c848f4-995a-4b12-826b-9bd5254fdf3f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Interaction"",
+                    ""name"": ""Quick"",
                     ""type"": ""Button"",
-                    ""id"": ""f58e6b7d-5ba8-4723-9545-5fcc73dd1c33"",
+                    ""id"": ""2dfeb728-f92d-4d20-8446-cecaa0ba65a6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -383,6 +392,17 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""979aa19c-d115-4498-9004-15def5027d8f"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard/Mouse"",
+                    ""action"": ""SkillTree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""ccdd241c-235b-45ed-b7a4-a5997be9d793"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -420,13 +440,14 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         m_Player_CursorToggle = m_Player.FindAction("CursorToggle", throwIfNotFound: true);
         m_Player_LockOn = m_Player.FindAction("LockOn", throwIfNotFound: true);
         m_Player_Cancel = m_Player.FindAction("Cancel", throwIfNotFound: true);
         m_Player_ItemInventory = m_Player.FindAction("ItemInventory", throwIfNotFound: true);
         m_Player_EquipmentInventory = m_Player.FindAction("EquipmentInventory", throwIfNotFound: true);
+        m_Player_SkillTree = m_Player.FindAction("SkillTree", throwIfNotFound: true);
         m_Player_Quick = m_Player.FindAction("Quick", throwIfNotFound: true);
-        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -492,13 +513,14 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_Interaction;
     private readonly InputAction m_Player_CursorToggle;
     private readonly InputAction m_Player_LockOn;
     private readonly InputAction m_Player_Cancel;
     private readonly InputAction m_Player_ItemInventory;
     private readonly InputAction m_Player_EquipmentInventory;
+    private readonly InputAction m_Player_SkillTree;
     private readonly InputAction m_Player_Quick;
-    private readonly InputAction m_Player_Interaction;
     public struct PlayerActions
     {
         private @GameControls m_Wrapper;
@@ -507,13 +529,14 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputAction @CursorToggle => m_Wrapper.m_Player_CursorToggle;
         public InputAction @LockOn => m_Wrapper.m_Player_LockOn;
         public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
         public InputAction @ItemInventory => m_Wrapper.m_Player_ItemInventory;
         public InputAction @EquipmentInventory => m_Wrapper.m_Player_EquipmentInventory;
+        public InputAction @SkillTree => m_Wrapper.m_Player_SkillTree;
         public InputAction @Quick => m_Wrapper.m_Player_Quick;
-        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -535,6 +558,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @Interaction.started += instance.OnInteraction;
+            @Interaction.performed += instance.OnInteraction;
+            @Interaction.canceled += instance.OnInteraction;
             @CursorToggle.started += instance.OnCursorToggle;
             @CursorToggle.performed += instance.OnCursorToggle;
             @CursorToggle.canceled += instance.OnCursorToggle;
@@ -550,12 +576,12 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @EquipmentInventory.started += instance.OnEquipmentInventory;
             @EquipmentInventory.performed += instance.OnEquipmentInventory;
             @EquipmentInventory.canceled += instance.OnEquipmentInventory;
+            @SkillTree.started += instance.OnSkillTree;
+            @SkillTree.performed += instance.OnSkillTree;
+            @SkillTree.canceled += instance.OnSkillTree;
             @Quick.started += instance.OnQuick;
             @Quick.performed += instance.OnQuick;
             @Quick.canceled += instance.OnQuick;
-            @Interaction.started += instance.OnInteraction;
-            @Interaction.performed += instance.OnInteraction;
-            @Interaction.canceled += instance.OnInteraction;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -572,6 +598,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @Interaction.started -= instance.OnInteraction;
+            @Interaction.performed -= instance.OnInteraction;
+            @Interaction.canceled -= instance.OnInteraction;
             @CursorToggle.started -= instance.OnCursorToggle;
             @CursorToggle.performed -= instance.OnCursorToggle;
             @CursorToggle.canceled -= instance.OnCursorToggle;
@@ -587,12 +616,12 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @EquipmentInventory.started -= instance.OnEquipmentInventory;
             @EquipmentInventory.performed -= instance.OnEquipmentInventory;
             @EquipmentInventory.canceled -= instance.OnEquipmentInventory;
+            @SkillTree.started -= instance.OnSkillTree;
+            @SkillTree.performed -= instance.OnSkillTree;
+            @SkillTree.canceled -= instance.OnSkillTree;
             @Quick.started -= instance.OnQuick;
             @Quick.performed -= instance.OnQuick;
             @Quick.canceled -= instance.OnQuick;
-            @Interaction.started -= instance.OnInteraction;
-            @Interaction.performed -= instance.OnInteraction;
-            @Interaction.canceled -= instance.OnInteraction;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -625,12 +654,13 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
         void OnCursorToggle(InputAction.CallbackContext context);
         void OnLockOn(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
         void OnItemInventory(InputAction.CallbackContext context);
         void OnEquipmentInventory(InputAction.CallbackContext context);
+        void OnSkillTree(InputAction.CallbackContext context);
         void OnQuick(InputAction.CallbackContext context);
-        void OnInteraction(InputAction.CallbackContext context);
     }
 }

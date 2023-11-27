@@ -5,7 +5,6 @@ using AYellowpaper.SerializedCollections;
 
 public class SkillTree : MonoBehaviour
 {
-    #region SkillInit
     [Serializable]
     public class SkillInit
     {
@@ -13,9 +12,8 @@ public class SkillTree : MonoBehaviour
         [SerializeField, SerializedDictionary("자식 스킬", "레벨 조건")]
         public SerializedDictionary<SkillData, int> ChildrenData;
     }
-    #endregion
 
-    public int SkillPoint 
+    public int SkillPoint
     {
         get => _skillPoint;
         set

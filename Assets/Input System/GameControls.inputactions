@@ -42,6 +42,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Interaction",
+                    "type": "Button",
+                    "id": "f58e6b7d-5ba8-4723-9545-5fcc73dd1c33",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "CursorToggle",
                     "type": "Button",
                     "id": "11b76afa-69e7-4a07-ba64-c3800beea9da",
@@ -87,18 +96,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Quick",
+                    "name": "SkillTree",
                     "type": "Button",
-                    "id": "2dfeb728-f92d-4d20-8446-cecaa0ba65a6",
+                    "id": "b3c848f4-995a-4b12-826b-9bd5254fdf3f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interaction",
+                    "name": "Quick",
                     "type": "Button",
-                    "id": "f58e6b7d-5ba8-4723-9545-5fcc73dd1c33",
+                    "id": "2dfeb728-f92d-4d20-8446-cecaa0ba65a6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -356,6 +365,17 @@
                     "processors": "Scale(factor=9)",
                     "groups": "Keyboard/Mouse",
                     "action": "Quick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "979aa19c-d115-4498-9004-15def5027d8f",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard/Mouse",
+                    "action": "SkillTree",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
