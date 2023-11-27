@@ -33,6 +33,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
+  - m_GUID: 067db487627e74843bd1ae92b8afa7c0
+    m_Address: QuestCompletableNotifier
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+  - m_GUID: e3178602cefa12f4aa3782b42ba87987
+    m_Address: QuestPresenceNotifier
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
   m_SchemaSet:

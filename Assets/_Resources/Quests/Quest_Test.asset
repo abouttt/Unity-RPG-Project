@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d316d109c6bbbd84f85c358caa3784b7, type: 3}
+  m_Name: Quest_Test
+  m_EditorClassIdentifier: 
+  <QuestID>k__BackingField: TEST
+  <QuestName>k__BackingField: "\uD14C\uC2A4\uD2B8"
+  <Description>k__BackingField: "\uD14C\uC2A4\uD2B8\uD018\uC2A4\uD2B8\uC785\uB2C8\uB2E4."
+  <LimitLevel>k__BackingField: 1
+  <CompleteOwnerID>k__BackingField: 
+  <CanRemoteComplete>k__BackingField: 0
+  <Targets>k__BackingField:
+  - <Category>k__BackingField: 0
+    <TargetID>k__BackingField: CONSUMABLE_HEAL_POTION
+    <Description>k__BackingField: "\uD790 \uD3EC\uC158"
+    <CompleteCount>k__BackingField: 5
+    <RemoveAfterCompletion>k__BackingField: 1
+  RewardGold: 1000
+  RewardXP: 120
+  RewardItems:
+    _serializedList:
+    - Key: {fileID: 11400000, guid: 49543d249241ddc47a2c25630219bc32, type: 2}
+      Value: 1

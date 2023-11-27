@@ -33,7 +33,6 @@ public class GameScene : BaseScene
         Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
 
         Player.Status.Gold += 10000;
-        Player.Status.XP += 700;
     }
 
     private void InitPlayer()
