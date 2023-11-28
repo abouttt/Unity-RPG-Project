@@ -73,14 +73,11 @@ public class UI_NPCMenuPopup : UI_Popup
             });
         }
 
-        if (npc.Quest)
+        AddSubtiem("Äù½ºÆ®", () =>
         {
-            AddSubtiem("Äù½ºÆ®", () =>
-            {
-                ToggleMenu(false);
-                Managers.UI.Show<UI_NPCQuestPopup>().SetNPCQuest(npc);
-            });
-        }
+            ToggleMenu(false);
+            Managers.UI.Show<UI_NPCQuestPopup>().SetNPCQuest(npc);
+        });
 
         AddSubtiem("¶°³­´Ù", () =>
         {

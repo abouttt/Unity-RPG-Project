@@ -28,14 +28,6 @@ public class Quest
 
             _targets.Add(target, count);
         }
-
-        Owner.Quests.Remove(Data);
-
-        if (CheckCompletable())
-        {
-            State = QuestState.Completable;
-            CompleteOwner.Quests.Add(Data);
-        }
     }
 
     //public Quest(QuestSaveData saveData)
@@ -71,11 +63,6 @@ public class Quest
             return false;
         }
 
-        if (State is QuestState.Completable && count > 0)
-        {
-            return false;
-        }
-
         foreach (var element in _targets.ToList())
         {
             var target = element.Key;
@@ -93,24 +80,7 @@ public class Quest
             _targets[target] = element.Value + count;
         }
 
-        var prevState = State;
-        if (CheckCompletable())
-        {
-            if (prevState is not QuestState.Completable)
-            {
-                State = QuestState.Completable;
-                CompleteOwner.Quests.Add(Data);
-            }
-        }
-        else
-        {
-            if (prevState is QuestState.Completable)
-            {
-                CompleteOwner.Quests.Remove(Data);
-            }
-
-            State = QuestState.Active;
-        }
+        CheckCompletable();
 
         return true;
     }
@@ -122,17 +92,15 @@ public class Quest
             return false;
         }
 
-        CompleteOwner.Quests.Remove(Data);
+        CompleteOwner.RemoveQuest(Data);
 
         State = QuestState.Complete;
         Player.Status.Gold += Data.RewardGold;
         Player.Status.XP += Data.RewardXP;
-        if (Data.RewardItems is not null)
+
+        foreach (var element in Data.RewardItems.ToList())
         {
-            foreach (var element in Data.RewardItems)
-            {
-                Player.ItemInventory.AddItem(element.Key, element.Value);
-            }
+            Player.ItemInventory.AddItem(element.Key, element.Value);
         }
 
         foreach (var element in _targets.ToList())
@@ -155,24 +123,35 @@ public class Quest
     {
         if (State is QuestState.Completable)
         {
-            CompleteOwner.Quests.Remove(Data);
+            CompleteOwner.RemoveQuest(Data);
         }
 
         State = QuestState.Cancel;
-        Owner.Quests.Add(Data);
+        Owner.AddQuest(Data);
         Managers.Quest.ReceiveReport(Category.Quest, Data.QuestID, -1);
     }
 
-    private bool CheckCompletable()
+    public void CheckCompletable()
     {
+        var prevState = State;
         foreach (var element in _targets)
         {
             if (element.Key.CompleteCount > element.Value)
             {
-                return false;
+                if (prevState is QuestState.Completable)
+                {
+                    State = QuestState.Active;
+                    CompleteOwner.RemoveQuest(Data);
+                }
+
+                return;
             }
         }
 
-        return true;
+        if (prevState is not QuestState.Completable)
+        {
+            State = QuestState.Completable;
+            CompleteOwner.AddQuest(Data);
+        }
     }
 }

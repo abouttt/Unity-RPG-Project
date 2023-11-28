@@ -46112,7 +46112,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 49543d249241ddc47a2c25630219bc32, type: 2}
   - {fileID: 11400000, guid: cf2be0fb45720354782ea5c31f455047, type: 2}
   - {fileID: 11400000, guid: de34922a05749ec4595dc9c8a7da9ea9, type: 2}
-  <Quests>k__BackingField:
+  _quests:
   - {fileID: 11400000, guid: 02d1c4ef826835b439e880db6f49aec4, type: 2}
   _questNotifierPosition: {x: 0, y: 2.3, z: 0}
 --- !u!143 &1723072758

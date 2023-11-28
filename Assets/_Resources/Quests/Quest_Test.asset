@@ -27,6 +27,4 @@ MonoBehaviour:
   RewardGold: 1000
   RewardXP: 120
   RewardItems:
-    _serializedList:
-    - Key: {fileID: 11400000, guid: 49543d249241ddc47a2c25630219bc32, type: 2}
-      Value: 1
+    _serializedList: []

@@ -29,8 +29,11 @@ public class QuestManager
 
         var newQuest = new Quest(owner, questData);
         _quests.Add(newQuest);
+        newQuest.Owner.RemoveQuest(newQuest.Data);
         QuestRegistered?.Invoke(newQuest);
-        if (newQuest.State == QuestState.Completable)
+
+        newQuest.CheckCompletable();
+        if (newQuest.State is QuestState.Completable)
         {
             QuestCompletabled?.Invoke(newQuest);
         }
@@ -64,9 +67,9 @@ public class QuestManager
             var prevState = quest.State;
             if (quest.ReceiveReport(category, id, count))
             {
-                if (quest.State is QuestState.Completable)
+                if (prevState is not QuestState.Completable)
                 {
-                    if (prevState is not QuestState.Completable)
+                    if (quest.State is QuestState.Completable)
                     {
                         QuestCompletabled?.Invoke(quest);
                     }

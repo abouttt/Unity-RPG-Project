@@ -11,8 +11,6 @@ public class NPC : Interactive
     public bool Conversation { get; private set; }
     [field: SerializeField]
     public bool Shop { get; private set; }
-    [field: SerializeField]
-    public bool Quest { get; private set; }
 
     [field: SerializeField, TextArea, Space(10)]
     public List<string> ConversationScripts { get; private set; }
@@ -20,10 +18,12 @@ public class NPC : Interactive
     [field: SerializeField]
     public List<ItemData> SaleItems { get; private set; }
 
-    [field: SerializeField]
-    public List<QuestData> Quests { get; private set; }
+    public IReadOnlyList<QuestData> Quests => _quests;
 
     private static readonly List<NPC> s_NPCs = new();
+
+    [field: SerializeField]
+    private List<QuestData> _quests = new();
 
     [SerializeField]
     private Vector3 _questNotifierPosition = new Vector3(0f, 2.3f, 0f);
@@ -38,12 +38,6 @@ public class NPC : Interactive
 
         Managers.Game.GameStarted += () =>
         {
-            Managers.Quest.QuestRegistered += CheckQuest;
-            Managers.Quest.QuestCompletabled += CheckQuest;
-            Managers.Quest.QuestCompletableCanceled += CheckQuest;
-            Managers.Quest.QuestCompleted += CheckQuest;
-            Managers.Quest.QuestUnRegistered += CheckQuest;
-
             _questPresenceNotifier = Managers.Resource.Instantiate("QuestPresenceNotifier", _questNotifierPosition, transform);
             _questCompletableNotifier = Managers.Resource.Instantiate("QuestCompletableNotifier", _questNotifierPosition, transform);
             _questPresenceNotifier.SetActive(false);
@@ -60,17 +54,19 @@ public class NPC : Interactive
 
     public override void Interaction()
     {
-        if (!Conversation && !Shop && !Quest)
-        {
-            return;
-        }
-
-        Managers.Quest.ReceiveReport(Category.NPC, NPCID, 1);
         Managers.UI.Show<UI_NPCMenuPopup>().SetNPC(this);
+        Managers.Quest.ReceiveReport(Category.NPC, NPCID, 1);
     }
 
-    private void CheckQuest(Quest quest)
+    public void AddQuest(QuestData questData)
     {
+        _quests.Add(questData);
+        CheckQuest();
+    }
+
+    public void RemoveQuest(QuestData questData)
+    {
+        _quests.Remove(questData);
         CheckQuest();
     }
 
@@ -79,42 +75,33 @@ public class NPC : Interactive
         _questPresenceNotifier.SetActive(false);
         _questCompletableNotifier.SetActive(false);
 
-        if (Quests.Count == 0)
+        int lockedQuestCount = 0;
+        bool hasCompletableQuest = false;
+        foreach (var questData in Quests)
         {
-            Quest = false;
+            if (questData.LimitLevel > Player.Status.Level)
+            {
+                lockedQuestCount++;
+                continue;
+            }
+
+            var quest = Managers.Quest.GetActiveQuest(questData);
+            if (quest is null)
+            {
+                continue;
+            }
+
+            if (quest.State is QuestState.Completable)
+            {
+                hasCompletableQuest = true;
+                break;
+            }
         }
-        else
+
+        if (Quests.Count != lockedQuestCount)
         {
-            Quest = true;
-
-            int lockedQuestCount = 0;
-            bool hasCompletableQuest = false;
-            foreach (var questData in Quests)
-            {
-                if (questData.LimitLevel > Player.Status.Level)
-                {
-                    lockedQuestCount++;
-                    continue;
-                }
-
-                var quest = Managers.Quest.GetActiveQuest(questData);
-                if (quest is null)
-                {
-                    continue;
-                }
-
-                if (quest.State is QuestState.Completable)
-                {
-                    hasCompletableQuest = true;
-                    break;
-                }
-            }
-
-            if (Quests.Count != lockedQuestCount)
-            {
-                _questPresenceNotifier.SetActive(!hasCompletableQuest);
-                _questCompletableNotifier.SetActive(hasCompletableQuest);
-            }
+            _questPresenceNotifier.SetActive(!hasCompletableQuest);
+            _questCompletableNotifier.SetActive(hasCompletableQuest);
         }
     }
 
