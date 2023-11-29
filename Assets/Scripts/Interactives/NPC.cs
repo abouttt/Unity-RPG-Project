@@ -12,18 +12,18 @@ public class NPC : Interactive
     [field: SerializeField]
     public bool Shop { get; private set; }
 
-    [field: SerializeField, TextArea, Space(10)]
-    public List<string> ConversationScripts { get; private set; }
-
-    [field: SerializeField]
-    public List<ItemData> SaleItems { get; private set; }
-
+    public IReadOnlyList<string> ConversationScripts => _conversationScripts;
+    public IReadOnlyList<ItemData> SaleItems => _saleItems;
     public IReadOnlyList<QuestData> Quests => _quests;
 
     private static readonly List<NPC> s_NPCs = new();
 
+    [field: SerializeField, TextArea, Space(10)]
+    private List<string> _conversationScripts = new();
     [field: SerializeField]
     private List<QuestData> _quests = new();
+    [field: SerializeField]
+    private List<ItemData> _saleItems = new();
 
     [SerializeField]
     private Vector3 _questNotifierPosition = new Vector3(0f, 2.3f, 0f);

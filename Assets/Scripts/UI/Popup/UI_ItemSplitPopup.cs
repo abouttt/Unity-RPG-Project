@@ -68,7 +68,7 @@ public class UI_ItemSplitPopup : UI_Popup
 
         GetText((int)Texts.GuideText).text = text;
         Get<TMP_InputField>((int)InputFields.InputField).text = CurrentCount.ToString();
-        //GetText((int)Texts.PriceText).color = (_price * CurrentCount) <= Player.Status.Gold ? Color.white : Color.red;
+        GetText((int)Texts.PriceText).color = (_price * CurrentCount) <= Player.Status.Gold ? Color.white : Color.red;
         GetObject((int)GameObjects.ItemPrice).SetActive(showPrice);
     }
 
@@ -101,7 +101,7 @@ public class UI_ItemSplitPopup : UI_Popup
 
         int totalPrice = _price * CurrentCount;
         GetText((int)Texts.PriceText).text = totalPrice.ToString();
-        //GetText((int)Texts.PriceText).color = totalPrice <= Player.Status.Gold ? Color.white : Color.red;
+        GetText((int)Texts.PriceText).color = totalPrice <= Player.Status.Gold ? Color.white : Color.red;
     }
 
     private void OnEndEdit()

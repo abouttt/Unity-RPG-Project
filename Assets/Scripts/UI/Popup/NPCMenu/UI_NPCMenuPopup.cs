@@ -69,7 +69,7 @@ public class UI_NPCMenuPopup : UI_Popup
             AddSubtiem("»óÁ¡", () =>
             {
                 ToggleMenu(false);
-                Managers.UI.Show<UI_ShopPopup>().SetItemSaleList(npc.SaleItems);
+                Managers.UI.Show<UI_ShopPopup>().SetNPCSaleItems(npc);
             });
         }
 

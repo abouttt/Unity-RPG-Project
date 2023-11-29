@@ -56,9 +56,9 @@ public class UI_ShopPopup : UI_Popup, IDropHandler
         };
     }
 
-    public void SetItemSaleList(List<ItemData> itemSaleList)
+    public void SetNPCSaleItems(NPC npc)
     {
-        foreach (ItemData itemData in itemSaleList)
+        foreach (ItemData itemData in npc.SaleItems)
         {
             CreateShopSlot(itemData);
         }
