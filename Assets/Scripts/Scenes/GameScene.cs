@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using Cinemachine;
 
 public class GameScene : BaseScene
 {
@@ -21,7 +20,8 @@ public class GameScene : BaseScene
     {
         base.Init();
 
-        InitPlayer();
+        GetPositionAndRotation(out var position, out var yaw);
+        Player.Init(position, yaw);
         InitUI();
         StartCoroutine(GameStart());
 
@@ -33,25 +33,6 @@ public class GameScene : BaseScene
         Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
 
         Player.Status.Gold += 10000;
-    }
-
-    private void InitPlayer()
-    {
-        if (Player.GameObject != null)
-        {
-            return;
-        }
-
-        GetPositionAndRotation(out var position, out var yaw);
-        Camera.main.transform.position = Vector3.zero;
-
-        var playerPackagePrefab = Managers.Resource.Load<GameObject>("PlayerPackage");
-        playerPackagePrefab.FindChild("Player").transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
-
-        var playerPackage = Instantiate(playerPackagePrefab);
-        playerPackage.transform.DetachChildren();
-        Destroy(playerPackage);
-        FindObjectOfType<CinemachineStateDrivenCamera>().transform.SetParent(UnityEngine.Camera.main.transform);
     }
 
     private void InitUI()
