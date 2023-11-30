@@ -22,33 +22,31 @@ public class UI_QuestTrackerSubitem : UI_Base
         BindButton(typeof(Buttons));
         BindText(typeof(Texts));
 
-        GetButton((int)Buttons.CloseButton).onClick.AddListener(() => { Managers.UI.Get<UI_QuestPopup>().QuestTrackerToggle(_questRef, false); });
+        GetButton((int)Buttons.CloseButton).onClick.AddListener(() => 
+        { 
+            Managers.UI.Get<UI_QuestPopup>().ToggleQuestTracker(_questRef, false);
+        });
     }
 
     public void SetQuest(Quest quest)
     {
         _questRef = quest;
-        Managers.Quest.QuestTargetCountChanged += RefreshTargetText;
+        quest.TargetCountChanged += RefreshTargetText;
         GetText((int)Texts.QuestNameText).text = $"<{quest.Data.QuestName}>";
-        RefreshTargetText(quest);
+        RefreshTargetText();
     }
 
     public void Clear()
     {
+        _questRef.TargetCountChanged -= RefreshTargetText;
         _questRef = null;
-        Managers.Quest.QuestTargetCountChanged -= RefreshTargetText;
     }
 
-    private void RefreshTargetText(Quest quest)
+    private void RefreshTargetText()
     {
-        if (_questRef != quest)
-        {
-            return;
-        }
-
         _sb.Clear();
 
-        foreach (var target in quest.Targets)
+        foreach (var target in _questRef.Targets)
         {
             var completeCount = target.Key.CompleteCount;
             var currentCount = Mathf.Clamp(target.Value, 0, completeCount);

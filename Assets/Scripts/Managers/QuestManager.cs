@@ -9,7 +9,7 @@ public class QuestManager
     public event Action<Quest> QuestCompletableCanceled;
     public event Action<Quest> QuestCompleted;
     public event Action<Quest> QuestUnRegistered;
-    public event Action<Quest> QuestTargetCountChanged;
+
     public IReadOnlyList<Quest> Quests => _quests;
 
     private readonly List<Quest> _quests = new();
@@ -17,7 +17,7 @@ public class QuestManager
 
     public void Init()
     {
-        
+
     }
 
     public Quest Register(NPC owner, QuestData questData)
@@ -67,9 +67,9 @@ public class QuestManager
             var prevState = quest.State;
             if (quest.ReceiveReport(category, id, count))
             {
-                if (prevState is not QuestState.Completable)
+                if (quest.State is QuestState.Completable)
                 {
-                    if (quest.State is QuestState.Completable)
+                    if (prevState is not QuestState.Completable)
                     {
                         QuestCompletabled?.Invoke(quest);
                     }
@@ -78,8 +78,6 @@ public class QuestManager
                 {
                     QuestCompletableCanceled?.Invoke(quest);
                 }
-
-                QuestTargetCountChanged?.Invoke(quest);
             }
         }
     }
@@ -117,7 +115,7 @@ public class QuestManager
             return false;
         }
 
-        return quest.State == QuestState.Completable;
+        return quest.State is QuestState.Completable;
     }
 
     public void Clear()
@@ -129,6 +127,5 @@ public class QuestManager
         QuestCompletableCanceled = null;
         QuestCompleted = null;
         QuestUnRegistered = null;
-        QuestTargetCountChanged = null;
     }
 }

@@ -53,12 +53,11 @@ public class UI_QuestPopup : UI_Popup
         Managers.Quest.QuestCompletableCanceled += OnQuestCompletableCanceld;
         Managers.Quest.QuestCompleted += OnQuestCompletedOrCanceled;
         Managers.Quest.QuestUnRegistered += OnQuestCompletedOrCanceled;
-        Managers.Quest.QuestTargetCountChanged += RefreshTargetText;
 
         foreach (var quest in Managers.Quest.Quests)
         {
             OnQuestRegisterd(quest);
-            if (quest.State == QuestState.Completable)
+            if (quest.State is QuestState.Completable)
             {
                 OnQuestCompletabled(quest);
             }
@@ -74,6 +73,11 @@ public class UI_QuestPopup : UI_Popup
 
     public void SetQuestDescription(Quest quest)
     {
+        if (quest is null)
+        {
+            return;
+        }
+
         if (_selectedQuest == quest)
         {
             return;
@@ -82,21 +86,22 @@ public class UI_QuestPopup : UI_Popup
         Clear();
 
         _selectedQuest = quest;
+        quest.TargetCountChanged += RefreshTargetText;
         GetObject((int)GameObjects.QuestInfo).SetActive(true);
         GetText((int)Texts.QuestTitleText).text = quest.Data.QuestName;
         GetText((int)Texts.QuestDescriptionText).text = quest.Data.Description;
-        RefreshTargetText(quest);
+        RefreshTargetText();
         SetRewardText(quest.Data);
-        ShowCompleteButton(quest, quest.State == QuestState.Completable);
+        ShowCompleteButton(quest, quest.State is QuestState.Completable);
         GetButton((int)Buttons.CancelButton).gameObject.SetActive(true);
         GetText((int)Texts.NOQuestText).gameObject.SetActive(false);
     }
 
-    public void QuestTrackerToggle(Quest quest, bool toggle)
+    public void ToggleQuestTracker(Quest quest, bool toggle)
     {
         if (_titleSubitems.TryGetValue(quest, out var subitem))
         {
-            subitem.QuestTrackerToggle(toggle);
+            subitem.ToggleQuestTracker(toggle);
         }
     }
 
@@ -131,19 +136,19 @@ public class UI_QuestPopup : UI_Popup
         if (_titleSubitems.TryGetValue(quest, out var subitem))
         {
             subitem.ToggleCompleteText(false);
-            subitem.QuestTrackerToggle(false);
+            subitem.ToggleQuestTracker(false);
             Managers.Resource.Destroy(subitem.gameObject);
             _titleSubitems.Remove(quest);
             Clear();
         }
     }
 
-    private void RefreshTargetText(Quest quest)
+    private void RefreshTargetText()
     {
         _sb.Clear();
         _sb.AppendLine("[¸ñÀû]");
 
-        foreach (var target in quest.Targets)
+        foreach (var target in _selectedQuest.Targets)
         {
             var completeCount = target.Key.CompleteCount;
             var currentCount = Mathf.Clamp(target.Value, 0, completeCount);
@@ -187,7 +192,12 @@ public class UI_QuestPopup : UI_Popup
 
     private void Clear()
     {
-        _selectedQuest = null;
+        if (_selectedQuest is not null)
+        {
+            _selectedQuest.TargetCountChanged -= RefreshTargetText;
+            _selectedQuest = null;
+        }
+        
         GetObject((int)GameObjects.QuestInfo).SetActive(false);
         GetButton((int)Buttons.CompleteButton).gameObject.SetActive(false);
         GetButton((int)Buttons.CancelButton).gameObject.SetActive(false);

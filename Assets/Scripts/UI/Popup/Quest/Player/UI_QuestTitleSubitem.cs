@@ -57,7 +57,7 @@ public class UI_QuestTitleSubitem : UI_Base
         GetText((int)Texts.CompleteText).gameObject.SetActive(toggle);
     }
 
-    public void QuestTrackerToggle(bool toggle)
+    public void ToggleQuestTracker(bool toggle)
     {
         if (Get<Toggle>((int)Toggles.QuestTrackerToggle).isOn != toggle)
         {

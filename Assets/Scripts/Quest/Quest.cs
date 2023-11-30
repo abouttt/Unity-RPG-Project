@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class Quest
     public NPC CompleteOwner { get; private set; }
     public QuestState State { get; private set; } = QuestState.Inactive;
     public IReadOnlyDictionary<QuestData.Target, int> Targets => _targets;
+    public event Action TargetCountChanged;
 
     private readonly Dictionary<QuestData.Target, int> _targets = new();
 
@@ -63,6 +65,7 @@ public class Quest
             return false;
         }
 
+        bool isChanged = false;
         foreach (var element in _targets.ToList())
         {
             var target = element.Key;
@@ -78,11 +81,16 @@ public class Quest
             }
 
             _targets[target] = element.Value + count;
+            isChanged = true;
         }
 
-        CheckCompletable();
+        if (isChanged)
+        {
+            CheckCompletable();
+            TargetCountChanged?.Invoke();
+        }
 
-        return true;
+        return isChanged;
     }
 
     public bool Complete()
@@ -114,6 +122,7 @@ public class Quest
             Player.ItemInventory.RemoveItem(element.Key.TargetID, element.Key.CompleteCount);
         }
 
+        TargetCountChanged = null;
         Managers.Quest.ReceiveReport(Category.Quest, Data.QuestID, 1);
 
         return true;
@@ -128,6 +137,7 @@ public class Quest
 
         State = QuestState.Cancel;
         Owner.AddQuest(Data);
+        TargetCountChanged = null;
         Managers.Quest.ReceiveReport(Category.Quest, Data.QuestID, -1);
     }
 
