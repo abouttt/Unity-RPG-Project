@@ -318,12 +318,6 @@ public class ItemInventory : MonoBehaviour
         Managers.Quest.ReceiveReport(Category.Item, item.Data.ItemID, -count);
     }
 
-    private bool TryGetEmptyIndex(ItemType itemType, out int index)
-    {
-        index = _inventories[itemType].Items.FindIndex(item => item is null);
-        return index != -1;
-    }
-
     private void SwapItem(ItemType itemType, int Aindex, int BIndex)
     {
         var inventory = _inventories[itemType];
@@ -339,6 +333,12 @@ public class ItemInventory : MonoBehaviour
         }
 
         (inventory.Items[Aindex], inventory.Items[BIndex]) = (inventory.Items[BIndex], inventory.Items[Aindex]);
+    }
+
+    private bool TryGetEmptyIndex(ItemType itemType, out int index)
+    {
+        index = _inventories[itemType].Items.FindIndex(item => item is null);
+        return index != -1;
     }
 
     private bool TryGetSameNoMaxCountalbeItemIndex(Inventory inventory, CountableItemData countableItemData, out int index)
