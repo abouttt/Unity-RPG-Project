@@ -10,7 +10,7 @@ public class CooldownManager
     {
         foreach (var cooldown in _cooldowns)
         {
-            cooldown.Current -= Time.smoothDeltaTime;
+            cooldown.Current -= Time.deltaTime;
             if (cooldown.Current <= 0f)
             {
                 cooldown.Current = 0f;

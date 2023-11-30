@@ -118,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (_jumpTimeoutDelta >= 0.0f)
             {
-                _jumpTimeoutDelta -= Time.smoothDeltaTime;
+                _jumpTimeoutDelta -= Time.deltaTime;
             }
         }
         else
@@ -127,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (_fallTimeoutDelta >= 0.0f)
             {
-                _fallTimeoutDelta -= Time.smoothDeltaTime;
+                _fallTimeoutDelta -= Time.deltaTime;
             }
             else
             {
@@ -138,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         // 중력
         if (_verticalVelocity < _terminalVelocity)
         {
-            _verticalVelocity += _gravity * Time.smoothDeltaTime;
+            _verticalVelocity += _gravity * Time.deltaTime;
         }
     }
 
@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
 
                     if (IsGrounded && !IsJumping && !_isJumpLand)
                     {
-                        Player.Status.SP -= _requiredSprintSP * Time.smoothDeltaTime;
+                        Player.Status.SP -= _requiredSprintSP * Time.deltaTime;
                     }
                 }
                 else
@@ -184,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         var currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-        var finalSpeedChangeRate = Time.smoothDeltaTime * _speedChangeRate;
+        var finalSpeedChangeRate = Time.deltaTime * _speedChangeRate;
         float speedOffset = 0.1f;
 
         // 목표 속도로 가속 또는 감속.
@@ -252,7 +252,7 @@ public class PlayerMovement : MonoBehaviour
 
         // 움직임.
         var targetDirection = Quaternion.Euler(0.0f, _lockOffRotation, 0.0f) * Vector3.forward;
-        _controller.Move((targetDirection.normalized * _speed + new Vector3(0.0f, _verticalVelocity, 0.0f)) * Time.smoothDeltaTime);
+        _controller.Move((targetDirection.normalized * _speed + new Vector3(0.0f, _verticalVelocity, 0.0f)) * Time.deltaTime);
 
         // 애니메이터 업데이트.
         Player.Animator.SetFloat(_animIDPosX, _posXBlend);
