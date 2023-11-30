@@ -110,7 +110,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void Start()
     {
-        Player.EquipmentInventory.Changed += (equipmentType) =>
+        Player.EquipmentInventory.EquipmentChanged += (equipmentType) =>
         {
             RefreshAllStat();
             FillCurrentMeleeStat();

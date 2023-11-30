@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class EquipmentInventory : MonoBehaviour
 {
-    public event Action<EquipmentType> Changed;
+    public event Action<EquipmentType> EquipmentChanged;
 
     private readonly Dictionary<EquipmentType, EquipmentItem> _items = new();
 
@@ -26,14 +27,17 @@ public class EquipmentInventory : MonoBehaviour
         }
 
         var equipmentItem = equipmentItemData.CreateItem() as EquipmentItem;
-        _items[equipmentItemData.EquipmentType]?.Destroy();
-        ChangeItem(equipmentItemData.EquipmentType, equipmentItem);
+        var equipmentType = equipmentItemData.EquipmentType;
+        _items[equipmentType]?.Destroy();
+        _items[equipmentType] = equipmentItem;
+        EquipmentChanged?.Invoke(equipmentType);
     }
 
     public void UnequipItem(EquipmentType equipmentType)
     {
         _items[equipmentType]?.Destroy();
-        ChangeItem(equipmentType, null);
+        _items[equipmentType] = null;
+        EquipmentChanged?.Invoke(equipmentType);
     }
 
     public EquipmentItem GetItem(EquipmentType equipmentType)
@@ -44,11 +48,5 @@ public class EquipmentInventory : MonoBehaviour
     public bool IsNullSlot(EquipmentType equipmentType)
     {
         return _items[equipmentType] is null;
-    }
-
-    private void ChangeItem(EquipmentType equipmentType, EquipmentItem item)
-    {
-        _items[equipmentType] = item;
-        Changed?.Invoke(equipmentType);
     }
 }

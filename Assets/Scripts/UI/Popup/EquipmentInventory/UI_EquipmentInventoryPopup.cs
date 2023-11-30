@@ -39,7 +39,7 @@ public class UI_EquipmentInventoryPopup : UI_Popup
         BindText(typeof(Texts));
         Bind<UI_EquipmentSlot>(typeof(EquipmentSlots));
 
-        Player.EquipmentInventory.Changed += RefreshSlot;
+        Player.EquipmentInventory.EquipmentChanged += RefreshSlot;
         Player.Status.HPChanged += RefreshHPText;
         Player.Status.MPChanged += RefreshMPText;
         Player.Status.SPChanged += RefreshSPText;

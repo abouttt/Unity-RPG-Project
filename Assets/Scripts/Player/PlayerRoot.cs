@@ -21,7 +21,7 @@ public class PlayerRoot : MonoBehaviour
 
     private void Start()
     {
-        Player.EquipmentInventory.Changed += RefreshEquipmentObject;
+        Player.EquipmentInventory.EquipmentChanged += RefreshEquipmentObject;
 
         var types = Enum.GetValues(typeof(EquipmentType));
         foreach (EquipmentType type in types)
