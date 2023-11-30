@@ -13,12 +13,7 @@ public class InteractionDetector : MonoBehaviour
 
     private void Update()
     {
-        if (_target == null)
-        {
-            return;
-        }
-
-        if (!CanInteraction())
+        if (!_isOnKeyGuide)
         {
             return;
         }
@@ -40,7 +35,7 @@ public class InteractionDetector : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!CanInteraction())
+        if (Managers.UI.IsOn<UI_LootPopup>() || Managers.UI.IsOn<UI_NPCMenuPopup>())
         {
             return;
         }
@@ -86,10 +81,5 @@ public class InteractionDetector : MonoBehaviour
         }
 
         SetTarget(null);
-    }
-
-    public bool CanInteraction()
-    {
-        return !(Managers.UI.IsOn<UI_LootPopup>() || Managers.UI.IsOn<UI_NPCMenuPopup>());
     }
 }
