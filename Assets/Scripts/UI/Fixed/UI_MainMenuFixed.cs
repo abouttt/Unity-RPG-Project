@@ -55,7 +55,7 @@ public class UI_MainMenuFixed : UI_Base
 
     private void Start()
     {
-        Managers.UI.Register<UI_MainMenuFixed>();
+        Managers.UI.Register<UI_MainMenuFixed>(this);
         Managers.UI.Get<UI_OptionPopup>().gameObject.FindChild("CloseButton", recursive: true).SetActive(false);
         ToggleOptionMenu(false);
     }

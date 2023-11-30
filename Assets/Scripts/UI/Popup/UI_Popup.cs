@@ -35,6 +35,13 @@ public abstract class UI_Popup : UI_Base, IPointerDownHandler
         Canvas = GetComponent<Canvas>();
     }
 
+    public void ClearEvents()
+    {
+        Focused = null;
+        Showed = null;
+        Closed = null;
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         if (CanFocus)

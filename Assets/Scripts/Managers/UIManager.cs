@@ -62,7 +62,7 @@ public class UIManager
             canvas.sortingOrder = (int)ui.UIType;
         }
 
-        if (ui.UIType == UIType.Popup)
+        if (ui.UIType is UIType.Popup)
         {
             var popup = ui as UI_Popup;
             InitPopup(popup);
@@ -80,9 +80,10 @@ public class UIManager
         bool isRegistered = _uiObjects.TryGetValue(typeof(T), out var ui);
         if (isRegistered)
         {
-            if (ui.UIType == UIType.Popup)
+            if (ui is UI_Popup popup)
             {
-                _activePopups.Remove(ui as UI_Popup);
+                _activePopups.Remove(popup);
+                popup.ClearEvents();
             }
 
             _uiObjects.Remove(typeof(T));
@@ -129,7 +130,7 @@ public class UIManager
                 return ui as T;
             }
 
-            if (ui.UIType == UIType.Popup)
+            if (ui.UIType is UIType.Popup)
             {
                 var popup = ui as UI_Popup;
                 if (IsOnSelfishPopup && !popup.IgnoreSelfish)
@@ -158,7 +159,7 @@ public class UIManager
     {
         if (_uiObjects.TryGetValue(typeof(T), out var ui))
         {
-            if (ui.UIType == UIType.Popup)
+            if (ui.UIType is UIType.Popup)
             {
                 var popup = ui as UI_Popup;
                 if (popup.IsSelfish)
@@ -187,7 +188,7 @@ public class UIManager
 
     public void CloseAll(UIType type)
     {
-        if (type == UIType.Popup)
+        if (type is UIType.Popup)
         {
             foreach (var popup in _activePopups)
             {

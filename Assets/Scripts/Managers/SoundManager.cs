@@ -40,7 +40,7 @@ public class SoundManager
 
         var audioSource = _audioSources[(int)type];
 
-        if (type == SoundType.Bgm)
+        if (type is SoundType.Bgm)
         {
             if (audioSource.isPlaying)
             {
