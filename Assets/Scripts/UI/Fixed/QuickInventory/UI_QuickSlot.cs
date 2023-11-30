@@ -192,50 +192,22 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
             switch (otherSlot.SlotType)
             {
                 case SlotType.Item:
-                    OnDropItemSlot(otherSlot as UI_ItemSlot);
-                    break;
                 case SlotType.Skill:
-                    OnDropSkillSlot(otherSlot as UI_SkillSlot);
+                    if (otherSlot.ObjectRef is not IUsable usable)
+                    {
+                        return;
+                    }
+                    if (ObjectRef == usable)
+                    {
+                        return;
+                    }
+                    Player.QuickInventory.SetUsable(usable, Index);
                     break;
+
                 case SlotType.Quick:
-                    OnDropQuickSlot(otherSlot as UI_QuickSlot);
+                    Player.QuickInventory.Swap(Index, (otherSlot as UI_QuickSlot).Index);
                     break;
             }
         }
-    }
-
-    private void OnDropItemSlot(UI_ItemSlot otherItemSlot)
-    {
-        if (otherItemSlot.ObjectRef is not IUsable usable)
-        {
-            return;
-        }
-
-        if (ObjectRef == otherItemSlot.ObjectRef)
-        {
-            return;
-        }
-
-        Player.QuickInventory.SetUsable(usable, Index);
-    }
-
-    private void OnDropSkillSlot(UI_SkillSlot otherSkillSlot)
-    {
-        if (otherSkillSlot.ObjectRef is not IUsable usable)
-        {
-            return;
-        }
-
-        if (ObjectRef == otherSkillSlot.ObjectRef)
-        {
-            return;
-        }
-
-        Player.QuickInventory.SetUsable(usable, Index);
-    }
-
-    private void OnDropQuickSlot(UI_QuickSlot otherQuickSlot)
-    {
-        Player.QuickInventory.Swap(Index, otherQuickSlot.Index);
     }
 }
