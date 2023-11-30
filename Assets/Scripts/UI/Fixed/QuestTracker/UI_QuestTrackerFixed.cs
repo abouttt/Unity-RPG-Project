@@ -52,7 +52,6 @@ public class UI_QuestTrackerFixed : UI_Base
         if (_trackers.TryGetValue(quest, out var tracker))
         {
             tracker.Clear();
-            tracker.gameObject.SetActive(false);
             _trackers.Remove(quest);
             Managers.Resource.Destroy(tracker.gameObject);
         }
