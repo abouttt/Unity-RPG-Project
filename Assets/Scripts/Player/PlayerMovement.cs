@@ -118,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (_jumpTimeoutDelta >= 0.0f)
             {
-                _jumpTimeoutDelta -= Time.deltaTime;
+                _jumpTimeoutDelta -= Time.smoothDeltaTime;
             }
         }
         else
@@ -127,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (_fallTimeoutDelta >= 0.0f)
             {
-                _fallTimeoutDelta -= Time.deltaTime;
+                _fallTimeoutDelta -= Time.smoothDeltaTime;
             }
             else
             {
@@ -138,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         // 중력
         if (_verticalVelocity < _terminalVelocity)
         {
-            _verticalVelocity += _gravity * Time.deltaTime;
+            _verticalVelocity += _gravity * Time.smoothDeltaTime;
         }
     }
 
@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
 
                     if (IsGrounded && !IsJumping && !_isJumpLand)
                     {
-                        Player.Status.SP -= _requiredSprintSP * Time.deltaTime;
+                        Player.Status.SP -= _requiredSprintSP * Time.smoothDeltaTime;
                     }
                 }
                 else
@@ -184,13 +184,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         var currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+        var finalSpeedChangeRate = Time.smoothDeltaTime * _speedChangeRate;
         float speedOffset = 0.1f;
 
         // 목표 속도로 가속 또는 감속.
         if (currentHorizontalSpeed < targetSpeed - speedOffset ||
             currentHorizontalSpeed > targetSpeed + speedOffset)
         {
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, Time.deltaTime * _speedChangeRate);
+            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, finalSpeedChangeRate);
             // 소수점 이하 3자리까지의 반올림 속도.
             _speed = Mathf.Round(_speed * 1000f) / 1000f;
         }
@@ -199,9 +200,9 @@ public class PlayerMovement : MonoBehaviour
             _speed = targetSpeed;
         }
 
-        _posXBlend = Mathf.Lerp(_posXBlend, Managers.Input.Move.x, Time.deltaTime * _speedChangeRate);
-        _posZBlend = Mathf.Lerp(_posZBlend, Managers.Input.Move.y, Time.deltaTime * _speedChangeRate);
-        _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * _speedChangeRate);
+        _posXBlend = Mathf.Lerp(_posXBlend, Managers.Input.Move.x, finalSpeedChangeRate);
+        _posZBlend = Mathf.Lerp(_posZBlend, Managers.Input.Move.y, finalSpeedChangeRate);
+        _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, finalSpeedChangeRate);
         if (_animationBlend < 0.01f)
         {
             _animationBlend = 0f;
@@ -251,7 +252,7 @@ public class PlayerMovement : MonoBehaviour
 
         // 움직임.
         var targetDirection = Quaternion.Euler(0.0f, _lockOffRotation, 0.0f) * Vector3.forward;
-        _controller.Move((targetDirection.normalized * _speed + new Vector3(0.0f, _verticalVelocity, 0.0f)) * Time.deltaTime);
+        _controller.Move((targetDirection.normalized * _speed + new Vector3(0.0f, _verticalVelocity, 0.0f)) * Time.smoothDeltaTime);
 
         // 애니메이터 업데이트.
         Player.Animator.SetFloat(_animIDPosX, _posXBlend);
