@@ -12,6 +12,7 @@ public class DataManager
         SaveScene();
         SaveItemInventory();
         SaveEquipmentInventory();
+        SaveSkillTree();
     }
 
     public bool HasSaveDatas()
@@ -87,6 +88,12 @@ public class DataManager
     {
         var root = Player.EquipmentInventory.GetSaveData();
         SaveToFile(SavePath.EquipmentInventorySavePath, root.ToString());
+    }
+
+    private void SaveSkillTree()
+    {
+        var root = Player.SkillTree.GetSaveData();
+        SaveToFile(SavePath.SkillTreeSavePath, root.ToString());
     }
 
     private void SaveToFile(string path, string json)

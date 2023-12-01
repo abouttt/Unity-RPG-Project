@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
+using Newtonsoft.Json.Linq;
 
 public class SkillTree : MonoBehaviour
 {
@@ -13,26 +14,13 @@ public class SkillTree : MonoBehaviour
         public SerializedDictionary<SkillData, int> ChildrenData;
     }
 
-    public int SkillPoint
-    {
-        get => _skillPoint;
-        set
-        {
-            _skillPoint = value;
-            CheckRootSkills();
-            SkillPointChanged?.Invoke();
-        }
-    }
-
-    public event Action SkillPointChanged;
+    private const string SAVE_KEY_NAME = "SaveSkillTree";
 
     [SerializeField]
     private SkillInit[] _skillInits;
-
     private readonly List<Skill> _skills = new();
     private readonly List<Skill> _rootSkills = new();
     private readonly Dictionary<SkillData, Skill> _dataAndSkill = new();
-    private int _skillPoint = 0;
 
     private void Awake()
     {
@@ -41,6 +29,8 @@ public class SkillTree : MonoBehaviour
 
     private void Start()
     {
+        Player.Status.SkillPointChanged += CheckRootSkills;
+        LoadSaveData();
         CheckRootSkills();
     }
 
@@ -70,7 +60,16 @@ public class SkillTree : MonoBehaviour
             totalSkillPoint = skill.ResetSkill();
         }
 
-        SkillPoint += totalSkillPoint;
+        Player.Status.SkillPoint += totalSkillPoint;
+    }
+
+    public JObject GetSaveData()
+    {
+        var root = new JObject
+        {
+            { SAVE_KEY_NAME, CreateSaveData() }
+        };
+        return root;
     }
 
     private void InitSkills()
@@ -99,6 +98,53 @@ public class SkillTree : MonoBehaviour
             if (skill.Data.Root)
             {
                 _rootSkills.Add(skill);
+            }
+        }
+    }
+
+    private JArray CreateSaveData()
+    {
+        var saveDatas = new JArray();
+
+        foreach (var skill in _skills)
+        {
+            SkillSaveData saveData = new()
+            {
+                SkillID = skill.Data.SkillID,
+                CurrentLevel = skill.CurrentLevel,
+            };
+
+            saveDatas.Add(JObject.FromObject(saveData));
+        }
+
+        return saveDatas;
+    }
+
+    private void LoadSaveData()
+    {
+        if (!Managers.Data.TryGetSaveData(SavePath.SkillTreeSavePath, out JObject root))
+        {
+            return;
+        }
+
+        JToken datasToken = root[SAVE_KEY_NAME];
+        var datas = datasToken as JArray;
+
+        foreach (var data in datas)
+        {
+            var saveData = data.ToObject<SkillSaveData>();
+            if (saveData.CurrentLevel == 0)
+            {
+                continue;
+            }
+
+            var skillData = SkillDatabase.GetInstance.FindSkillBy(saveData.SkillID);
+            for (int i = 0; i < _skills.Count; i++)
+            {
+                if (_skills[i].Data.Equals(skillData))
+                {
+                    _skills[i].CurrentLevel = saveData.CurrentLevel;
+                }
             }
         }
     }
