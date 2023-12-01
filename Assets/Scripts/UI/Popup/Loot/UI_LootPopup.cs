@@ -70,7 +70,7 @@ public class UI_LootPopup : UI_Popup
 
         for (int i = 0; i < fieldItem.Items.Count; i++)
         {
-            if (fieldItem.Items[i] != null)
+            if (fieldItem.Items[i] is not null)
             {
                 AddLootSubitem(fieldItem.Items[i], i);
             }
