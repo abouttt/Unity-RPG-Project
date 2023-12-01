@@ -19,9 +19,9 @@ public class UI_MainMenuFixed : UI_Base
 
         GetButton((int)Buttons.ContinueButton).onClick.AddListener(() =>
         {
-            //SceneType scene = Managers.Data.LoadScene();
+            SceneType scene = Managers.Data.LoadScene();
             Managers.Game.IsDefaultSpawnPosition = false;
-            //Managers.Scene.LoadScene(scene);
+            Managers.Scene.LoadScene(scene);
         });
 
         GetButton((int)Buttons.NewGameButton).onClick.AddListener(() =>

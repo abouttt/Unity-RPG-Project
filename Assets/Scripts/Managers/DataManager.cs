@@ -9,6 +9,7 @@ public class DataManager
 
     public void Save()
     {
+        SaveScene();
         SaveItemInventory();
     }
 
@@ -52,6 +53,27 @@ public class DataManager
         {
             file.Delete();
         }
+    }
+
+    public SceneType LoadScene()
+    {
+        if (!LoadFromFile(SavePath.SceneSavePath, out var json))
+        {
+            return SceneType.Unknown;
+        }
+
+        SceneSaveData saveData = JsonUtility.FromJson<SceneSaveData>(json);
+        return saveData.Scene;
+    }
+
+    private void SaveScene()
+    {
+        SceneSaveData saveData = new()
+        {
+            Scene = Managers.Scene.CurrentScene.SceneType
+        };
+
+        SaveToFile(SavePath.SceneSavePath, JsonUtility.ToJson(saveData));
     }
 
     private void SaveItemInventory()
