@@ -62,7 +62,7 @@ public class PlayerStatus : MonoBehaviour
 
             _currentStat.XP = value;
 
-            while(_currentStat.XP >= MaxStat.XP)
+            while (_currentStat.XP >= MaxStat.XP)
             {
                 _currentStat.XP -= MaxStat.XP;
                 LevelUp();
