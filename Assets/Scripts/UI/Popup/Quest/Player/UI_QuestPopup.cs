@@ -31,9 +31,9 @@ public class UI_QuestPopup : UI_Popup
         NOQuestText,
     }
 
+    private Quest _selectedQuest;
     private readonly Dictionary<Quest, UI_QuestTitleSubitem> _titleSubitems = new();
     private readonly StringBuilder _sb = new(50);
-    private Quest _selectedQuest;
 
     protected override void Init()
     {
@@ -197,7 +197,7 @@ public class UI_QuestPopup : UI_Popup
             _selectedQuest.TargetCountChanged -= RefreshTargetText;
             _selectedQuest = null;
         }
-        
+
         GetObject((int)GameObjects.QuestInfo).SetActive(false);
         GetButton((int)Buttons.CompleteButton).gameObject.SetActive(false);
         GetButton((int)Buttons.CancelButton).gameObject.SetActive(false);
