@@ -45,12 +45,12 @@ public class UI_EquipmentSlot : UI_BaseSlot, IDropHandler
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
-        //Managers.UI.Get<UI_ItemTooltipTop>().Target = this;
+        Managers.UI.Get<UI_ItemTooltipTop>().Target = this;
     }
 
     public override void OnPointerExit(PointerEventData eventData)
     {
-        //Managers.UI.Get<UI_ItemTooltipTop>().Target = null;
+        Managers.UI.Get<UI_ItemTooltipTop>().Target = null;
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -72,10 +72,10 @@ public class UI_EquipmentSlot : UI_BaseSlot, IDropHandler
                 return;
             }
 
-            //if (otherItem.EquipmentData.LimitLevel > Player.Status.Level)
-            //{
-            //    return;
-            //}
+            if (otherItem.EquipmentData.LimitLevel > Player.Status.Level)
+            {
+                return;
+            }
 
             if (HasObject)
             {
