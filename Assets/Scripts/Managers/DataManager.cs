@@ -14,6 +14,7 @@ public class DataManager
         SaveEquipmentInventory();
         SaveSkillTree();
         SaveQuickInventory();
+        SaveGameOption();
     }
 
     public bool HasSaveDatas()
@@ -54,6 +55,11 @@ public class DataManager
         var directory = new DirectoryInfo(SavePath.Path);
         foreach (FileInfo file in directory.GetFiles())
         {
+            if (file.Name.Equals("GameOptionSaveData"))
+            {
+                continue;
+            }
+
             file.Delete();
         }
     }
@@ -67,6 +73,21 @@ public class DataManager
 
         SceneSaveData saveData = JsonUtility.FromJson<SceneSaveData>(json);
         return saveData.Scene;
+    }
+
+    public void LoadGameOption()
+    {
+        if (!LoadFromFile(SavePath.GameOptionSavePath, out var json))
+        {
+            return;
+        }
+
+        GameOptionSaveData saveData = JsonUtility.FromJson<GameOptionSaveData>(json);
+        Managers.Sound.SetVolume(SoundType.Bgm, saveData.BGMVolume);
+        Managers.Sound.SetVolume(SoundType.Effect, saveData.EffectVolume);
+        QualitySettings.antiAliasing = saveData.MSAA;
+        Application.targetFrameRate = saveData.Frame;
+        QualitySettings.vSyncCount = saveData.VSync;
     }
 
     private void SaveScene()
@@ -101,6 +122,20 @@ public class DataManager
     {
         var root = Player.QuickInventory.GetSaveData();
         SaveToFile(SavePath.QuickBarSavePath, root.ToString());
+    }
+
+    private void SaveGameOption()
+    {
+        GameOptionSaveData saveData = new()
+        {
+            BGMVolume = Managers.Sound.GetVolume(SoundType.Bgm),
+            EffectVolume = Managers.Sound.GetVolume(SoundType.Effect),
+            MSAA = QualitySettings.antiAliasing,
+            Frame = Application.targetFrameRate,
+            VSync = QualitySettings.vSyncCount
+        };
+
+        SaveToFile(SavePath.GameOptionSavePath, JsonUtility.ToJson(saveData));
     }
 
     private void SaveToFile(string path, string json)
