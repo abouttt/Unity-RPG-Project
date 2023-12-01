@@ -12,6 +12,7 @@ public class DataManager
         SaveScene();
         SavePlayerTransform();
         SaveCamera();
+        SaveStatus();
         SaveItemInventory();
         SaveEquipmentInventory();
         SaveSkillTree();
@@ -122,6 +123,21 @@ public class DataManager
         };
 
         SaveToFile(SavePath.CameraSavePath, JsonUtility.ToJson(saveData));
+    }
+
+    private void SaveStatus()
+    {
+        StatusSaveData saveData = new()
+        {
+            Level = Player.Status.Level,
+            CurrentHP = Player.Status.HP,
+            CurrentMP = Player.Status.MP,
+            CurrentXP = Player.Status.XP,
+            Gold = Player.Status.Gold,
+            SkillPoint = Player.Status.SkillPoint,
+        };
+
+        SaveToFile(SavePath.StatusSavePath, JsonUtility.ToJson(saveData));
     }
 
     private void SaveItemInventory()

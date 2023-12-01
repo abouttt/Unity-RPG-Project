@@ -115,9 +115,17 @@ public class PlayerStatus : MonoBehaviour
 
     private void Awake()
     {
+        LoadSaveData();
         RefreshAllStat();
-        FillAllStat();
-        StatChanged?.Invoke();
+        FillCurrentMeleeStat();
+        if (Managers.Data.HasSaveDatas())
+        {
+            SP = MaxStat.SP;
+        }
+        else
+        {
+            FillCurrentStat();
+        }
     }
 
     private void Start()
@@ -140,6 +148,8 @@ public class PlayerStatus : MonoBehaviour
             }
             StatChanged?.Invoke();
         };
+        
+        StatChanged?.Invoke();
     }
 
     private void Update()
@@ -231,5 +241,22 @@ public class PlayerStatus : MonoBehaviour
                 SP += Mathf.Clamp(_recoverySPAmount * Time.deltaTime, 0f, MaxStat.SP);
             }
         }
+    }
+
+    private void LoadSaveData()
+    {
+        if (!Managers.Data.TryGetSaveData(SavePath.StatusSavePath, out string json))
+        {
+            return;
+        }
+
+        var saveData = JsonUtility.FromJson<StatusSaveData>(json);
+
+        Level = saveData.Level;
+        Gold = saveData.Gold;
+        SkillPoint = saveData.SkillPoint;
+        _currentStat.HP = saveData.CurrentHP;
+        _currentStat.MP = saveData.CurrentMP;
+        _currentStat.XP = saveData.CurrentXP;
     }
 }
