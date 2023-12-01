@@ -1,5 +1,6 @@
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.UIElements;
 
 public class PlayerCameraController : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class PlayerCameraController : MonoBehaviour
     }
 
     public bool IsLockOn { get; private set; } = false;
+
+    public float Pitch => _cinemachineTargetPitch;
+    public float Yaw => _cinemachineTargetYaw;
 
     [Header("[Rotate]")]
     [SerializeField]
@@ -49,13 +53,17 @@ public class PlayerCameraController : MonoBehaviour
     private readonly Collider[] _lockTargets = new Collider[10];
     private readonly int _animIDLockOn = Animator.StringToHash("LockOn");
 
-    private float _cinemachineTargetYaw;    // Y
     private float _cinemachineTargetPitch;  // X
+    private float _cinemachineTargetYaw;    // Y
+
+    private void Awake()
+    {
+        LoadSaveData();
+    }
 
     private void Start()
     {
         _lockOnTargetImageFollowTarget = Managers.UI.Get<UI_AutoCanvas>().LockOnTargetImage.GetComponent<UI_FollowTarget>();
-        _cinemachineTargetYaw = _cinemachineCameraTarget.transform.rotation.eulerAngles.y;
     }
 
     private void Update()
@@ -154,5 +162,19 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
+    }
+
+    private void LoadSaveData()
+    {
+        if (Managers.Data.TryGetSaveData(SavePath.CameraSavePath, out string json))
+        {
+            var saveData = JsonUtility.FromJson<CameraSaveData>(json);
+            _cinemachineTargetPitch = saveData.Pitch;
+            _cinemachineTargetYaw = saveData.Yaw;
+        }
+        else
+        {
+            _cinemachineTargetYaw = _cinemachineCameraTarget.transform.rotation.eulerAngles.y;
+        }
     }
 }

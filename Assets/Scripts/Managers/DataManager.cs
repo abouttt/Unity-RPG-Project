@@ -11,6 +11,7 @@ public class DataManager
     {
         SaveScene();
         SavePlayerTransform();
+        SaveCamera();
         SaveItemInventory();
         SaveEquipmentInventory();
         SaveSkillTree();
@@ -110,6 +111,17 @@ public class DataManager
         };
 
         SaveToFile(SavePath.TransformSavePath, JsonUtility.ToJson(saveData));
+    }
+
+    private void SaveCamera()
+    {
+        CameraSaveData saveData = new()
+        {
+            Pitch = Player.Camera.Pitch,
+            Yaw = Player.Camera.Yaw,
+        };
+
+        SaveToFile(SavePath.CameraSavePath, JsonUtility.ToJson(saveData));
     }
 
     private void SaveItemInventory()
