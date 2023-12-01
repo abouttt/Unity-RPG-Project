@@ -11,7 +11,7 @@ public class SceneManagerEx
     {
         if (CurrentScene is GameScene)
         {
-            //Managers.Data.Save();
+            Managers.Data.Save();
         }
 
         NextScene = scene;

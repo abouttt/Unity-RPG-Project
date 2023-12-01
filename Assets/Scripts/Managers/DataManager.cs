@@ -7,6 +7,11 @@ public class DataManager
 {
     private readonly BinaryFormatter _binaryFormatter = new();
 
+    public void Save()
+    {
+        SaveItemInventory();
+    }
+
     public bool HasSaveDatas()
     {
         var directory = new DirectoryInfo(SavePath.Path);
@@ -47,6 +52,12 @@ public class DataManager
         {
             file.Delete();
         }
+    }
+
+    private void SaveItemInventory()
+    {
+        var root = Player.ItemInventory.GetSaveData();
+        SaveToFile(SavePath.ItemInventorySavePath, root.ToString());
     }
 
     private void SaveToFile(string path, string json)

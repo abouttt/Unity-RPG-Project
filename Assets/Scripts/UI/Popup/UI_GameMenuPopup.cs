@@ -67,7 +67,7 @@ public class UI_GameMenuPopup : UI_Popup
 
         GetButton((int)Buttons.ExitButton).onClick.AddListener(() =>
         {
-            //Managers.Data.Save();
+            Managers.Data.Save();
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
+using Newtonsoft.Json.Linq;
 
 public class ItemInventory : MonoBehaviour
 {
+    private const string SAVE_KEY_NAME = "SaveItemInventory";
+
     [Serializable]
     public class Inventory
     {
@@ -28,6 +31,8 @@ public class ItemInventory : MonoBehaviour
             var inventory = element.Value;
             inventory.Items = Enumerable.Repeat<Item>(null, inventory.Capacity).ToList();
         }
+
+        LoadSaveData();
     }
 
     public int AddItem(ItemData itemData, int count = 1)
@@ -268,6 +273,14 @@ public class ItemInventory : MonoBehaviour
         return _inventories[itemType].Items[index] is null;
     }
 
+    public JObject GetSaveData()
+    {
+        return new JObject
+        {
+            { SAVE_KEY_NAME, CreateSaveData() }
+        };
+    }
+
     private bool AddItemCountFromTo(ItemType itemType, int fromIndex, int toIndex)
     {
         if (IsNullSlot(itemType, fromIndex) || IsNullSlot(itemType, toIndex))
@@ -382,6 +395,64 @@ public class ItemInventory : MonoBehaviour
             "ETC" => ItemType.Etc,
             _ => throw new NotImplementedException(),
         };
+    }
+
+    private JArray CreateSaveData()
+    {
+        var saveDatas = new JArray();
+
+        foreach (var element in _inventories)
+        {
+            for (int i = 0; i < element.Value.Capacity; i++)
+            {
+                var item = element.Value.Items[i];
+                if (item == null)
+                {
+                    continue;
+                }
+
+                ItemSaveData saveData = new()
+                {
+                    ItemID = item.Data.ItemID,
+                    Count = 1,
+                    Index = i,
+                };
+
+                if (item is CountableItem countableItem)
+                {
+                    saveData.Count = countableItem.CurrentCount;
+                }
+
+                saveDatas.Add(JObject.FromObject(saveData));
+            }
+        }
+
+        return saveDatas;
+    }
+
+    private void LoadSaveData()
+    {
+        if (!Managers.Data.TryGetSaveData(SavePath.ItemInventorySavePath, out JObject root))
+        {
+            return;
+        }
+
+        JToken datasToken = root[SAVE_KEY_NAME];
+        var datas = datasToken as JArray;
+
+        foreach (var data in datas)
+        {
+            var saveData = data.ToObject<ItemSaveData>();
+            var itemData = ItemDatabase.GetInstance.FindItemBy(saveData.ItemID);
+            if (itemData is CountableItemData countableItemData)
+            {
+                SetItem(countableItemData, saveData.Index, saveData.Count);
+            }
+            else
+            {
+                SetItem(itemData, saveData.Index);
+            }
+        }
     }
 
     private void OnDestroy()
