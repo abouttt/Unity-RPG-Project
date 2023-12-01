@@ -35,13 +35,13 @@ public class UI_GameMenuPopup : UI_Popup
 
         GetButton((int)Buttons.SkillButton).onClick.AddListener(() =>
         {
-            //Managers.UI.Show<UI_SkillTreePopup>();
+            Managers.UI.Show<UI_SkillTreePopup>();
             Managers.UI.Close<UI_GameMenuPopup>();
         });
 
         GetButton((int)Buttons.QuestButton).onClick.AddListener(() =>
         {
-            //Managers.UI.Show<UI_QuestPopup>();
+            Managers.UI.Show<UI_QuestPopup>();
             Managers.UI.Close<UI_GameMenuPopup>();
         });
 
