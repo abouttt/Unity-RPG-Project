@@ -76,3 +76,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Pp]lugins.meta
 /[Aa]ssets/[Ee]xternals
 /[Aa]ssets/[Ee]xternals.meta
+/[Aa]ssets/[Ss]treamingAssets/SaveData.meta
+/[Aa]ssets/[Ss]treamingAssets/SaveData/*
