@@ -32,10 +32,10 @@ public class UI_NPCQuestPopup : UI_Popup
         NOQuestText,
     }
 
+    private NPC _npc;
+    private QuestData _selectedQuestData;
     private readonly Dictionary<QuestData, UI_NPCQuestTitleSubitem> _titleSubitems = new();
     private readonly StringBuilder _sb = new(50);
-    private QuestData _selectedQuestData;
-    private NPC _npc;
 
     protected override void Init()
     {
@@ -56,7 +56,7 @@ public class UI_NPCQuestPopup : UI_Popup
         GetButton((int)Buttons.AcceptButton).onClick.AddListener(() =>
         {
             var quest = Managers.Quest.Register(_npc, _selectedQuestData);
-            if (quest.State == QuestState.Completable)
+            if (quest.State is QuestState.Completable)
             {
                 _titleSubitems[_selectedQuestData].ToggleCompleteText(true);
                 Clear();
@@ -129,10 +129,12 @@ public class UI_NPCQuestPopup : UI_Popup
         }
 
         Clear();
+
         _selectedQuestData = questData;
         GetObject((int)GameObjects.QuestInfo).SetActive(true);
         GetText((int)Texts.QuestTitleText).text = questData.QuestName;
         GetText((int)Texts.QuestDescriptionText).text = questData.Description;
+
         if (Managers.Quest.IsCompletable(questData))
         {
             RefreshTargetText(questData, true);
@@ -143,6 +145,7 @@ public class UI_NPCQuestPopup : UI_Popup
             RefreshTargetText(questData, false);
             GetButton((int)Buttons.AcceptButton).gameObject.SetActive(true);
         }
+
         SetRewardText(questData);
     }
 
