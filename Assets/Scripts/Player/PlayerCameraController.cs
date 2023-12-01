@@ -18,6 +18,9 @@ public class PlayerCameraController : MonoBehaviour
 
     public bool IsLockOn { get; private set; } = false;
 
+    public float Pitch => _cinemachineTargetPitch;
+    public float Yaw => _cinemachineTargetYaw;
+
     [Header("[Rotate]")]
     [SerializeField]
     private GameObject _cinemachineCameraTarget;
@@ -52,10 +55,14 @@ public class PlayerCameraController : MonoBehaviour
     private float _cinemachineTargetYaw;    // Y
     private float _cinemachineTargetPitch;  // X
 
+    private void Awake()
+    {
+        LoadPitchAndYaw();
+    }
+
     private void Start()
     {
         _lockOnTargetImageFollowTarget = Managers.UI.Get<UI_AutoCanvas>().LockOnTargetImage.GetComponent<UI_FollowTarget>();
-        _cinemachineTargetYaw = _cinemachineCameraTarget.transform.rotation.eulerAngles.y;
     }
 
     private void Update()
@@ -154,5 +161,20 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
+    }
+
+    private void LoadPitchAndYaw()
+    {
+        if (Managers.Data.TryGetSaveData(SavePath.PlayerTransformSavePath, out string json))
+        {
+            var saveData = JsonUtility.FromJson<PlayerTransformSaveData>(json);
+            _cinemachineTargetPitch = saveData.CameraPitch;
+            _cinemachineTargetYaw = saveData.CameraYaw;
+            _cinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0f);
+        }
+        else
+        {
+            _cinemachineTargetYaw = _cinemachineCameraTarget.transform.rotation.eulerAngles.y;
+        }
     }
 }
