@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67737de005afb7b47ae3a3d9fd3c892d, type: 3}
   m_Name: QuestDatabase
   m_EditorClassIdentifier: 
-  _quests: []
+  _quests:
+  - {fileID: 11400000, guid: 02d1c4ef826835b439e880db6f49aec4, type: 2}

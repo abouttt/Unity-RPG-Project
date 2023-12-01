@@ -46,5 +46,6 @@ public class GameScene : BaseScene
         yield return null;
 
         Managers.Game.OnGameStarted();
+        Managers.Quest.Init();
     }
 }

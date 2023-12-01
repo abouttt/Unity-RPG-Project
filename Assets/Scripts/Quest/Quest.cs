@@ -20,6 +20,7 @@ public class Quest
         Owner = owner;
         CompleteOwner = string.IsNullOrEmpty(Data.CompleteOwnerID) ? Owner : NPC.GetNPC(Data.CompleteOwnerID);
         State = QuestState.Active;
+
         foreach (var target in Data.Targets)
         {
             int count = 0;
@@ -32,26 +33,19 @@ public class Quest
         }
     }
 
-    //public Quest(QuestSaveData saveData)
-    //{
-    //    Data = QuestDatabase.GetInstance.FindQuestBy(saveData.QuestID);
-    //    Owner = NPC.GetNPC(saveData.NPCID);
-    //    CompleteOwner = string.IsNullOrEmpty(Data.CompleteOwnerID) ? Owner : NPC.GetNPC(Data.CompleteOwnerID);
-    //    State = saveData.State;
+    public Quest(QuestSaveData saveData)
+    {
+        Data = QuestDatabase.GetInstance.FindQuestBy(saveData.QuestID);
+        Owner = NPC.GetNPC(saveData.NPCID);
+        CompleteOwner = string.IsNullOrEmpty(Data.CompleteOwnerID) ? Owner : NPC.GetNPC(Data.CompleteOwnerID);
+        State = QuestState.Active;
 
-    //    int i = 0;
-    //    foreach (var target in Data.Targets)
-    //    {
-    //        _targets.Add(target, saveData.Counts[i++]);
-    //    }
-
-    //    Owner.Quests.Remove(Data);
-
-    //    if (State is QuestState.Completable)
-    //    {
-    //        CompleteOwner.Quests.Add(Data);
-    //    }
-    //}
+        int i = 0;
+        foreach (var target in Data.Targets)
+        {
+            _targets.Add(target, saveData.Counts[i++]);
+        }
+    }
 
     public bool ReceiveReport(Category category, string id, int count)
     {

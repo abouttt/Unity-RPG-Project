@@ -17,6 +17,7 @@ public class DataManager
         SaveEquipmentInventory();
         SaveSkillTree();
         SaveQuickInventory();
+        SaveQuest();
         SaveGameOption();
     }
 
@@ -162,6 +163,12 @@ public class DataManager
     {
         var root = Player.QuickInventory.GetSaveData();
         SaveToFile(SavePath.QuickBarSavePath, root.ToString());
+    }
+
+    private void SaveQuest()
+    {
+        var root = Managers.Quest.GetSaveData();
+        SaveToFile(SavePath.QuestSavePath, root.ToString());
     }
 
     private void SaveGameOption()

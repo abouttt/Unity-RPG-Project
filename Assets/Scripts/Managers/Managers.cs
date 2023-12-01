@@ -48,7 +48,6 @@ public class Managers : Singleton<Managers>
 
         Input.Init();
         Pool.Init();
-        Quest.Init();
         Sound.Init();
         UI.Init();
 
