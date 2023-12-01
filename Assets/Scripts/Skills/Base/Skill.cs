@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class Skill : IUsable
 {
     public SkillData Data { get; private set; }
+    public int CurrentLevel { get; private set; }
     public bool IsLock { get; private set; } = true;
     public bool IsAcquirable { get; private set; } = false;
-    public int CurrentLevel { get; set; }
     public IReadOnlyList<Skill> Parents => _parents;
     public IReadOnlyDictionary<Skill, int> Children => _children;
     public event Action SkillChanged;
@@ -29,7 +29,7 @@ public abstract class Skill : IUsable
         }
 
         CurrentLevel++;
-        Player.Status.SkillPoint -= Data.RequiredSkillPoint;
+        Player.SkillTree.SkillPoint -= Data.RequiredSkillPoint;
         SkillChanged?.Invoke();
     }
 

@@ -20,7 +20,8 @@ public class GameScene : BaseScene
     {
         base.Init();
 
-        Player.Init();
+        GetPositionAndRotation(out var position, out var yaw);
+        Player.Init(position, yaw);
         InitUI();
         StartCoroutine(GameStart());
 
@@ -46,5 +47,23 @@ public class GameScene : BaseScene
         yield return null;
 
         Managers.Game.OnGameStarted();
+    }
+
+    private void GetPositionAndRotation(out Vector3 position, out float yaw)
+    {
+        position = DefaultSpawnPosition;
+        yaw = DefaultSpawnRotationYaw;
+
+        if (Managers.Game.IsPortalSpawnPosition)
+        {
+            position = PortalSpawnPosition;
+            yaw = PortalSpawnRotationYaw;
+        }
+        //else if (Managers.Data.TryGetSaveData(SavePath.PlayerTransformSavePath, out string json))
+        //{
+        //    var saveData = JsonUtility.FromJson<PlayerTransformSaveData>(json);
+        //    position = saveData.Position;
+        //    yaw = saveData.RotationYaw;
+        //}
     }
 }

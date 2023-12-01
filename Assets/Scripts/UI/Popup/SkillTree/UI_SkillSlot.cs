@@ -74,7 +74,7 @@ public class UI_SkillSlot : UI_BaseSlot
 
         CanDrag = !SkillRef.IsLock && SkillData.SkillType is SkillType.Active;
         GetButton((int)Buttons.LevelUpButton).gameObject.SetActive(SkillRef.IsAcquirable);
-        GetImage((int)Imagess.LevelUpDisabledImage).enabled = Player.Status.SkillPoint < SkillData.RequiredSkillPoint;
+        GetImage((int)Imagess.LevelUpDisabledImage).enabled = Player.SkillTree.SkillPoint < SkillData.RequiredSkillPoint;
 
         if (!SkillRef.IsAcquirable && SkillRef.IsLock)
         {

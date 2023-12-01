@@ -78,7 +78,6 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
-        LoadPositionAndYaw();
     }
 
     private void Update()
@@ -271,27 +270,5 @@ public class PlayerMovement : MonoBehaviour
     {
         _isJumpLand = false;
         IsJumping = false;
-    }
-
-    private void LoadPositionAndYaw()
-    {
-        var gameScene = Managers.Scene.CurrentScene as GameScene;
-        var position = gameScene.DefaultSpawnPosition;
-        var yaw = gameScene.DefaultSpawnRotationYaw;
-
-        if (Managers.Game.IsPortalSpawnPosition)
-        {
-            position = gameScene.PortalSpawnPosition;
-            yaw = gameScene.PortalSpawnRotationYaw;
-        }
-        else if (Managers.Data.TryGetSaveData(SavePath.PlayerTransformSavePath, out string json))
-        {
-            var saveData = JsonUtility.FromJson<PlayerTransformSaveData>(json);
-            position = saveData.PlayerPosition;
-            yaw = saveData.PlayerRotationYaw;
-        }
-
-        Player.GameObject.transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
-        _lockOffRotation = yaw;
     }
 }

@@ -10,10 +10,7 @@ public class DataManager
     public void Save()
     {
         SaveScene();
-        SavePlayerTransform();
         SaveItemInventory();
-        SaveEquipmentInventory();
-        SaveSkillTree();
     }
 
     public bool HasSaveDatas()
@@ -79,35 +76,10 @@ public class DataManager
         SaveToFile(SavePath.SceneSavePath, JsonUtility.ToJson(saveData));
     }
 
-    private void SavePlayerTransform()
-    {
-        PlayerTransformSaveData saveData = new()
-        {
-            PlayerPosition = Player.GameObject.transform.position,
-            PlayerRotationYaw = Player.GameObject.transform.eulerAngles.y,
-            CameraPitch = Player.Camera.Pitch,
-            CameraYaw = Player.Camera.Yaw,
-        };
-
-        SaveToFile(SavePath.PlayerTransformSavePath, JsonUtility.ToJson(saveData));
-    }
-
     private void SaveItemInventory()
     {
         var root = Player.ItemInventory.GetSaveData();
         SaveToFile(SavePath.ItemInventorySavePath, root.ToString());
-    }
-
-    private void SaveEquipmentInventory()
-    {
-        var root = Player.EquipmentInventory.GetSaveData();
-        SaveToFile(SavePath.EquipmentInventorySavePath, root.ToString());
-    }
-
-    private void SaveSkillTree()
-    {
-        var root = Player.SkillTree.GetSaveData();
-        SaveToFile(SavePath.SkillTreeSavePath, root.ToString());
     }
 
     private void SaveToFile(string path, string json)
