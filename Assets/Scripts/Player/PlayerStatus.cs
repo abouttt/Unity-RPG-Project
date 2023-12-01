@@ -10,6 +10,7 @@ public class PlayerStatus : MonoBehaviour
     public event Action XPChanged;
     public event Action StatChanged;
     public event Action GoldChanged;
+    public event Action SkillPointChanged;
 
     public int Level { get; private set; } = 1;
 
@@ -84,6 +85,16 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
+    public int SkillPoint
+    {
+        get => _skillPoint;
+        set
+        {
+            _skillPoint = value;
+            SkillPointChanged?.Invoke();
+        }
+    }
+
     [ReadOnly]
     public PlayerStat ExtraStat = new();
     public PlayerStat MaxStat { get; private set; } = new();
@@ -99,7 +110,8 @@ public class PlayerStatus : MonoBehaviour
     private float _recoverySPTime;  // SP 회복 현재 딜레이 시간
 
     private readonly PlayerStat _currentStat = new();
-    private int _currentGold = 0;
+    private int _currentGold;
+    private int _skillPoint;
 
     private void Awake()
     {
@@ -175,7 +187,7 @@ public class PlayerStatus : MonoBehaviour
     private void LevelUp()
     {
         Level++;
-        Player.SkillTree.SkillPoint++;
+        SkillPoint++;
         RefreshAllStat();
         FillAllStat();
         LevelChanged?.Invoke();
