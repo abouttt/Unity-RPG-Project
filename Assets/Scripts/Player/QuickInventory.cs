@@ -1,9 +1,12 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class QuickInventory : MonoBehaviour
 {
+    private const string SAVE_KEY_NAME = "SaveQuickInventory";
+
     [field: SerializeField]
     public int Capacity { get; private set; }
 
@@ -17,6 +20,11 @@ public class QuickInventory : MonoBehaviour
         {
             _intUsable.Add(i, null);
         }
+    }
+
+    private void Start()
+    {
+        LoadSaveData();
     }
 
     public void SetUsable(IUsable usable, int index)
@@ -68,5 +76,91 @@ public class QuickInventory : MonoBehaviour
     public bool IsNullSlot(int index)
     {
         return _intUsable[index] is null;
+    }
+
+    public JObject GetSaveData()
+    {
+        return new JObject
+        {
+            { SAVE_KEY_NAME, CreateSaveData() }
+        };
+    }
+
+    private JArray CreateSaveData()
+    {
+        var saveDatas = new JArray();
+
+        foreach (var element in _intUsable)
+        {
+            QuickSaveData saveData = new()
+            {
+                ItemSaveData = null,
+                SkillSaveData = null,
+            };
+
+            if (element.Value is Item item)
+            {
+                ItemSaveData itemSaveData = new()
+                {
+                    ItemID = item.Data.ItemID,
+                    Count = 1,
+                    Index = item.Index,
+                };
+
+                if (item is CountableItem countableItem)
+                {
+                    itemSaveData.Count = countableItem.CurrentCount;
+                }
+
+                saveData.ItemSaveData = itemSaveData;
+            }
+            else if (element.Value is Skill skill)
+            {
+                SkillSaveData skillSaveData = new()
+                {
+                    SkillID = skill.Data.SkillID,
+                    CurrentLevel = -1,
+                };
+
+                saveData.SkillSaveData = skillSaveData;
+            }
+
+            saveDatas.Add(JObject.FromObject(saveData));
+        }
+
+        return saveDatas;
+    }
+
+    private void LoadSaveData()
+    {
+        if (!Managers.Data.TryGetSaveData(SavePath.QuickBarSavePath, out JObject root))
+        {
+            return;
+        }
+
+        JToken datasToken = root[SAVE_KEY_NAME];
+        var datas = datasToken as JArray;
+
+        int i = 0;
+        foreach (var data in datas)
+        {
+            var saveData = data.ToObject<QuickSaveData>();
+            if (saveData.ItemSaveData.HasValue)
+            {
+                var itemSaveData = saveData.ItemSaveData.Value;
+                var itemData = ItemDatabase.GetInstance.FindItemBy(itemSaveData.ItemID);
+                var item = Player.ItemInventory.GetItem<Item>(itemData.ItemType, itemSaveData.Index);
+                SetUsable(item as IUsable, i);
+            }
+            else if (saveData.SkillSaveData.HasValue)
+            {
+                var skillSaveData = saveData.SkillSaveData.Value;
+                var skillData = SkillDatabase.GetInstance.FindSkillBy(skillSaveData.SkillID);
+                var skill = Player.SkillTree.GetSkill(skillData);
+                SetUsable(skill, i);
+            }
+
+            i++;
+        }
     }
 }
