@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
         SkillTree = GetComponent<SkillTree>();
     }
 
-    public static void Init(Vector3 position, float yaw)
+    public static void Init()
     {
         if (GameObject != null)
         {
@@ -36,8 +36,6 @@ public class Player : MonoBehaviour
         UnityEngine.Camera.main.transform.position = Vector3.zero;
 
         var playerPackagePrefab = Managers.Resource.Load<GameObject>("PlayerPackage");
-        playerPackagePrefab.FindChild("Player").transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
-
         var playerPackage = Instantiate(playerPackagePrefab);
         playerPackage.transform.DetachChildren();
         Destroy(playerPackage);

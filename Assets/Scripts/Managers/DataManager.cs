@@ -10,6 +10,7 @@ public class DataManager
     public void Save()
     {
         SaveScene();
+        SavePlayerTransform();
         SaveItemInventory();
         SaveEquipmentInventory();
         SaveSkillTree();
@@ -98,6 +99,17 @@ public class DataManager
         };
 
         SaveToFile(SavePath.SceneSavePath, JsonUtility.ToJson(saveData));
+    }
+
+    private void SavePlayerTransform()
+    {
+        TransformSaveData saveData = new()
+        {
+            Position = Player.GameObject.transform.position,
+            RotationYaw = Player.GameObject.transform.eulerAngles.y,
+        };
+
+        SaveToFile(SavePath.TransformSavePath, JsonUtility.ToJson(saveData));
     }
 
     private void SaveItemInventory()

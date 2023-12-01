@@ -78,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
+        LoadSaveData();
     }
 
     private void Update()
@@ -270,5 +271,27 @@ public class PlayerMovement : MonoBehaviour
     {
         _isJumpLand = false;
         IsJumping = false;
+    }
+
+    private void LoadSaveData()
+    {
+        var gameScene = Managers.Scene.CurrentScene as GameScene;
+        var position = gameScene.DefaultSpawnPosition;
+        var yaw = gameScene.DefaultSpawnRotationYaw;
+
+        if (Managers.Game.IsPortalSpawnPosition)
+        {
+            position = gameScene.PortalSpawnPosition;
+            yaw = gameScene.PortalSpawnRotationYaw;
+        }
+        else if (Managers.Data.TryGetSaveData(SavePath.TransformSavePath, out string json))
+        {
+            var saveData = JsonUtility.FromJson<TransformSaveData>(json);
+            position = saveData.Position;
+            yaw = saveData.RotationYaw;
+        }
+
+        gameObject.transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
+        _lockOffRotation = yaw;
     }
 }
