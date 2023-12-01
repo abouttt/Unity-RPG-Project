@@ -26,7 +26,7 @@ public class UI_MainMenuFixed : UI_Base
 
         GetButton((int)Buttons.NewGameButton).onClick.AddListener(() =>
         {
-            //Managers.Data.ClearSaveDatas();
+            Managers.Data.ClearSaveDatas();
             Managers.Game.IsDefaultSpawnPosition = true;
             Managers.Scene.LoadScene(SceneType.VillageScene);
         });
@@ -50,7 +50,7 @@ public class UI_MainMenuFixed : UI_Base
 #endif
         });
 
-        //_hasSaveFile = Managers.Data.HasSaveDatas();
+        _hasSaveFile = Managers.Data.HasSaveDatas();
     }
 
     private void Start()

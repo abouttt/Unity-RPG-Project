@@ -4,6 +4,7 @@ using UnityEngine;
 public class Managers : Singleton<Managers>
 {
     public static CooldownManager Cooldown => GetInstance._cooldown;
+    public static DataManager Data => GetInstance._data;
     public static GameManager Game => GetInstance._game;
     public static InputManager Input => GetInstance._input;
     public static PoolManager Pool => GetInstance._pool;
@@ -16,6 +17,7 @@ public class Managers : Singleton<Managers>
     private static bool s_isInit = false;
 
     private readonly CooldownManager _cooldown = new();
+    private readonly DataManager _data = new();
     private readonly GameManager _game = new();
     private readonly InputManager _input = new();
     private readonly PoolManager _pool = new();
