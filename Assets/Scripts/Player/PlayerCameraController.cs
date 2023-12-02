@@ -1,6 +1,5 @@
 using UnityEngine;
 using Cinemachine;
-using UnityEngine.UIElements;
 
 public class PlayerCameraController : MonoBehaviour
 {
@@ -166,7 +165,8 @@ public class PlayerCameraController : MonoBehaviour
 
     private void LoadSaveData()
     {
-        if (Managers.Data.TryGetSaveData(SavePath.CameraSavePath, out string json))
+        if (Managers.Data.TryGetSaveData(SavePath.CameraSavePath, out string json) &&
+            !Managers.Game.IsPortalSpawnPosition)
         {
             var saveData = JsonUtility.FromJson<CameraSaveData>(json);
             _cinemachineTargetPitch = saveData.Pitch;
