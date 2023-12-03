@@ -15,7 +15,6 @@ public enum QuestState
     Active,
     Completable,
     Complete,
-    Cancel,
 }
 
 public enum SkillType

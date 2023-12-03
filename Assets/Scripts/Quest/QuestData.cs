@@ -33,6 +33,9 @@ public class QuestData : ScriptableObject
     public int LimitLevel { get; private set; }
 
     [field: SerializeField]
+    public string OwnerID { get; private set; }
+
+    [field: SerializeField]
     public string CompleteOwnerID { get; private set; }
 
     [field: SerializeField]

@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _quests:
   - {fileID: 11400000, guid: 02d1c4ef826835b439e880db6f49aec4, type: 2}
+  _ownerQuests:
+    _serializedList:
+    - Key: FEDDLER
+      Value:
+      - {fileID: 11400000, guid: 02d1c4ef826835b439e880db6f49aec4, type: 2}

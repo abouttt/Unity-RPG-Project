@@ -55,7 +55,7 @@ public class UI_NPCQuestPopup : UI_Popup
 
         GetButton((int)Buttons.AcceptButton).onClick.AddListener(() =>
         {
-            var quest = Managers.Quest.Register(_npc, _selectedQuestData);
+            var quest = Managers.Quest.Register(_selectedQuestData);
             if (quest.State is QuestState.Completable)
             {
                 _titleSubitems[_selectedQuestData].ToggleCompleteText(true);

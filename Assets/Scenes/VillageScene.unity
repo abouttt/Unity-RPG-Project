@@ -16860,7 +16860,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &581476958
 PrefabInstance:
@@ -24346,7 +24346,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &872279588
 PrefabInstance:
@@ -39023,7 +39023,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1346338320
 PrefabInstance:
@@ -44638,6 +44638,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 480734, guid: b1ad8ef6890687249a641abef8e26baf, type: 3}
   m_PrefabInstance: {fileID: 1514208079}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1519824932
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1519824933}
+  m_Layer: 0
+  m_Name: ---------- NPC ----------
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1519824933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519824932}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1523909377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51194,20 +51225,19 @@ MonoBehaviour:
   <InteractionMessage>k__BackingField: "\uB300\uD654"
   <InteractionKeyGuideDeltaPos>k__BackingField: {x: 0, y: 1.3, z: 0}
   <CanInteraction>k__BackingField: 1
-  <NPCID>k__BackingField: PEDDLER
+  <NPCID>k__BackingField: FEDDLER
   <Name>k__BackingField: "\uC7A1\uC0C1\uC778"
   <Conversation>k__BackingField: 1
   <Shop>k__BackingField: 1
   _conversationScripts:
   - "\uC548\uB155\uD558\uC138\uC5EC \uC774\uAC83 \uC800\uAC83 \uD314\uACE0\uC788\uC2B5\uB2C8\uB2E4~"
   - "\uAF2D \uB458\uB7EC\uBCF4\uACE0 \uAC00\uC138\uC694~"
-  _quests:
-  - {fileID: 11400000, guid: 02d1c4ef826835b439e880db6f49aec4, type: 2}
   _saleItems:
   - {fileID: 11400000, guid: 98d7db5f46b28344dadbb818b4ced8a3, type: 2}
   - {fileID: 11400000, guid: cf2be0fb45720354782ea5c31f455047, type: 2}
   - {fileID: 11400000, guid: 49543d249241ddc47a2c25630219bc32, type: 2}
   - {fileID: 11400000, guid: de34922a05749ec4595dc9c8a7da9ea9, type: 2}
+  _quests: []
   _questNotifierPosition: {x: 0, y: 2.3, z: 0}
 --- !u!143 &1723072758
 CharacterController:
@@ -51262,7 +51292,7 @@ Transform:
   m_Children:
   - {fileID: 507765807}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 50, z: 0}
 --- !u!1001 &1724951176
 PrefabInstance:
@@ -52397,7 +52427,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4069382700904614350, guid: 9678f9888c159a04f81a3ee7ab555acf, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4069382700904614350, guid: 9678f9888c159a04f81a3ee7ab555acf, type: 3}
       propertyPath: m_LocalPosition.x

@@ -4,6 +4,6 @@ using System;
 public struct QuestSaveData
 {
     public string QuestID;
-    public string NPCID;
+    public QuestState State;
     public int[] Counts;
 }

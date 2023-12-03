@@ -54,7 +54,7 @@ public class UI_QuestPopup : UI_Popup
         Managers.Quest.QuestCompleted += OnQuestCompletedOrCanceled;
         Managers.Quest.QuestUnRegistered += OnQuestCompletedOrCanceled;
 
-        foreach (var quest in Managers.Quest.Quests)
+        foreach (var quest in Managers.Quest.ActiveQuests)
         {
             OnQuestRegisterd(quest);
             if (quest.State is QuestState.Completable)

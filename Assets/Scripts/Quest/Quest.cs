@@ -6,21 +6,18 @@ using UnityEngine;
 public class Quest
 {
     public QuestData Data { get; private set; }
-    public NPC Owner { get; private set; }
-    public NPC CompleteOwner { get; private set; }
+    public NPC Owner => NPC.GetNPC(Data.OwnerID);
+    public NPC CompleteOwner => NPC.GetNPC(Data.CompleteOwnerID);
     public QuestState State { get; private set; } = QuestState.Inactive;
     public IReadOnlyDictionary<QuestData.Target, int> Targets => _targets;
     public event Action TargetCountChanged;
 
     private readonly Dictionary<QuestData.Target, int> _targets = new();
 
-    public Quest(NPC owner, QuestData data)
+    public Quest(QuestData data)
     {
         Data = data;
-        Owner = owner;
-        CompleteOwner = string.IsNullOrEmpty(Data.CompleteOwnerID) ? Owner : NPC.GetNPC(Data.CompleteOwnerID);
         State = QuestState.Active;
-
         foreach (var target in Data.Targets)
         {
             int count = 0;
@@ -36,14 +33,48 @@ public class Quest
     public Quest(QuestSaveData saveData)
     {
         Data = QuestDatabase.GetInstance.FindQuestBy(saveData.QuestID);
-        Owner = NPC.GetNPC(saveData.NPCID);
-        CompleteOwner = string.IsNullOrEmpty(Data.CompleteOwnerID) ? Owner : NPC.GetNPC(Data.CompleteOwnerID);
-        State = QuestState.Active;
+        State = saveData.State;
 
         int i = 0;
         foreach (var target in Data.Targets)
         {
             _targets.Add(target, saveData.Counts[i++]);
+        }
+    }
+
+    public void AddQuestToOwner()
+    {
+        var npc = Owner;
+        if (npc != null)
+        {
+            npc.AddQuest(Data);
+        }
+    }
+
+    public void RemoveQuestFromOwner()
+    {
+        var owner = Owner;
+        if (owner != null)
+        {
+            owner.RemoveQuest(Data);
+        }
+    }
+
+    public void AddQuestToCompletableOwner()
+    {
+        var completeOwner = CompleteOwner;
+        if (completeOwner != null)
+        {
+            completeOwner.AddQuest(Data);
+        }
+    }
+
+    public void RemoveQuestFromCompletableOwner()
+    {
+        var completeOwner = CompleteOwner;
+        if (completeOwner != null)
+        {
+            completeOwner.RemoveQuest(Data);
         }
     }
 
@@ -94,8 +125,6 @@ public class Quest
             return false;
         }
 
-        CompleteOwner.RemoveQuest(Data);
-
         State = QuestState.Complete;
         Player.Status.Gold += Data.RewardGold;
         Player.Status.XP += Data.RewardXP;
@@ -124,13 +153,7 @@ public class Quest
 
     public void Cancel()
     {
-        if (State is QuestState.Completable)
-        {
-            CompleteOwner.RemoveQuest(Data);
-        }
-
-        State = QuestState.Cancel;
-        Owner.AddQuest(Data);
+        State = QuestState.Inactive;
         TargetCountChanged = null;
         Managers.Quest.ReceiveReport(Category.Quest, Data.QuestID, -1);
     }
@@ -145,7 +168,6 @@ public class Quest
                 if (prevState is QuestState.Completable)
                 {
                     State = QuestState.Active;
-                    CompleteOwner.RemoveQuest(Data);
                 }
 
                 return;
@@ -155,7 +177,6 @@ public class Quest
         if (prevState is not QuestState.Completable)
         {
             State = QuestState.Completable;
-            CompleteOwner.AddQuest(Data);
         }
     }
 }

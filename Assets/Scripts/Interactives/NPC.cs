@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NPC : Interactive
@@ -16,14 +17,14 @@ public class NPC : Interactive
     public IReadOnlyList<ItemData> SaleItems => _saleItems;
     public IReadOnlyList<QuestData> Quests => _quests;
 
-    private static readonly List<NPC> s_NPCs = new();
+    private static readonly Dictionary<string, NPC> s_NPCs = new();
 
     [field: SerializeField, TextArea, Space(10)]
-    private List<string> _conversationScripts = new();
+    private List<string> _conversationScripts;
     [field: SerializeField]
-    private List<QuestData> _quests = new();
-    [field: SerializeField]
-    private List<ItemData> _saleItems = new();
+    private List<ItemData> _saleItems;
+    [field: SerializeField, ReadOnly]
+    private List<QuestData> _quests;
 
     [SerializeField]
     private Vector3 _questNotifierPosition = new Vector3(0f, 2.3f, 0f);
@@ -34,7 +35,8 @@ public class NPC : Interactive
     {
         base.Awake();
 
-        s_NPCs.Add(this);
+        s_NPCs.Add(NPCID, this);
+        _quests = QuestDatabase.GetInstance.FindQuestsBy(NPCID);
 
         Managers.Game.GameStarted += () =>
         {
@@ -49,7 +51,7 @@ public class NPC : Interactive
 
     public static NPC GetNPC(string id)
     {
-        return s_NPCs.Find(npc => npc.NPCID.Equals(id));
+        return s_NPCs.TryGetValue(id, out NPC npc) ? npc : null;
     }
 
     public override void Interaction()
@@ -107,6 +109,6 @@ public class NPC : Interactive
 
     private void OnDestroy()
     {
-        s_NPCs.Remove(this);
+        s_NPCs.Remove(NPCID);
     }
 }

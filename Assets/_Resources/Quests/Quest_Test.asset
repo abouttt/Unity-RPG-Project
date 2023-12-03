@@ -16,7 +16,8 @@ MonoBehaviour:
   <QuestName>k__BackingField: "\uD14C\uC2A4\uD2B8"
   <Description>k__BackingField: "\uD14C\uC2A4\uD2B8\uD018\uC2A4\uD2B8\uC785\uB2C8\uB2E4."
   <LimitLevel>k__BackingField: 1
-  <CompleteOwnerID>k__BackingField: 
+  <OwnerID>k__BackingField: FEDDLER
+  <CompleteOwnerID>k__BackingField: FEDDLER
   <CanRemoteComplete>k__BackingField: 0
   <Targets>k__BackingField:
   - <Category>k__BackingField: 0

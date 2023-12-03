@@ -15,9 +15,10 @@ public class QuestManager
     public event Action<Quest> QuestCompleted;
     public event Action<Quest> QuestUnRegistered;
 
-    public IReadOnlyList<Quest> Quests => _quests;
+    public IReadOnlyList<Quest> ActiveQuests => _activeQuests;
+    public IReadOnlyList<Quest> CompleteQuests => _completeQuests;
 
-    private readonly List<Quest> _quests = new();
+    private readonly List<Quest> _activeQuests = new();
     private readonly List<Quest> _completeQuests = new();
 
     public void Init()
@@ -25,21 +26,22 @@ public class QuestManager
         LoadSaveData();
     }
 
-    public Quest Register(NPC owner, QuestData questData)
+    public Quest Register(QuestData questData)
     {
         if (IsRegistered(questData))
         {
             return null;
         }
 
-        var newQuest = new Quest(owner, questData);
-        _quests.Add(newQuest);
-        newQuest.Owner.RemoveQuest(newQuest.Data);
+        var newQuest = new Quest(questData);
+        _activeQuests.Add(newQuest);
+        newQuest.RemoveQuestFromOwner();
         QuestRegistered?.Invoke(newQuest);
 
         newQuest.CheckCompletable();
         if (newQuest.State is QuestState.Completable)
         {
+            newQuest.AddQuestToCompletableOwner();
             QuestCompletabled?.Invoke(newQuest);
         }
 
@@ -53,9 +55,14 @@ public class QuestManager
             return;
         }
 
-        if (_quests.Remove(quest))
+        if (_activeQuests.Remove(quest))
         {
+            if (quest.State is QuestState.Completable)
+            {
+                quest.RemoveQuestFromCompletableOwner();
+            }
             quest.Cancel();
+            quest.AddQuestToOwner();
             QuestUnRegistered?.Invoke(quest);
         }
     }
@@ -67,7 +74,7 @@ public class QuestManager
             return;
         }
 
-        foreach (var quest in _quests)
+        foreach (var quest in _activeQuests)
         {
             var prevState = quest.State;
             if (quest.ReceiveReport(category, id, count))
@@ -76,11 +83,13 @@ public class QuestManager
                 {
                     if (prevState is not QuestState.Completable)
                     {
+                        quest.AddQuestToCompletableOwner();
                         QuestCompletabled?.Invoke(quest);
                     }
                 }
                 else if (prevState is QuestState.Completable)
                 {
+                    quest.RemoveQuestFromCompletableOwner();
                     QuestCompletableCanceled?.Invoke(quest);
                 }
             }
@@ -96,15 +105,16 @@ public class QuestManager
 
         if (quest.Complete())
         {
-            _quests.Remove(quest);
+            _activeQuests.Remove(quest);
             _completeQuests.Add(quest);
+            quest.RemoveQuestFromCompletableOwner();
             QuestCompleted?.Invoke(quest);
         }
     }
 
     public Quest GetActiveQuest(QuestData questData)
     {
-        return _quests.Find(quest => quest.Data.Equals(questData));
+        return _activeQuests.Find(quest => quest.Data.Equals(questData));
     }
 
     public bool IsRegistered(QuestData questData)
@@ -125,7 +135,7 @@ public class QuestManager
 
     public void Clear()
     {
-        _quests.Clear();
+        _activeQuests.Clear();
         _completeQuests.Clear();
         QuestRegistered = null;
         QuestCompletabled = null;
@@ -138,7 +148,7 @@ public class QuestManager
     {
         return new JObject
         {
-            { ACTIVE_QUEST_SAVE_KEY_NAME, CreateSaveData(_quests) },
+            { ACTIVE_QUEST_SAVE_KEY_NAME, CreateSaveData(_activeQuests) },
             { COMPLETE_QUEST_SAVE_KEY_NAME, CreateSaveData(_completeQuests) },
         };
     }
@@ -152,7 +162,7 @@ public class QuestManager
             QuestSaveData saveData = new()
             {
                 QuestID = quest.Data.QuestID,
-                NPCID = quest.Owner.NPCID,
+                State = quest.State,
                 Counts = quest.Targets.Select(t => t.Value).ToArray(),
             };
 
@@ -180,16 +190,18 @@ public class QuestManager
                 if (quest.State is QuestState.Complete)
                 {
                     _completeQuests.Add(quest);
+                    quest.RemoveQuestFromOwner();
                 }
                 else
                 {
-                    _quests.Add(quest);
-                    quest.Owner.RemoveQuest(quest.Data);
+                    _activeQuests.Add(quest);
+                    quest.RemoveQuestFromOwner();
                     QuestRegistered?.Invoke(quest);
 
                     quest.CheckCompletable();
                     if (quest.State is QuestState.Completable)
                     {
+                        quest.AddQuestToCompletableOwner();
                         QuestCompletabled?.Invoke(quest);
                     }
                 }
