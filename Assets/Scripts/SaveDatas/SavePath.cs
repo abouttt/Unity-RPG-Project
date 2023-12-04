@@ -11,6 +11,7 @@ public static class SavePath
     public readonly static string ItemInventorySavePath = $"{Path}/ItemInventory.json";
     public readonly static string EquipmentInventorySavePath = $"{Path}/EquipmentInventory.json";
     public readonly static string QuestSavePath = $"{Path}/Quest.json";
+    public readonly static string QuestUISavePath = $"{Path}/QuestUI.json";
     public readonly static string QuickBarSavePath = $"{Path}/QuickBar.json";
     public readonly static string SkillTreeSavePath = $"{Path}/SkillTree.json";
 }

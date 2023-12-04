@@ -43,9 +43,8 @@ public class GameScene : BaseScene
 
     private IEnumerator GameStart()
     {
-        yield return null;
-
-        Managers.Game.OnGameStarted();
         Managers.Quest.Init();
+        yield return null;
+        Managers.Game.OnGameStarted();
     }
 }

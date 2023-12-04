@@ -64,4 +64,9 @@ public class UI_QuestTitleSubitem : UI_Base
             Get<Toggle>((int)Toggles.QuestTrackerToggle).isOn = toggle;
         }
     }
+
+    public bool IsShowedTracker()
+    {
+        return Get<Toggle>((int)Toggles.QuestTrackerToggle).isOn;
+    }
 }

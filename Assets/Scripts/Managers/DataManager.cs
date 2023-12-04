@@ -18,6 +18,7 @@ public class DataManager
         SaveSkillTree();
         SaveQuickInventory();
         SaveQuest();
+        SaveQuestUI();
         SaveGameOption();
     }
 
@@ -169,6 +170,12 @@ public class DataManager
     {
         var root = Managers.Quest.GetSaveData();
         SaveToFile(SavePath.QuestSavePath, root.ToString());
+    }
+
+    private void SaveQuestUI()
+    {
+        var root = Managers.UI.Get<UI_QuestPopup>().GetSaveData();
+        SaveToFile(SavePath.QuestUISavePath, root.ToString());
     }
 
     private void SaveGameOption()

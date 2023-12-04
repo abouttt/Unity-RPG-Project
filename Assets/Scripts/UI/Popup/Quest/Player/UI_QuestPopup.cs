@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 public class UI_QuestPopup : UI_Popup
 {
+    private const string SAVE_KEY_NAME = "SaveQuestUI";
+
     enum GameObjects
     {
         QuestInfo,
@@ -54,6 +57,8 @@ public class UI_QuestPopup : UI_Popup
         Managers.Quest.QuestCompleted += OnQuestCompletedOrCanceled;
         Managers.Quest.QuestUnRegistered += OnQuestCompletedOrCanceled;
 
+        Managers.Game.GameStarted += LoadSaveData;
+
         foreach (var quest in Managers.Quest.ActiveQuests)
         {
             OnQuestRegisterd(quest);
@@ -103,6 +108,14 @@ public class UI_QuestPopup : UI_Popup
         {
             subitem.ToggleQuestTracker(toggle);
         }
+    }
+
+    public JObject GetSaveData()
+    {
+        return new JObject
+        {
+            { SAVE_KEY_NAME, CreateSaveData() }
+        };
     }
 
     private void OnQuestRegisterd(Quest quest)
@@ -210,6 +223,51 @@ public class UI_QuestPopup : UI_Popup
             }
 
             Managers.Resource.Destroy(reward.gameObject);
+        }
+    }
+
+    private JArray CreateSaveData()
+    {
+        var saveDatas = new JArray();
+
+        foreach (var element in _titleSubitems)
+        {
+            if (!element.Value.IsShowedTracker())
+            {
+                continue;
+            }
+
+            QuestUISaveData saveData = new()
+            {
+                QuestID = element.Key.Data.QuestID
+            };
+
+            saveDatas.Add(JObject.FromObject(saveData));
+        }
+
+        return saveDatas;
+    }
+
+    private void LoadSaveData()
+    {
+        if (!Managers.Data.TryGetSaveData(SavePath.QuestUISavePath, out JObject root))
+        {
+            return;
+        }
+
+        JToken datasToken = root[SAVE_KEY_NAME];
+        var datas = datasToken as JArray;
+
+        foreach (var data in datas)
+        {
+            var saveData = data.ToObject<QuestUISaveData>();
+            foreach (var element in _titleSubitems)
+            {
+                if (element.Key.Data.QuestID.Equals(saveData.QuestID))
+                {
+                    element.Value.ToggleQuestTracker(true);
+                }
+            }
         }
     }
 }

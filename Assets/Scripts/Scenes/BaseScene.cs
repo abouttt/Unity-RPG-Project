@@ -22,6 +22,7 @@ public class BaseScene : MonoBehaviour
 
     protected virtual void Init()
     {
+        Managers.Game.OnResourceLoaded();
         Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
 
         var eventSystem = FindObjectOfType(typeof(EventSystem));
