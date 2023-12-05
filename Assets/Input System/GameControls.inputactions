@@ -51,6 +51,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Attack",
+                    "type": "Button",
+                    "id": "cd41ab50-3c8f-47a3-82d8-988f18cce152",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "CursorToggle",
                     "type": "Button",
                     "id": "11b76afa-69e7-4a07-ba64-c3800beea9da",
@@ -407,6 +416,17 @@
                     "processors": "",
                     "groups": "Keyboard/Mouse",
                     "action": "Quest",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ac30f29-81fc-4053-a85b-34a57832ba38",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard/Mouse",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

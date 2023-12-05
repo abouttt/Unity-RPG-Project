@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 4829309594836655713}
   - component: {fileID: 1466335506153813564}
   - component: {fileID: 1466335506153813537}
+  - component: {fileID: 3011979715355510911}
   - component: {fileID: 3044611854374840128}
   - component: {fileID: 3985247554683799744}
   - component: {fileID: 9162409017268964190}
@@ -104,6 +105,7 @@ Transform:
   - {fileID: 1461816899248585445}
   - {fileID: 1466335505826183769}
   - {fileID: 8463217905995771230}
+  - {fileID: 8837614394007568240}
   m_Father: {fileID: 1466335507305199949}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -170,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c68160de1f5b840a61635c1ad5c3e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SaveKey: SaveStatus
   ExtraStat:
     HP: 0
     MP: 0
@@ -259,6 +262,25 @@ MonoBehaviour:
   _stateDrivenCameraAnimator: {fileID: 1466335506231219131}
   _followCamera: {fileID: 1466335506189952439}
   _targetCamera: {fileID: 1466335506426504036}
+--- !u!114 &3011979715355510911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466335506153813543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7768df37c0005504184d89cb8ff03582, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackOffset: {fileID: 8837614394007568240}
+  _requiredAttackSP: 15
+  _attackEffectDirection:
+  - {x: 45, y: 0, z: 0}
+  - {x: -75, y: 0, z: 0}
+  - {x: -90, y: 0, z: 0}
+  - {x: -200, y: 0, z: 0}
 --- !u!114 &3044611854374840128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,6 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 840854af83b59874c8c0e48b6ce9085b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SaveKey: SaveSkillTree
   _skillInits:
   - Data: {fileID: 11400000, guid: 61820652fd9d0474088f623794e4e778, type: 2}
     ChildrenData:
@@ -792,6 +815,37 @@ MonoBehaviour:
   CameraRadius: 0.15
   DampingIntoCollision: 0
   DampingFromCollision: 0
+--- !u!1 &2211473122247056915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8837614394007568240}
+  m_Layer: 0
+  m_Name: AttackOffset
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8837614394007568240
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2211473122247056915}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1466335506153813536}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3500841462526801683
 GameObject:
   m_ObjectHideFlags: 0

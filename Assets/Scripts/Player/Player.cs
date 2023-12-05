@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public static PlayerStatus Status { get; private set; }
     public static PlayerMovement Movement { get; private set; }
     public static PlayerCameraController Camera { get; private set; }
+    public static PlayerRoot Root { get; private set; }
+    public static PlayerBattleController Battle { get; private set; }
     public static ItemInventory ItemInventory { get; private set; }
     public static EquipmentInventory EquipmentInventory { get; private set; }
     public static QuickInventory QuickInventory { get; private set; }
@@ -19,6 +21,8 @@ public class Player : MonoBehaviour
         Animator = GetComponent<Animator>();
         Status = GetComponent<PlayerStatus>();
         Movement = GetComponent<PlayerMovement>();
+        Root = GetComponent<PlayerRoot>();
+        Battle = GetComponent<PlayerBattleController>();
         Camera = GetComponent<PlayerCameraController>();
         ItemInventory = GetComponent<ItemInventory>();
         EquipmentInventory = GetComponent<EquipmentInventory>();

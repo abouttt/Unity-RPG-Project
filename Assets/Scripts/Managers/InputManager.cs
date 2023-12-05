@@ -11,6 +11,7 @@ public class InputManager : GameControls.IPlayerActions
     public bool Jump { get; private set; }
     public bool Interaction { get; private set; }
     public bool LockOn { get; private set; }
+    public bool Attack { get; private set; }
 
     //Pass Through
     public bool Sprint { get; private set; }
@@ -48,6 +49,7 @@ public class InputManager : GameControls.IPlayerActions
         _controls.Player.Jump.Reset();
         _controls.Player.Interaction.Reset();
         _controls.Player.LockOn.Reset();
+        _controls.Player.Attack.Reset();
     }
 
     public void Clear()
@@ -85,6 +87,11 @@ public class InputManager : GameControls.IPlayerActions
     public void OnInteraction(InputAction.CallbackContext context)
     {
         Interaction = context.ReadValueAsButton();
+    }
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        Attack = context.ReadValueAsButton();
     }
 
     public void OnCursorToggle(InputAction.CallbackContext context)
