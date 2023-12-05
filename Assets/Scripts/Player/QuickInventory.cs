@@ -1,11 +1,11 @@
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 public class QuickInventory : MonoBehaviour
 {
-    private const string SAVE_KEY_NAME = "SaveQuickInventory";
+    public readonly string SaveKey = "SaveQuickInventory";
 
     [field: SerializeField]
     public int Capacity { get; private set; }
@@ -78,15 +78,7 @@ public class QuickInventory : MonoBehaviour
         return _intUsable[index] is null;
     }
 
-    public JObject GetSaveData()
-    {
-        return new JObject
-        {
-            { SAVE_KEY_NAME, CreateSaveData() }
-        };
-    }
-
-    private JArray CreateSaveData()
+    public JArray GetSaveData()
     {
         var saveDatas = new JArray();
 
@@ -133,13 +125,10 @@ public class QuickInventory : MonoBehaviour
 
     private void LoadSaveData()
     {
-        if (!Managers.Data.TryGetSaveData(SavePath.QuickBarSavePath, out JObject root))
+        if (!Managers.Data.Load<JArray>(SaveKey, out var datas))
         {
             return;
         }
-
-        JToken datasToken = root[SAVE_KEY_NAME];
-        var datas = datasToken as JArray;
 
         int i = 0;
         foreach (var data in datas)

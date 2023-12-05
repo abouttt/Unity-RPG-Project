@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 public class ItemInventory : MonoBehaviour
 {
-    private const string SAVE_KEY_NAME = "SaveItemInventory";
+    public readonly string SaveKey = "SaveItemInventory";
 
     [Serializable]
     public class Inventory
@@ -273,12 +273,37 @@ public class ItemInventory : MonoBehaviour
         return _inventories[itemType].Items[index] is null;
     }
 
-    public JObject GetSaveData()
+    public JArray GetSaveData()
     {
-        return new JObject
+        var saveDatas = new JArray();
+
+        foreach (var element in _inventories)
         {
-            { SAVE_KEY_NAME, CreateSaveData() }
-        };
+            for (int i = 0; i < element.Value.Capacity; i++)
+            {
+                var item = element.Value.Items[i];
+                if (item == null)
+                {
+                    continue;
+                }
+
+                ItemSaveData saveData = new()
+                {
+                    ItemID = item.Data.ItemID,
+                    Count = 1,
+                    Index = i,
+                };
+
+                if (item is CountableItem countableItem)
+                {
+                    saveData.Count = countableItem.CurrentCount;
+                }
+
+                saveDatas.Add(JObject.FromObject(saveData));
+            }
+        }
+
+        return saveDatas;
     }
 
     private bool AddItemCountFromTo(ItemType itemType, int fromIndex, int toIndex)
@@ -397,48 +422,12 @@ public class ItemInventory : MonoBehaviour
         };
     }
 
-    private JArray CreateSaveData()
-    {
-        var saveDatas = new JArray();
-
-        foreach (var element in _inventories)
-        {
-            for (int i = 0; i < element.Value.Capacity; i++)
-            {
-                var item = element.Value.Items[i];
-                if (item == null)
-                {
-                    continue;
-                }
-
-                ItemSaveData saveData = new()
-                {
-                    ItemID = item.Data.ItemID,
-                    Count = 1,
-                    Index = i,
-                };
-
-                if (item is CountableItem countableItem)
-                {
-                    saveData.Count = countableItem.CurrentCount;
-                }
-
-                saveDatas.Add(JObject.FromObject(saveData));
-            }
-        }
-
-        return saveDatas;
-    }
-
     private void LoadSaveData()
     {
-        if (!Managers.Data.TryGetSaveData(SavePath.ItemInventorySavePath, out JObject root))
+        if (!Managers.Data.Load<JArray>(SaveKey, out var datas))
         {
             return;
         }
-
-        JToken datasToken = root[SAVE_KEY_NAME];
-        var datas = datasToken as JArray;
 
         foreach (var data in datas)
         {

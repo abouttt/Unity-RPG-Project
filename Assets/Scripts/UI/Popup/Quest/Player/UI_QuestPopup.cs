@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public class UI_QuestPopup : UI_Popup
 {
-    private const string SAVE_KEY_NAME = "SaveQuestUI";
+    public readonly string SaveKey = "SaveQuestUI";
 
     enum GameObjects
     {
@@ -110,12 +110,26 @@ public class UI_QuestPopup : UI_Popup
         }
     }
 
-    public JObject GetSaveData()
+    public JArray GetSaveData()
     {
-        return new JObject
+        var saveDatas = new JArray();
+
+        foreach (var element in _titleSubitems)
         {
-            { SAVE_KEY_NAME, CreateSaveData() }
-        };
+            if (!element.Value.IsShowedTracker())
+            {
+                continue;
+            }
+
+            QuestUISaveData saveData = new()
+            {
+                QuestID = element.Key.Data.QuestID
+            };
+
+            saveDatas.Add(JObject.FromObject(saveData));
+        }
+
+        return saveDatas;
     }
 
     private void OnQuestRegisterd(Quest quest)
@@ -226,37 +240,12 @@ public class UI_QuestPopup : UI_Popup
         }
     }
 
-    private JArray CreateSaveData()
-    {
-        var saveDatas = new JArray();
-
-        foreach (var element in _titleSubitems)
-        {
-            if (!element.Value.IsShowedTracker())
-            {
-                continue;
-            }
-
-            QuestUISaveData saveData = new()
-            {
-                QuestID = element.Key.Data.QuestID
-            };
-
-            saveDatas.Add(JObject.FromObject(saveData));
-        }
-
-        return saveDatas;
-    }
-
     private void LoadSaveData()
     {
-        if (!Managers.Data.TryGetSaveData(SavePath.QuestUISavePath, out JObject root))
+        if (!Managers.Data.Load<JArray>(SaveKey, out var datas))
         {
             return;
         }
-
-        JToken datasToken = root[SAVE_KEY_NAME];
-        var datas = datasToken as JArray;
 
         foreach (var data in datas)
         {

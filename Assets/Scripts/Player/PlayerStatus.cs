@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
+    public string SaveKey = "SaveStatus";
+
     public event Action LevelChanged;
     public event Action HPChanged;
     public event Action MPChanged;
@@ -180,6 +182,21 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
+    public string GetSaveData()
+    {
+        StatusSaveData saveData = new()
+        {
+            Level = Level,
+            CurrentHP = _currentStat.HP,
+            CurrentMP = _currentStat.MP,
+            CurrentXP = _currentStat.XP,
+            Gold = Gold,
+            SkillPoint = SkillPoint,
+        };
+
+        return JsonUtility.ToJson(saveData);
+    }
+
     private void AddStatByEquipment(EquipmentType equipmentType)
     {
         if (Player.EquipmentInventory.IsNullSlot(equipmentType))
@@ -245,7 +262,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void LoadSaveData()
     {
-        if (!Managers.Data.TryGetSaveData(SavePath.StatusSavePath, out string json))
+        if (!Managers.Data.Load<string>(SaveKey, out var json))
         {
             return;
         }

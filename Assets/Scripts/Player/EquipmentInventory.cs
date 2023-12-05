@@ -1,11 +1,11 @@
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 public class EquipmentInventory : MonoBehaviour
 {
-    private const string SAVE_KEY_NAME = "SaveEquipmentInventory";
+    public readonly string SaveKey = "SaveEquipmentInventory";
 
     private readonly Dictionary<EquipmentType, EquipmentItem> _items = new();
     public event Action<EquipmentType> EquipmentChanged;
@@ -53,15 +53,7 @@ public class EquipmentInventory : MonoBehaviour
         return _items[equipmentType] is null;
     }
 
-    public JObject GetSaveData()
-    {
-        return new JObject
-        {
-            { SAVE_KEY_NAME, CreateSaveData() }
-        };
-    }
-
-    private JArray CreateSaveData()
+    public JArray GetSaveData()
     {
         var saveDatas = new JArray();
 
@@ -85,13 +77,10 @@ public class EquipmentInventory : MonoBehaviour
 
     private void LoadSaveData()
     {
-        if (!Managers.Data.TryGetSaveData(SavePath.EquipmentInventorySavePath, out JObject root))
+        if (!Managers.Data.Load<JArray>(SaveKey, out var datas))
         {
             return;
         }
-
-        JToken datasToken = root[SAVE_KEY_NAME];
-        var datas = datasToken as JArray;
 
         foreach (var data in datas)
         {

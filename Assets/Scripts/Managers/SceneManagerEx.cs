@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx
 {
+    public string SaveKey = "SaveScene";
+
     public BaseScene CurrentScene { get { return Object.FindObjectOfType<BaseScene>(); } }
     public SceneType NextScene { get; private set; } = SceneType.Unknown;
     public SceneType PrevScene { get; private set; } = SceneType.Unknown;
@@ -17,5 +19,15 @@ public class SceneManagerEx
         NextScene = scene;
         PrevScene = CurrentScene.SceneType;
         SceneManager.LoadScene(SceneType.LoadingScene.ToString());
+    }
+
+    public string GetSaveData()
+    {
+        SceneSaveData saveData = new()
+        {
+            Scene = Managers.Scene.CurrentScene.SceneType
+        };
+
+        return JsonUtility.ToJson(saveData);
     }
 }

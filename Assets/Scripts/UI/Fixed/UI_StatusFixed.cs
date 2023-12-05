@@ -31,7 +31,6 @@ public class UI_StatusFixed : UI_Base
     private void Start()
     {
         Managers.UI.Register<UI_StatusFixed>(this);
-        RefreshAllStatusImage();
     }
 
     private void RefreshAllStatusImage()

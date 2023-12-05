@@ -5,26 +5,61 @@ using Newtonsoft.Json.Linq;
 
 public class DataManager
 {
+    public static readonly string SavePath = $"{Application.streamingAssetsPath}/Saved";
+    public static readonly string SaveFilePath = $"{SavePath}/Saves.json";
+    public static readonly string GameOptionSavePath = $"{SavePath}/GameOption.json";
+
+    private JObject _saveDatas;
     private readonly BinaryFormatter _binaryFormatter = new();
+
+    public void Init()
+    {
+        LoadFromFile(SaveFilePath, out var root);
+        if (root is not null)
+        {
+            _saveDatas = JObject.Parse(root);
+        }
+    }
 
     public void Save()
     {
-        SaveScene();
-        SavePlayerTransform();
-        SaveCamera();
-        SaveStatus();
-        SaveItemInventory();
-        SaveEquipmentInventory();
-        SaveSkillTree();
-        SaveQuickInventory();
-        SaveQuest();
-        SaveQuestUI();
+        JObject saveData = new()
+        {
+            { Managers.Scene.SaveKey, Managers.Scene.GetSaveData() },
+            { Player.Movement.SaveKey, Player.Movement.GetSaveData() },
+            { Player.Camera.SaveKey, Player.Camera.GetSaveData() },
+            { Player.Status.SaveKey, Player.Status.GetSaveData() },
+            { Player.ItemInventory.SaveKey, Player.ItemInventory.GetSaveData() },
+            { Player.EquipmentInventory.SaveKey, Player.EquipmentInventory.GetSaveData() },
+            { Player.SkillTree.SaveKey, Player.SkillTree.GetSaveData() },
+            { Player.QuickInventory.SaveKey, Player.QuickInventory.GetSaveData() },
+            { Managers.Quest.SaveKey, Managers.Quest.GetSaveData() },
+            { Managers.UI.Get<UI_QuestPopup>().SaveKey, Managers.UI.Get<UI_QuestPopup>().GetSaveData() },
+        };
+
+        SaveToFile(SaveFilePath, saveData.ToString());
         SaveGameOption();
+    }
+
+    public bool Load<T>(string saveKey, out T data) where T : class
+    {
+        data = null;
+
+        if (_saveDatas is not null)
+        {
+            var token = _saveDatas.GetValue(saveKey);
+            if (token is not null)
+            {
+                data = token.ToObject<T>();
+            }
+        }
+
+        return data is not null;
     }
 
     public bool HasSaveDatas()
     {
-        var directory = new DirectoryInfo(SavePath.Path);
+        var directory = new DirectoryInfo(SavePath);
         if (!directory.Exists)
         {
             directory.Create();
@@ -33,56 +68,25 @@ public class DataManager
         return directory.GetFiles().Length > 0;
     }
 
-    public bool TryGetSaveData(string path, out string json)
-    {
-        if (!LoadFromFile(path, out json))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public bool TryGetSaveData(string path, out JObject data)
-    {
-        if (!LoadFromFile(path, out var json))
-        {
-            data = null;
-            return false;
-        }
-
-        data = JObject.Parse(json);
-        return true;
-    }
-
     public void ClearSaveDatas()
     {
-        var directory = new DirectoryInfo(SavePath.Path);
+        var directory = new DirectoryInfo(SavePath);
         foreach (FileInfo file in directory.GetFiles())
         {
-            if (file.Name.Equals("GameOptionSaveData"))
+            if (file.Name.Equals("GameOption.json"))
             {
                 continue;
             }
 
             file.Delete();
         }
-    }
 
-    public SceneType LoadScene()
-    {
-        if (!LoadFromFile(SavePath.SceneSavePath, out var json))
-        {
-            return SceneType.Unknown;
-        }
-
-        SceneSaveData saveData = JsonUtility.FromJson<SceneSaveData>(json);
-        return saveData.Scene;
+        _saveDatas.RemoveAll();
     }
 
     public void LoadGameOption()
     {
-        if (!LoadFromFile(SavePath.GameOptionSavePath, out var json))
+        if (!LoadFromFile(GameOptionSavePath, out var json))
         {
             return;
         }
@@ -93,89 +97,6 @@ public class DataManager
         QualitySettings.antiAliasing = saveData.MSAA;
         Application.targetFrameRate = saveData.Frame;
         QualitySettings.vSyncCount = saveData.VSync;
-    }
-
-    private void SaveScene()
-    {
-        SceneSaveData saveData = new()
-        {
-            Scene = Managers.Scene.CurrentScene.SceneType
-        };
-
-        SaveToFile(SavePath.SceneSavePath, JsonUtility.ToJson(saveData));
-    }
-
-    private void SavePlayerTransform()
-    {
-        TransformSaveData saveData = new()
-        {
-            Position = Player.GameObject.transform.position,
-            RotationYaw = Player.GameObject.transform.eulerAngles.y,
-        };
-
-        SaveToFile(SavePath.TransformSavePath, JsonUtility.ToJson(saveData));
-    }
-
-    private void SaveCamera()
-    {
-        CameraSaveData saveData = new()
-        {
-            Pitch = Player.Camera.Pitch,
-            Yaw = Player.Camera.Yaw,
-        };
-
-        SaveToFile(SavePath.CameraSavePath, JsonUtility.ToJson(saveData));
-    }
-
-    private void SaveStatus()
-    {
-        StatusSaveData saveData = new()
-        {
-            Level = Player.Status.Level,
-            CurrentHP = Player.Status.HP,
-            CurrentMP = Player.Status.MP,
-            CurrentXP = Player.Status.XP,
-            Gold = Player.Status.Gold,
-            SkillPoint = Player.Status.SkillPoint,
-        };
-
-        SaveToFile(SavePath.StatusSavePath, JsonUtility.ToJson(saveData));
-    }
-
-    private void SaveItemInventory()
-    {
-        var root = Player.ItemInventory.GetSaveData();
-        SaveToFile(SavePath.ItemInventorySavePath, root.ToString());
-    }
-
-    private void SaveEquipmentInventory()
-    {
-        var root = Player.EquipmentInventory.GetSaveData();
-        SaveToFile(SavePath.EquipmentInventorySavePath, root.ToString());
-    }
-
-    private void SaveSkillTree()
-    {
-        var root = Player.SkillTree.GetSaveData();
-        SaveToFile(SavePath.SkillTreeSavePath, root.ToString());
-    }
-
-    private void SaveQuickInventory()
-    {
-        var root = Player.QuickInventory.GetSaveData();
-        SaveToFile(SavePath.QuickBarSavePath, root.ToString());
-    }
-
-    private void SaveQuest()
-    {
-        var root = Managers.Quest.GetSaveData();
-        SaveToFile(SavePath.QuestSavePath, root.ToString());
-    }
-
-    private void SaveQuestUI()
-    {
-        var root = Managers.UI.Get<UI_QuestPopup>().GetSaveData();
-        SaveToFile(SavePath.QuestUISavePath, root.ToString());
     }
 
     private void SaveGameOption()
@@ -189,7 +110,7 @@ public class DataManager
             VSync = QualitySettings.vSyncCount
         };
 
-        SaveToFile(SavePath.GameOptionSavePath, JsonUtility.ToJson(saveData));
+        SaveToFile(GameOptionSavePath, JsonUtility.ToJson(saveData));
     }
 
     private void SaveToFile(string path, string json)

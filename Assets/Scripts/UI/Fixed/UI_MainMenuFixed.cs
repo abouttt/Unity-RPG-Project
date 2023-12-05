@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 public class UI_MainMenuFixed : UI_Base
@@ -19,7 +20,9 @@ public class UI_MainMenuFixed : UI_Base
 
         GetButton((int)Buttons.ContinueButton).onClick.AddListener(() =>
         {
-            SceneType scene = Managers.Data.LoadScene();
+            Managers.Data.Load<string>(Managers.Scene.SaveKey, out var json);
+            var saveData = JsonUtility.FromJson<SceneSaveData>(json);
+            var scene = saveData.Scene;
             Managers.Game.IsDefaultSpawnPosition = false;
             Managers.Scene.LoadScene(scene);
         });

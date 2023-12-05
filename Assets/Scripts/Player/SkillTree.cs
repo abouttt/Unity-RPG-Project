@@ -14,7 +14,7 @@ public class SkillTree : MonoBehaviour
         public SerializedDictionary<SkillData, int> ChildrenData;
     }
 
-    private const string SAVE_KEY_NAME = "SaveSkillTree";
+    public string SaveKey = "SaveSkillTree";
 
     [SerializeField]
     private SkillInit[] _skillInits;
@@ -63,13 +63,22 @@ public class SkillTree : MonoBehaviour
         Player.Status.SkillPoint += totalSkillPoint;
     }
 
-    public JObject GetSaveData()
+    public JArray GetSaveData()
     {
-        var root = new JObject
+        var saveDatas = new JArray();
+
+        foreach (var skill in _skills)
         {
-            { SAVE_KEY_NAME, CreateSaveData() }
-        };
-        return root;
+            SkillSaveData saveData = new()
+            {
+                SkillID = skill.Data.SkillID,
+                CurrentLevel = skill.CurrentLevel,
+            };
+
+            saveDatas.Add(JObject.FromObject(saveData));
+        }
+
+        return saveDatas;
     }
 
     private void InitSkills()
@@ -102,33 +111,12 @@ public class SkillTree : MonoBehaviour
         }
     }
 
-    private JArray CreateSaveData()
-    {
-        var saveDatas = new JArray();
-
-        foreach (var skill in _skills)
-        {
-            SkillSaveData saveData = new()
-            {
-                SkillID = skill.Data.SkillID,
-                CurrentLevel = skill.CurrentLevel,
-            };
-
-            saveDatas.Add(JObject.FromObject(saveData));
-        }
-
-        return saveDatas;
-    }
-
     private void LoadSaveData()
     {
-        if (!Managers.Data.TryGetSaveData(SavePath.SkillTreeSavePath, out JObject root))
+        if (!Managers.Data.Load<JArray>(SaveKey, out var datas))
         {
             return;
         }
-
-        JToken datasToken = root[SAVE_KEY_NAME];
-        var datas = datasToken as JArray;
 
         foreach (var data in datas)
         {

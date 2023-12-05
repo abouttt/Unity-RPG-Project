@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public readonly string SaveKey = "SaveTransform";
+
     public bool CanMove { get; set; } = true;
     public bool CanSprint { get; set; } = true;
     public bool CanJump { get; set; } = true;
@@ -86,6 +88,17 @@ public class PlayerMovement : MonoBehaviour
         JumpAndGravity();
         GroundedCheck();
         Move();
+    }
+
+    public string GetSaveData()
+    {
+        TransformSaveData saveData = new()
+        {
+            Position = Player.GameObject.transform.position,
+            RotationYaw = Player.GameObject.transform.eulerAngles.y,
+        };
+
+        return JsonUtility.ToJson(saveData);
     }
 
     private void JumpAndGravity()
@@ -284,7 +297,7 @@ public class PlayerMovement : MonoBehaviour
             position = gameScene.PortalSpawnPosition;
             yaw = gameScene.PortalSpawnRotationYaw;
         }
-        else if (Managers.Data.TryGetSaveData(SavePath.TransformSavePath, out string json))
+        else if (Managers.Data.Load<string>(SaveKey, out var json))
         {
             var saveData = JsonUtility.FromJson<TransformSaveData>(json);
             position = saveData.Position;

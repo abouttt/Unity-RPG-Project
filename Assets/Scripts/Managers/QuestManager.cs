@@ -6,8 +6,10 @@ using Newtonsoft.Json.Linq;
 
 public class QuestManager
 {
-    private const string ACTIVE_QUEST_SAVE_KEY_NAME = "SaveActiveQuest";
-    private const string COMPLETE_QUEST_SAVE_KEY_NAME = "SaveCompleteQuest";
+    public readonly string SaveKey = "SaveQuest";
+
+    private const string ACTIVE_QUEST_SaveKey = "SaveActiveQuest";
+    private const string COMPLETE_QUEST_SaveKey = "SaveCompleteQuest";
 
     public event Action<Quest> QuestRegistered;
     public event Action<Quest> QuestCompletabled;
@@ -148,8 +150,8 @@ public class QuestManager
     {
         return new JObject
         {
-            { ACTIVE_QUEST_SAVE_KEY_NAME, CreateSaveData(_activeQuests) },
-            { COMPLETE_QUEST_SAVE_KEY_NAME, CreateSaveData(_completeQuests) },
+            { ACTIVE_QUEST_SaveKey, CreateSaveData(_activeQuests) },
+            { COMPLETE_QUEST_SaveKey, CreateSaveData(_completeQuests) },
         };
     }
 
@@ -174,7 +176,7 @@ public class QuestManager
 
     private void LoadSaveData()
     {
-        if (!Managers.Data.TryGetSaveData(SavePath.QuestSavePath, out JObject root))
+        if (!Managers.Data.Load<JObject>(SaveKey, out var root))
         {
             return;
         }

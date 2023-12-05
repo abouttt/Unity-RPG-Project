@@ -3,6 +3,8 @@ using Cinemachine;
 
 public class PlayerCameraController : MonoBehaviour
 {
+    public readonly string SaveKey = "SaveCamera";
+
     public Transform LockOnTarget
     {
         get => _targetCamera.LookAt;
@@ -17,9 +19,6 @@ public class PlayerCameraController : MonoBehaviour
     }
 
     public bool IsLockOn { get; private set; } = false;
-
-    public float Pitch => _cinemachineTargetPitch;
-    public float Yaw => _cinemachineTargetYaw;
 
     [Header("[Rotate]")]
     [SerializeField]
@@ -88,6 +87,17 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         CameraRotation();
+    }
+
+    public string GetSaveData()
+    {
+        CameraSaveData saveData = new()
+        {
+            Pitch = _cinemachineTargetPitch,
+            Yaw = _cinemachineTargetYaw,
+        };
+
+        return JsonUtility.ToJson(saveData);
     }
 
     private void CameraRotation()
@@ -165,8 +175,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private void LoadSaveData()
     {
-        if (Managers.Data.TryGetSaveData(SavePath.CameraSavePath, out string json) &&
-            !Managers.Game.IsPortalSpawnPosition)
+        if (Managers.Data.Load<string>(SaveKey, out var json) && !Managers.Game.IsPortalSpawnPosition)
         {
             var saveData = JsonUtility.FromJson<CameraSaveData>(json);
             _cinemachineTargetPitch = saveData.Pitch;

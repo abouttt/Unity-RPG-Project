@@ -46,6 +46,7 @@ public class Managers : Singleton<Managers>
             Clear();
         }
 
+        Data.Init();
         Input.Init();
         Pool.Init();
         Sound.Init();

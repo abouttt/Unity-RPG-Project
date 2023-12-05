@@ -8,7 +8,7 @@ public static class EditorMenuItems
     [MenuItem("Tools/Clear Save Data")]
     public static void ClearSaveData()
     {
-        var directory = new DirectoryInfo(SavePath.Path);
+        var directory = new DirectoryInfo(DataManager.SavePath);
         if (!directory.Exists)
         {
             directory.Create();
