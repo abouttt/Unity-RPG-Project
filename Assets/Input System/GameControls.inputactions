@@ -60,6 +60,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Defense",
+                    "type": "PassThrough",
+                    "id": "838c5c2d-de8d-48bd-8484-a866220d0e87",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "CursorToggle",
                     "type": "Button",
                     "id": "11b76afa-69e7-4a07-ba64-c3800beea9da",
@@ -427,6 +436,17 @@
                     "processors": "",
                     "groups": "Keyboard/Mouse",
                     "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "85d82f45-f7ff-47df-874c-b2025919adcf",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard/Mouse",
+                    "action": "Defense",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

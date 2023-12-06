@@ -15,6 +15,7 @@ public class InputManager : GameControls.IPlayerActions
 
     //Pass Through
     public bool Sprint { get; private set; }
+    public bool Defense { get; private set; }
 
     public bool CursorLocked { get; private set; } = true;
 
@@ -92,6 +93,11 @@ public class InputManager : GameControls.IPlayerActions
     public void OnAttack(InputAction.CallbackContext context)
     {
         Attack = context.ReadValueAsButton();
+    }
+
+    public void OnDefense(InputAction.CallbackContext context)
+    {
+        Defense = context.ReadValueAsButton();
     }
 
     public void OnCursorToggle(InputAction.CallbackContext context)

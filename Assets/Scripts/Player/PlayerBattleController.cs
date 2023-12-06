@@ -6,6 +6,7 @@ public class PlayerBattleController : MonoBehaviour
     public bool IsAttacking { get; private set; } = false;
     public bool IsDefending { get; private set; } = false;
     public bool CanAttack { get; set; } = true;
+    public bool CanDefense { get; set; } = true;
 
     [SerializeField]
     private Transform _attackOffset;
@@ -18,11 +19,17 @@ public class PlayerBattleController : MonoBehaviour
     private bool _hasReservedAttack = false;
 
     private readonly int _animIDAttack = Animator.StringToHash("Attack");
+    private readonly int _animIDDefense = Animator.StringToHash("Defense");
 
     private void Update()
     {
         if (!Managers.Input.CursorLocked || Player.Movement.IsJumping)
         {
+            if (IsDefending)
+            {
+                OffDefense();
+            }
+
             return;
         }
 
@@ -34,12 +41,22 @@ public class PlayerBattleController : MonoBehaviour
         if (_hasReservedAttack)
         {
             Attack();
+            return;
+        }
+
+        if (Player.Root.IsEquip(EquipmentType.Shield) && Managers.Input.Defense)
+        {
+            Defense();
+        }
+        else if (IsDefending)
+        {
+            OffDefense();
         }
     }
 
     private void Attack()
     {
-        if (!CanMelee())
+        if (!CanAttack && Player.Movement.IsGrounded)
         {
             return;
         }
@@ -49,6 +66,12 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
+        if (IsDefending)
+        {
+            OffDefense();
+            CanDefense = false;
+        }
+
         _hasReservedAttack = false;
         IsAttacking = true;
         Player.Movement.CanRotation = true;
@@ -56,14 +79,27 @@ public class PlayerBattleController : MonoBehaviour
         Player.Status.SP -= _requiredAttackSP;
     }
 
-    private bool CanMelee()
+    private void Defense()
     {
-        return CanAttack && Player.Movement.IsGrounded;
+        if (!CanDefense && Player.Movement.IsGrounded)
+        {
+            return;
+        }
+
+        IsDefending = true;
+        Player.Animator.SetBool(_animIDDefense, true);
+    }
+
+    private void OffDefense()
+    {
+        IsDefending = false;
+        Player.Animator.SetBool(_animIDDefense, false);
     }
 
     private void OnBeginMeleeAnim()
     {
         CanAttack = false;
+        CanDefense = false;
         Player.Movement.CanMove = false;
         Player.Movement.CanRotation = false;
         Player.Movement.CanJump = false;
@@ -85,6 +121,7 @@ public class PlayerBattleController : MonoBehaviour
         _currentAttackComboCount = 0;
         IsAttacking = false;
         CanAttack = true;
+        CanDefense = true;
         Player.Movement.CanMove = true;
         Player.Movement.CanRotation = true;
         Player.Movement.CanJump = true;
