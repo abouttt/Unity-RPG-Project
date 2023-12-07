@@ -56,7 +56,14 @@ public class PlayerBattleController : MonoBehaviour
 
     private void Attack()
     {
-        if (!CanAttack && Player.Movement.IsGrounded)
+        if (!CanAttack)
+        {
+            return;
+        }
+
+        _hasReservedAttack = false;
+
+        if (!Player.Movement.IsGrounded)
         {
             return;
         }
@@ -72,7 +79,6 @@ public class PlayerBattleController : MonoBehaviour
             CanDefense = false;
         }
 
-        _hasReservedAttack = false;
         IsAttacking = true;
         Player.Movement.CanRotation = true;
         Player.Animator.SetTrigger(_animIDAttack);
@@ -109,7 +115,8 @@ public class PlayerBattleController : MonoBehaviour
     {
         if (IsAttacking)
         {
-            _currentAttackComboCount = (_currentAttackComboCount + 1) >= _attackEffectDirection.Count ? 0 : _currentAttackComboCount + 1;
+            int nextCount = _currentAttackComboCount + 1;
+            _currentAttackComboCount = nextCount >= _attackEffectDirection.Count ? 0 : nextCount;
         }
 
         CanAttack = true;
@@ -117,7 +124,6 @@ public class PlayerBattleController : MonoBehaviour
 
     private void OnEndMeleeAnim()
     {
-        _hasReservedAttack = false;
         _currentAttackComboCount = 0;
         IsAttacking = false;
         CanAttack = true;
