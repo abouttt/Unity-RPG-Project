@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Interactive
+  - MinimapCamera
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - Obstacle
   - LockOnTarget
   - Monster
-  - 
-  - 
+  - Minimap
+  - Environment
   - 
   - 
   - 
