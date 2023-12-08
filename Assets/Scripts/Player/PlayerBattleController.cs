@@ -125,6 +125,7 @@ public class PlayerBattleController : MonoBehaviour
     private void OnEndMeleeAnim()
     {
         _currentAttackComboCount = 0;
+        _hasReservedAttack = false;
         IsAttacking = false;
         CanAttack = true;
         CanDefense = true;
