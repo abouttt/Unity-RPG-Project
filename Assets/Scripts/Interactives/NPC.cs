@@ -40,6 +40,7 @@ public class NPC : Interactive
 
         Managers.Game.ResourceLoaded += () =>
         {
+            Managers.Resource.Instantiate("NPCMinimapIcon", transform);
             _questPresenceNotifier = Managers.Resource.Instantiate("QuestPresenceNotifier", _questNotifierPosition, transform);
             _questCompletableNotifier = Managers.Resource.Instantiate("QuestCompletableNotifier", _questNotifierPosition, transform);
             _questPresenceNotifier.SetActive(false);
