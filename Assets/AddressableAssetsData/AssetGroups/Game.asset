@@ -49,7 +49,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - Game
   - m_GUID: e52128cbd871bcf4dae7d6879306114a
-    m_Address: NPCMinimapIcon
+    m_Address: MinimapIcon
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game

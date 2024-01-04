@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public static class Util
 {
@@ -69,5 +70,11 @@ public static class Util
         }
 
         return result;
+    }
+
+    public static Sprite Texture2DToSprite(Texture2D texture)
+    {
+        var rect = new Rect(0, 0, texture.width, texture.height);
+        return Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f));
     }
 }

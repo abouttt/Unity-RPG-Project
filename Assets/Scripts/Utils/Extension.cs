@@ -21,4 +21,9 @@ public static class Extension
     {
         return Util.GetLastSlashString(str);
     }
+
+    public static Sprite ToSprite(this Texture2D texture)
+    {
+        return Util.Texture2DToSprite(texture);
+    }
 }

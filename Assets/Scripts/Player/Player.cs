@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
         EquipmentInventory = GetComponent<EquipmentInventory>();
         QuickInventory = GetComponent<QuickInventory>();
         SkillTree = GetComponent<SkillTree>();
+
+        Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup("PlayerMinimapIcon", "플레이어");
     }
 
     public static void Init()

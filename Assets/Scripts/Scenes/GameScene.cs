@@ -24,12 +24,12 @@ public class GameScene : BaseScene
         InitUI();
         StartCoroutine(GameStart());
 
-        Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
-        Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
-        Managers.Input.ToggleCursor(false);
         Managers.Game.IsDefaultSpawnPosition = false;
         Managers.Game.IsPortalSpawnPosition = false;
         Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
+        Managers.Input.ToggleCursor(false);
+        Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
+        Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
 
         Player.Status.Gold += 10000;
     }

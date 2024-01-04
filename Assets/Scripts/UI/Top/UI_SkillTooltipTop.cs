@@ -29,8 +29,7 @@ public class UI_SkillTooltipTop : UI_Base
         }
     }
 
-    [SerializeField]
-    [Tooltip("Distance from mouse")]
+    [SerializeField, Tooltip("Distance from mouse")]
     private Vector2 _deltaPosition;
 
     private UI_BaseSlot _target;

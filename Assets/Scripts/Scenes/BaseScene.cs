@@ -62,7 +62,7 @@ public class BaseScene : MonoBehaviour
             return;
         }
 
-        Managers.Resource.LoadAllAsync<GameObject>(loadResourceLabels[_currentLabelIndex].ToString(), () =>
+        Managers.Resource.LoadAllAsync<UnityEngine.Object>(loadResourceLabels[_currentLabelIndex].ToString(), () =>
         {
             if (_currentLabelIndex == loadResourceLabels.Length - 1)
             {

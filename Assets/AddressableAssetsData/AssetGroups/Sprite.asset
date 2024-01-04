@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Sprite
+  m_EditorClassIdentifier: 
+  m_GroupName: Sprite
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c9010e0a1b499054eaec4dd40248f47e
+  m_SerializeEntries:
+  - m_GUID: 1c98c2e35b694c24ebfd8a6ac0297151
+    m_Address: NPCMinimapIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+  - m_GUID: f370575d72311de4c875699b047a3184
+    m_Address: PlayerMinimapIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ea1e2375fae67c6478dc54ddb1d31d29, type: 2}
+    - {fileID: 11400000, guid: 30401aea897c2964ca5144ce3704af83, type: 2}
