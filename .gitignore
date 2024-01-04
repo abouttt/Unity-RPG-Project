@@ -80,4 +80,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/Saved/*
 /[Aa]ssets/[Hh]otReload.meta
 /[Aa]ssets/[Hh]otReload/*
+/[Aa]ssets/[Ss]treamingAssets/HotReload_BuildInfo.json.meta
 /[Pp]ackages/com.singularitygroup.hotreload/*
