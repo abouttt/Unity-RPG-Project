@@ -36,7 +36,7 @@ public class BaseScene : MonoBehaviour
 
     private void InitDefaultPrefabs()
     {
-        foreach (var prefab in LoadSetting.GetInstance.DefaultPrefabs)
+        foreach (var prefab in SceneSetting.GetInstance.FirstCreatePrefabs)
         {
             Instantiate(prefab);
         }
@@ -55,7 +55,7 @@ public class BaseScene : MonoBehaviour
 
     private void InitResources(Action callback)
     {
-        var loadResourceLabels = LoadSetting.GetInstance.LoadResourceLabels[SceneType];
+        var loadResourceLabels = SceneSetting.GetInstance.LoadResourceLabels[SceneType];
 
         if (loadResourceLabels == null || loadResourceLabels.Length == 0)
         {

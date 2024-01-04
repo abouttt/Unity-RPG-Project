@@ -18,7 +18,7 @@ public class LoadingScene : BaseScene
 
     private void Start()
     {
-        _background.sprite = LoadSetting.GetInstance.Background[Managers.Scene.NextScene];
+        _background.sprite = SceneSetting.GetInstance.Background[Managers.Scene.NextScene];
         _background.color = Color.white;
         if (_background.sprite == null)
         {
