@@ -81,7 +81,7 @@ public class DataManager
             file.Delete();
         }
 
-        _saveDatas.RemoveAll();
+        _saveDatas?.RemoveAll();
     }
 
     public void LoadGameOption()
