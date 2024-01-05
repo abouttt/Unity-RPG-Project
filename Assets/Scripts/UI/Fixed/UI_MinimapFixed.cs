@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class UI_MinimapFixed : UI_Base, IPointerMoveHandler
+public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
 {
     enum RectTransforms
     {
@@ -42,16 +42,7 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler
     private void Start()
     {
         Managers.UI.Register<UI_MinimapFixed>(this);
-    }
-
-    private void Update()
-    {
-        if (Managers.Input.CursorLocked && GetRT((int)RectTransforms.MinimapIconName).gameObject.activeSelf)
-        {
-            GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(false);
-        }
-
-        SetPosition(Mouse.current.position.ReadValue());
+        GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(false);
     }
 
     private void LateUpdate()
@@ -84,6 +75,11 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler
         }
     }
 
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(false);
+    }
+
     private void CastRayToWorld(Vector2 vec)
     {
         int layerMask = 1 << LayerMask.NameToLayer("Minimap");
@@ -91,8 +87,9 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler
         Ray mapRay = minimapCamera.ScreenPointToRay(new Vector2(vec.x * minimapCamera.pixelWidth, vec.y * minimapCamera.pixelHeight));
         if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity, layerMask))
         {
-            GetText((int)Texts.NameText).text = miniMapHit.collider.gameObject.GetComponent<MinimapIcon>().IconName;
             GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(true);
+            GetText((int)Texts.NameText).text = miniMapHit.collider.gameObject.GetComponent<MinimapIcon>().IconName;
+            SetPosition(Mouse.current.position.ReadValue());
         }
         else
         {
