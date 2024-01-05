@@ -42,9 +42,32 @@ public class Player : MonoBehaviour
         UnityEngine.Camera.main.transform.position = Vector3.zero;
 
         var playerPackagePrefab = Managers.Resource.Load<GameObject>("PlayerPackage");
+        GetPositionAndRotationYaw(out var position, out var yaw);
+        playerPackagePrefab.FindChild("Player").transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
+
         var playerPackage = Instantiate(playerPackagePrefab);
         playerPackage.transform.DetachChildren();
         Destroy(playerPackage);
         FindObjectOfType<CinemachineStateDrivenCamera>().transform.SetParent(UnityEngine.Camera.main.transform);
+        Movement.InitRotationYaw = yaw;
+    }
+
+    private static void GetPositionAndRotationYaw(out Vector3 position, out float yaw)
+    {
+        var gameScene = Managers.Scene.CurrentScene as GameScene;
+        position = gameScene.DefaultSpawnPosition;
+        yaw = gameScene.DefaultSpawnRotationYaw;
+
+        if (Managers.Game.IsPortalSpawnPosition)
+        {
+            position = gameScene.PortalSpawnPosition;
+            yaw = gameScene.PortalSpawnRotationYaw;
+        }
+        else if (Managers.Data.Load<string>(PlayerMovement.SaveKey, out var json))
+        {
+            var saveData = JsonUtility.FromJson<TransformSaveData>(json);
+            position = saveData.Position;
+            yaw = saveData.RotationYaw;
+        }
     }
 }

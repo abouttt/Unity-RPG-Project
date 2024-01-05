@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public class QuickInventory : MonoBehaviour
 {
-    public readonly string SaveKey = "SaveQuickInventory";
+    public static readonly string SaveKey = "SaveQuickInventory";
 
     [field: SerializeField]
     public int Capacity { get; private set; }

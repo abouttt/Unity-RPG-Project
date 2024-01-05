@@ -24,12 +24,7 @@ public class GameScene : BaseScene
         InitUI();
         StartCoroutine(GameStart());
 
-        Managers.Game.IsDefaultSpawnPosition = false;
-        Managers.Game.IsPortalSpawnPosition = false;
-        Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
         Managers.Input.ToggleCursor(false);
-        Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
-        Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
 
         Player.Status.Gold += 10000;
     }
@@ -44,7 +39,12 @@ public class GameScene : BaseScene
     private IEnumerator GameStart()
     {
         Managers.Quest.Init();
+        Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
         yield return null;
         Managers.Game.OnGameStarted();
+        Managers.Game.IsDefaultSpawnPosition = false;
+        Managers.Game.IsPortalSpawnPosition = false;
+        Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
+        Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
     }
 }

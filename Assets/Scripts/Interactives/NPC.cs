@@ -26,7 +26,7 @@ public class NPC : Interactive
     private List<QuestData> _quests;
 
     [SerializeField]
-    private Vector3 _questNotifierPosition = new Vector3(0f, 2.3f, 0f);
+    private Vector3 _questNotifierPosition = new(0f, 2.3f, 0f);
     private GameObject _questPresenceNotifier;
     private GameObject _questCompletableNotifier;
 

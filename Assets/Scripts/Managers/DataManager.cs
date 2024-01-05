@@ -14,6 +14,12 @@ public class DataManager
 
     public void Init()
     {
+        var directory = new DirectoryInfo(SavePath);
+        if (!directory.Exists)
+        {
+            directory.Create();
+        }
+
         LoadFromFile(SaveFilePath, out var root);
         if (root is not null)
         {
@@ -26,15 +32,15 @@ public class DataManager
         JObject saveData = new()
         {
             { Managers.Scene.SaveKey, Managers.Scene.GetSaveData() },
-            { Player.Movement.SaveKey, Player.Movement.GetSaveData() },
-            { Player.Camera.SaveKey, Player.Camera.GetSaveData() },
-            { Player.Status.SaveKey, Player.Status.GetSaveData() },
-            { Player.ItemInventory.SaveKey, Player.ItemInventory.GetSaveData() },
-            { Player.EquipmentInventory.SaveKey, Player.EquipmentInventory.GetSaveData() },
-            { Player.SkillTree.SaveKey, Player.SkillTree.GetSaveData() },
-            { Player.QuickInventory.SaveKey, Player.QuickInventory.GetSaveData() },
-            { Managers.Quest.SaveKey, Managers.Quest.GetSaveData() },
-            { Managers.UI.Get<UI_QuestPopup>().SaveKey, Managers.UI.Get<UI_QuestPopup>().GetSaveData() },
+            { PlayerMovement.SaveKey, Player.Movement.GetSaveData() },
+            { PlayerCameraController.SaveKey, Player.Camera.GetSaveData() },
+            { PlayerStatus.SaveKey, Player.Status.GetSaveData() },
+            { ItemInventory.SaveKey, Player.ItemInventory.GetSaveData() },
+            { EquipmentInventory.SaveKey, Player.EquipmentInventory.GetSaveData() },
+            { SkillTree.SaveKey, Player.SkillTree.GetSaveData() },
+            { QuickInventory.SaveKey, Player.QuickInventory.GetSaveData() },
+            { QuestManager.SaveKey, Managers.Quest.GetSaveData() },
+            { UI_QuestPopup.SaveKey, Managers.UI.Get<UI_QuestPopup>().GetSaveData() },
         };
 
         SaveToFile(SaveFilePath, saveData.ToString());
@@ -59,13 +65,7 @@ public class DataManager
 
     public bool HasSaveDatas()
     {
-        var directory = new DirectoryInfo(SavePath);
-        if (!directory.Exists)
-        {
-            directory.Create();
-        }
-
-        return directory.GetFiles().Length > 0;
+        return File.Exists(SaveFilePath);
     }
 
     public void ClearSaveDatas()

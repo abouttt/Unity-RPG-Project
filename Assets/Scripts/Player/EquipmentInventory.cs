@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public class EquipmentInventory : MonoBehaviour
 {
-    public readonly string SaveKey = "SaveEquipmentInventory";
+    public static readonly string SaveKey = "SaveEquipmentInventory";
 
     private readonly Dictionary<EquipmentType, EquipmentItem> _items = new();
     public event Action<EquipmentType> EquipmentChanged;

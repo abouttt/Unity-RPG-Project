@@ -3,7 +3,7 @@ using Cinemachine;
 
 public class PlayerCameraController : MonoBehaviour
 {
-    public readonly string SaveKey = "SaveCamera";
+    public static readonly string SaveKey = "SaveCamera";
 
     public Transform LockOnTarget
     {

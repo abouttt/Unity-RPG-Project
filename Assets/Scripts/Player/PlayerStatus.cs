@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    public string SaveKey = "SaveStatus";
+    public static readonly string SaveKey = "SaveStatus";
 
     public event Action LevelChanged;
     public event Action HPChanged;
@@ -150,7 +150,7 @@ public class PlayerStatus : MonoBehaviour
             }
             StatChanged?.Invoke();
         };
-        
+
         StatChanged?.Invoke();
     }
 

@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 public class ItemInventory : MonoBehaviour
 {
-    public readonly string SaveKey = "SaveItemInventory";
+    public static readonly string SaveKey = "SaveItemInventory";
 
     [Serializable]
     public class Inventory

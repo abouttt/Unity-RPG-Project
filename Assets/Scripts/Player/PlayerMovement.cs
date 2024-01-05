@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public readonly string SaveKey = "SaveTransform";
+    public static readonly string SaveKey = "SaveTransform";
 
     public bool CanMove { get; set; } = true;
     public bool CanSprint { get; set; } = true;
@@ -11,6 +11,21 @@ public class PlayerMovement : MonoBehaviour
 
     public bool IsGrounded { get; private set; }
     public bool IsJumping { get; private set; }
+
+    public float InitRotationYaw
+    {
+        get => _lockOffRotation;
+        set
+        {
+            if (_isInit)
+            {
+                return;
+            }
+
+            _lockOffRotation = value;
+            _isInit = true;
+        }
+    }
 
     [SerializeField]
     private float _moveSpeed;                         // 기본 속도
@@ -66,6 +81,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool _isJumpLand;
     private bool _isPrevLockOn;
+    private bool _isInit = false;
 
     private CharacterController _controller;
 
@@ -80,7 +96,6 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
-        LoadSaveData();
     }
 
     private void Update()
@@ -284,27 +299,5 @@ public class PlayerMovement : MonoBehaviour
     {
         _isJumpLand = false;
         IsJumping = false;
-    }
-
-    private void LoadSaveData()
-    {
-        var gameScene = Managers.Scene.CurrentScene as GameScene;
-        var position = gameScene.DefaultSpawnPosition;
-        var yaw = gameScene.DefaultSpawnRotationYaw;
-
-        if (Managers.Game.IsPortalSpawnPosition)
-        {
-            position = gameScene.PortalSpawnPosition;
-            yaw = gameScene.PortalSpawnRotationYaw;
-        }
-        else if (Managers.Data.Load<string>(SaveKey, out var json))
-        {
-            var saveData = JsonUtility.FromJson<TransformSaveData>(json);
-            position = saveData.Position;
-            yaw = saveData.RotationYaw;
-        }
-
-        gameObject.transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
-        _lockOffRotation = yaw;
     }
 }

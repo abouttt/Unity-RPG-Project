@@ -22,9 +22,6 @@ public class BaseScene : MonoBehaviour
 
     protected virtual void Init()
     {
-        Managers.Game.OnResourceLoaded();
-        Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
-
         var eventSystem = FindObjectOfType(typeof(EventSystem));
         if (eventSystem == null)
         {
@@ -32,11 +29,13 @@ public class BaseScene : MonoBehaviour
         }
 
         InitPrefabs();
+        Managers.Game.OnResourceLoaded();
+        Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
     }
 
     private void InitDefaultPrefabs()
     {
-        foreach (var prefab in SceneSetting.GetInstance.FirstCreatePrefabs)
+        foreach (var prefab in SceneSetting.GetInstance.DefaultPrefabs)
         {
             Instantiate(prefab);
         }

@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 public class QuestManager
 {
-    public readonly string SaveKey = "SaveQuest";
+    public static readonly string SaveKey = "SaveQuest";
 
     private const string ACTIVE_QUEST_SaveKey = "SaveActiveQuest";
     private const string COMPLETE_QUEST_SaveKey = "SaveCompleteQuest";

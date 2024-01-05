@@ -14,7 +14,7 @@ public class SkillTree : MonoBehaviour
         public SerializedDictionary<SkillData, int> ChildrenData;
     }
 
-    public string SaveKey = "SaveSkillTree";
+    public static readonly string SaveKey = "SaveSkillTree";
 
     [SerializeField]
     private SkillInit[] _skillInits;

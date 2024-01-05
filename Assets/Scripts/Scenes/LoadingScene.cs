@@ -14,10 +14,6 @@ public class LoadingScene : BaseScene
     {
         base.Init();
         Managers.UI.Get<UI_TopCanvas>().ActiveFalseInitBG();
-    }
-
-    private void Start()
-    {
         _background.sprite = SceneSetting.GetInstance.Background[Managers.Scene.NextScene];
         _background.color = Color.white;
         if (_background.sprite == null)

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public class UI_QuestPopup : UI_Popup
 {
-    public readonly string SaveKey = "SaveQuestUI";
+    public static readonly string SaveKey = "SaveQuestUI";
 
     enum GameObjects
     {
