@@ -38,9 +38,9 @@ public class GameScene : BaseScene
 
     private IEnumerator GameStart()
     {
+        yield return null;
         Managers.Quest.Init();
         Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
-        yield return null;
         Managers.Game.OnGameStarted();
         Managers.Game.IsDefaultSpawnPosition = false;
         Managers.Game.IsPortalSpawnPosition = false;

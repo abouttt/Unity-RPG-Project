@@ -46,7 +46,7 @@ public class NPC : Interactive
             _questCompletableNotifier.SetActive(false);
         };
 
-        Managers.Game.GameStarted += CheckQuest;
+        Managers.Game.GameStarted += CheckQuests;
     }
 
     public static NPC GetNPC(string id)
@@ -63,16 +63,16 @@ public class NPC : Interactive
     public void AddQuest(QuestData questData)
     {
         _quests.Add(questData);
-        CheckQuest();
+        CheckQuests();
     }
 
     public void RemoveQuest(QuestData questData)
     {
         _quests.Remove(questData);
-        CheckQuest();
+        CheckQuests();
     }
 
-    private void CheckQuest()
+    private void CheckQuests()
     {
         _questPresenceNotifier.SetActive(false);
         _questCompletableNotifier.SetActive(false);
