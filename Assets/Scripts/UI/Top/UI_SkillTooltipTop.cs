@@ -1,6 +1,7 @@
 using System.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class UI_SkillTooltipTop : UI_Base
 {
@@ -52,8 +53,6 @@ public class UI_SkillTooltipTop : UI_Base
 
     private void Update()
     {
-        SetPosition(Mouse.current.position.ReadValue());
-
         if (_target == null)
         {
             return;
@@ -86,6 +85,8 @@ public class UI_SkillTooltipTop : UI_Base
         {
             Close();
         }
+
+        SetPosition(Mouse.current.position.ReadValue());
     }
 
     private void Close()
@@ -107,6 +108,7 @@ public class UI_SkillTooltipTop : UI_Base
         GetText((int)Texts.SkillNameText).text = _skillData.SkillName;
         GetText((int)Texts.SkillTypeText).text = $"[{_skillData.SkillType}]";
         SetDescription(skill);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_rt);
     }
 
     private void SetDescription(Skill skill)

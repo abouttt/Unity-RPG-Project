@@ -1,6 +1,7 @@
 using System.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class UI_ItemTooltipTop : UI_Base
 {
@@ -63,8 +64,6 @@ public class UI_ItemTooltipTop : UI_Base
 
     private void Update()
     {
-        SetPosition(Mouse.current.position.ReadValue());
-
         if (_target == null)
         {
             return;
@@ -101,6 +100,8 @@ public class UI_ItemTooltipTop : UI_Base
         {
             Close();
         }
+
+        SetPosition(Mouse.current.position.ReadValue());
     }
 
     private void Close()
@@ -123,6 +124,7 @@ public class UI_ItemTooltipTop : UI_Base
         SetItemQualityColor(_itemData.ItemQuality);
         SetType(_itemData.ItemType);
         SetDescription(_itemData);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_rt);
     }
 
     private void SetItemQualityColor(ItemQuality itemQuality)
