@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
 {
-    enum RectTransforms
+    enum GameObjects
     {
         MinimapIconName,
     }
@@ -30,19 +30,21 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
 
     [SerializeField, Tooltip("Distance from mouse")]
     private Vector2 _deltaPosition;
+    private RectTransform _rt;
 
     protected override void Init()
     {
-        BindRT(typeof(RectTransforms));
+        BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
         Bind<RawImage>(typeof(RawImages));
         Bind<Camera>(typeof(Cameras));
+        _rt = GetObject((int)GameObjects.MinimapIconName).GetComponent<RectTransform>();
     }
 
     private void Start()
     {
         Managers.UI.Register<UI_MinimapFixed>(this);
-        GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(false);
+        GetObject((int)GameObjects.MinimapIconName).SetActive(false);
     }
 
     private void LateUpdate()
@@ -77,7 +79,7 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(false);
+        GetObject((int)GameObjects.MinimapIconName).SetActive(false);
     }
 
     private void CastRayToWorld(Vector2 vec)
@@ -87,25 +89,25 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
         Ray mapRay = minimapCamera.ScreenPointToRay(new Vector2(vec.x * minimapCamera.pixelWidth, vec.y * minimapCamera.pixelHeight));
         if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity, layerMask))
         {
-            GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(true);
+            GetObject((int)GameObjects.MinimapIconName).SetActive(true);
             GetText((int)Texts.NameText).text = miniMapHit.collider.gameObject.GetComponent<MinimapIcon>().IconName;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_rt);
             SetPosition(Mouse.current.position.ReadValue());
         }
         else
         {
-            GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(false);
+            GetObject((int)GameObjects.MinimapIconName).SetActive(false);
         }
     }
 
     private void SetPosition(Vector3 position)
     {
-        var rt = GetRT((int)RectTransforms.MinimapIconName);
         var nextPosition = new Vector3
         {
-            x = position.x + (rt.rect.width * 0.5f) + _deltaPosition.x,
-            y = position.y + (rt.rect.height * 0.5f) + _deltaPosition.y
+            x = position.x + (_rt.rect.width * 0.5f) + _deltaPosition.x,
+            y = position.y + (_rt.rect.height * 0.5f) + _deltaPosition.y
         };
 
-        rt.position = nextPosition;
+        _rt.position = nextPosition;
     }
 }
