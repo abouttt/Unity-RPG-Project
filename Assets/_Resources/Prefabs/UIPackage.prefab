@@ -143,9 +143,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4912638323104231210, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4912638323104231210, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7807909511862372936, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
       propertyPath: m_Name
       value: UI_MinimapFixed
+      objectReference: {fileID: 0}
+    - target: {fileID: 7807909511862372936, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190798132975134965, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190798132975134965, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190798132975134965, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190798132975134965, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190798132975134965, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 32.254997
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190798132975134965, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae81fbe205df6ee4d89703cb212cf848, type: 3}

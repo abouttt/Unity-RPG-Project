@@ -32,6 +32,9 @@ public class NPC : Interactive
 
     protected override void Awake()
     {
+        MinimapIconName = Name;
+        MinimapIconSpriteName = "NPCMinimapIcon";
+
         base.Awake();
 
         s_NPCs.Add(NPCID, this);
@@ -39,7 +42,6 @@ public class NPC : Interactive
 
         Managers.Game.ResourceLoaded += () =>
         {
-            Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup("NPCMinimapIcon", Name);
             _questPresenceNotifier = Managers.Resource.Instantiate("QuestPresenceNotifier", _questNotifierPosition, transform);
             _questCompletableNotifier = Managers.Resource.Instantiate("QuestCompletableNotifier", _questNotifierPosition, transform);
             _questPresenceNotifier.SetActive(false);

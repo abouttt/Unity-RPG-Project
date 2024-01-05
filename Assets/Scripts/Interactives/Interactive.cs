@@ -8,11 +8,20 @@ public abstract class Interactive : MonoBehaviour
     public Vector3 InteractionKeyGuideDeltaPos { get; private set; }
     [field: SerializeField]
     public bool CanInteraction { get; set; } = true;
+    [field: SerializeField]
+    public string MinimapIconSpriteName { get; protected set; }
+    [field: SerializeField]
+    public string MinimapIconName { get; protected set; }
 
     public abstract void Interaction();
 
     protected virtual void Awake()
     {
         tag = "Interactive";
+
+        Managers.Game.ResourceLoaded += () =>
+        {
+            Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup(MinimapIconSpriteName, MinimapIconName);
+        };
     }
 }

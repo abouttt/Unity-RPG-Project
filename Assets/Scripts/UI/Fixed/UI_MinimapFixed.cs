@@ -20,20 +20,23 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler
         MinimapImage,
     }
 
+    enum Cameras
+    {
+        MinimapCamera,
+    }
+
     [SerializeField]
     private float _height;
 
     [SerializeField, Tooltip("Distance from mouse")]
     private Vector2 _deltaPosition;
 
-    private Camera _minimapCamera;
-
     protected override void Init()
     {
         BindRT(typeof(RectTransforms));
         BindText(typeof(Texts));
         Bind<RawImage>(typeof(RawImages));
-        _minimapCamera = GameObject.FindWithTag("MinimapCamera").GetComponent<Camera>();
+        Bind<Camera>(typeof(Cameras));
     }
 
     private void Start()
@@ -43,7 +46,7 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler
 
     private void Update()
     {
-        if (Managers.Input.CursorLocked)
+        if (Managers.Input.CursorLocked && GetRT((int)RectTransforms.MinimapIconName).gameObject.activeSelf)
         {
             GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(false);
         }
@@ -58,7 +61,7 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler
         var euler = Camera.main.transform.rotation.eulerAngles;
         euler.x = 90f;
         euler.z = 0f;
-        _minimapCamera.transform.SetPositionAndRotation(position, Quaternion.Euler(euler));
+        Get<Camera>((int)Cameras.MinimapCamera).transform.SetPositionAndRotation(position, Quaternion.Euler(euler));
     }
 
     public void OnPointerMove(PointerEventData eventData)
@@ -84,11 +87,12 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler
     private void CastRayToWorld(Vector2 vec)
     {
         int layerMask = 1 << LayerMask.NameToLayer("Minimap");
-        Ray mapRay = _minimapCamera.ScreenPointToRay(new Vector2(vec.x * _minimapCamera.pixelWidth, vec.y * _minimapCamera.pixelHeight));
+        var minimapCamera = Get<Camera>((int)Cameras.MinimapCamera);
+        Ray mapRay = minimapCamera.ScreenPointToRay(new Vector2(vec.x * minimapCamera.pixelWidth, vec.y * minimapCamera.pixelHeight));
         if (Physics.Raycast(mapRay, out var miniMapHit, Mathf.Infinity, layerMask))
         {
-            GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(true);
             GetText((int)Texts.NameText).text = miniMapHit.collider.gameObject.GetComponent<MinimapIcon>().IconName;
+            GetRT((int)RectTransforms.MinimapIconName).gameObject.SetActive(true);
         }
         else
         {

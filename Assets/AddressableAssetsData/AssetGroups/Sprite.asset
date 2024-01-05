@@ -27,6 +27,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
+  - m_GUID: 3ac26685c1e95004e9bde23fea2af139
+    m_Address: ItemMinimapIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+  - m_GUID: 7f70ededc820b6b4e8f164ce27f2d3fd
+    m_Address: PortalMinimapIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
   m_SchemaSet:
