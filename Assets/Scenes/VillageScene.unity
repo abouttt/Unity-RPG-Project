@@ -56282,6 +56282,10 @@ PrefabInstance:
       propertyPath: _items.Array.data[3].ItemData
       value: 
       objectReference: {fileID: 11400000, guid: de34922a05749ec4595dc9c8a7da9ea9, type: 2}
+    - target: {fileID: 8998107349888703338, guid: 9678f9888c159a04f81a3ee7ab555acf, type: 3}
+      propertyPath: <MinimapIconName>k__BackingField
+      value: "\uC544\uC774\uD15C"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9678f9888c159a04f81a3ee7ab555acf, type: 3}
 --- !u!1001 &1767825955

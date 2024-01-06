@@ -19,16 +19,14 @@ public class FieldItem : Interactive
 
     protected override void Awake()
     {
-        base.Awake();
-    }
-
-    private void Start()
-    {
-        _count = _items.Count;
-        if (_count == 0)
+        if (_items == null || _items.Count == 0)
         {
             Managers.Resource.Destroy(gameObject);
+            return;
         }
+
+        base.Awake();
+        _count = _items.Count;
     }
 
     public override void Interaction()
