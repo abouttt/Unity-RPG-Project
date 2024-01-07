@@ -29,14 +29,9 @@ public class UI_ItemInventoryPopup : UI_Popup
         EtcTabButton,
     }
 
-    enum ScrollViews
+    enum ScrollRects
     {
         ItemSlotScrollView,
-    }
-
-    enum Scrollbars
-    {
-        Scrollbar,
     }
 
     [SerializeField]
@@ -55,8 +50,7 @@ public class UI_ItemInventoryPopup : UI_Popup
         BindButton(typeof(Buttons));
         BindText(typeof(Texts));
         Bind<UI_ItemInventoryTab>(typeof(Tabs));
-        Bind<ScrollRect>(typeof(ScrollViews));
-        Bind<Scrollbar>(typeof(Scrollbars));
+        Bind<ScrollRect>(typeof(ScrollRects));
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_ItemInventoryPopup>);
 
@@ -93,7 +87,7 @@ public class UI_ItemInventoryPopup : UI_Popup
         Showed += () =>
         {
             GetRT((int)RectTransforms.ItemInventory).SetParent(transform);
-            Get<Scrollbar>((int)Scrollbars.Scrollbar).value = 1f;
+            Get<ScrollRect>((int)ScrollRects.ItemSlotScrollView).verticalScrollbar.value = 1f;
         };
 
         OpenTheTab(ItemType.Equipment);
@@ -101,7 +95,7 @@ public class UI_ItemInventoryPopup : UI_Popup
 
     public void OpenTheTab(ItemType itemType)
     {
-        Get<Scrollbar>((int)Scrollbars.Scrollbar).value = 1f;
+        Get<ScrollRect>((int)ScrollRects.ItemSlotScrollView).verticalScrollbar.value = 1f;
 
         foreach (var tab in _tabs)
         {
@@ -109,7 +103,7 @@ public class UI_ItemInventoryPopup : UI_Popup
 
             if (tab.Key.TabType == itemType)
             {
-                Get<ScrollRect>((int)ScrollViews.ItemSlotScrollView).content = tab.Value;
+                Get<ScrollRect>((int)ScrollRects.ItemSlotScrollView).content = tab.Value;
                 pos.x = _tabClickedXPosition;
                 tab.Value.gameObject.SetActive(true);
             }
