@@ -153,8 +153,7 @@ public class Quest
 
     public void Cancel()
     {
-        State = QuestState.Inactive;
-        TargetCountChanged = null;
+        Clear();
         Managers.Quest.ReceiveReport(Category.Quest, Data.QuestID, -1);
     }
 
@@ -178,5 +177,11 @@ public class Quest
         {
             State = QuestState.Completable;
         }
+    }
+
+    public void Clear()
+    {
+        State = QuestState.Inactive;
+        TargetCountChanged = null;
     }
 }

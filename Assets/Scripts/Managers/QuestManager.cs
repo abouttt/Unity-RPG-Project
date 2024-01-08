@@ -30,7 +30,7 @@ public class QuestManager
 
     public Quest Register(QuestData questData)
     {
-        if (IsRegistered(questData))
+        if (GetActiveQuest(questData) is not null)
         {
             return null;
         }
@@ -119,11 +119,6 @@ public class QuestManager
         return _activeQuests.Find(quest => quest.Data.Equals(questData));
     }
 
-    public bool IsRegistered(QuestData questData)
-    {
-        return GetActiveQuest(questData) is not null;
-    }
-
     public bool IsCompletable(QuestData questData)
     {
         var quest = GetActiveQuest(questData);
@@ -137,6 +132,10 @@ public class QuestManager
 
     public void Clear()
     {
+        foreach (var quest in _activeQuests)
+        {
+            quest.Clear();
+        }
         _activeQuests.Clear();
         _completeQuests.Clear();
         QuestRegistered = null;
