@@ -6,8 +6,8 @@ using UnityEngine;
 public class Quest
 {
     public QuestData Data { get; private set; }
-    public NPC Owner => NPC.GetNPC(Data.OwnerID);
-    public NPC CompleteOwner => NPC.GetNPC(Data.CompleteOwnerID);
+    public NPC Owner { get; private set; }
+    public NPC CompleteOwner { get; private set; }
     public QuestState State { get; private set; } = QuestState.Inactive;
     public IReadOnlyDictionary<QuestData.Target, int> Targets => _targets;
     public event Action TargetCountChanged;
@@ -18,6 +18,8 @@ public class Quest
     {
         Data = data;
         State = QuestState.Active;
+        Owner = NPC.GetNPC(Data.OwnerID);
+        CompleteOwner = NPC.GetNPC(Data.CompleteOwnerID);
         foreach (var target in Data.Targets)
         {
             int count = 0;
@@ -34,7 +36,8 @@ public class Quest
     {
         Data = QuestDatabase.GetInstance.FindQuestBy(saveData.QuestID);
         State = saveData.State;
-
+        Owner = NPC.GetNPC(Data.OwnerID);
+        CompleteOwner = NPC.GetNPC(Data.CompleteOwnerID);
         int i = 0;
         foreach (var target in Data.Targets)
         {
@@ -44,37 +47,33 @@ public class Quest
 
     public void AddQuestToOwner()
     {
-        var npc = Owner;
-        if (npc != null)
+        if (Owner != null)
         {
-            npc.AddQuest(Data);
+            Owner.AddQuest(Data);
         }
     }
 
     public void RemoveQuestFromOwner()
     {
-        var owner = Owner;
-        if (owner != null)
+        if (Owner != null)
         {
-            owner.RemoveQuest(Data);
+            Owner.RemoveQuest(Data);
         }
     }
 
     public void AddQuestToCompletableOwner()
     {
-        var completeOwner = CompleteOwner;
-        if (completeOwner != null)
+        if (CompleteOwner != null)
         {
-            completeOwner.AddQuest(Data);
+            CompleteOwner.AddQuest(Data);
         }
     }
 
     public void RemoveQuestFromCompletableOwner()
     {
-        var completeOwner = CompleteOwner;
-        if (completeOwner != null)
+        if (CompleteOwner != null)
         {
-            completeOwner.RemoveQuest(Data);
+            CompleteOwner.RemoveQuest(Data);
         }
     }
 
