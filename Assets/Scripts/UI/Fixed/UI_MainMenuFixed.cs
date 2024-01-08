@@ -20,7 +20,7 @@ public class UI_MainMenuFixed : UI_Base
 
         GetButton((int)Buttons.ContinueButton).onClick.AddListener(() =>
         {
-            Managers.Data.Load<string>(Managers.Scene.SaveKey, out var json);
+            Managers.Data.Load<string>(SceneManagerEx.SaveKey, out var json);
             var saveData = JsonUtility.FromJson<SceneSaveData>(json);
             var scene = saveData.Scene;
             Managers.Game.IsDefaultSpawnPosition = false;

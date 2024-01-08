@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx
 {
-    public string SaveKey = "SaveScene";
+    public static readonly string SaveKey = "SaveScene";
 
     public BaseScene CurrentScene { get { return Object.FindObjectOfType<BaseScene>(); } }
     public SceneType NextScene { get; private set; } = SceneType.Unknown;
