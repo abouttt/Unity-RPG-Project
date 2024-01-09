@@ -156,7 +156,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void Update()
     {
-        if (!Player.Movement.CanSprint && !Managers.Input.Sprint)
+        if (!Managers.Input.Sprint && !Player.Movement.CanSprint)
         {
             Player.Movement.CanSprint = true;
         }
@@ -245,7 +245,7 @@ public class PlayerStatus : MonoBehaviour
     {
         if (!Player.Movement.IsGrounded)
         {
-            _recoverySPTime = 0;
+            _recoverySPTime = 0f;
             return;
         }
 

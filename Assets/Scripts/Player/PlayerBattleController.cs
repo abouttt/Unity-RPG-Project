@@ -33,7 +33,7 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        if (Player.Root.IsEquip(EquipmentType.Weapon) && Managers.Input.Attack)
+        if (Managers.Input.Attack && Player.Root.IsEquip(EquipmentType.Weapon))
         {
             _hasReservedAttack = true;
         }
@@ -44,7 +44,7 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        if (Player.Root.IsEquip(EquipmentType.Shield) && Managers.Input.Defense)
+        if (Managers.Input.Defense && Player.Root.IsEquip(EquipmentType.Shield))
         {
             Defense();
         }
@@ -63,12 +63,7 @@ public class PlayerBattleController : MonoBehaviour
 
         _hasReservedAttack = false;
 
-        if (!Player.Movement.IsGrounded)
-        {
-            return;
-        }
-
-        if (Player.Status.SP < _requiredAttackSP * 0.5f)
+        if (Player.Status.SP <= 0f)
         {
             return;
         }
@@ -87,7 +82,7 @@ public class PlayerBattleController : MonoBehaviour
 
     private void Defense()
     {
-        if (!CanDefense && Player.Movement.IsGrounded)
+        if (!CanDefense)
         {
             return;
         }
@@ -137,13 +132,13 @@ public class PlayerBattleController : MonoBehaviour
 
     private void OnEnableWeapon()
     {
-        CreateEffect();
+        CreateAttackEffect();
     }
 
-    private void CreateEffect()
+    private void CreateAttackEffect()
     {
         var euler = transform.rotation.eulerAngles;
-        euler.y += 90;
+        euler.y += 90f;
         euler += _attackEffectDirection[_currentAttackComboCount];
         Managers.Resource.Instantiate("AttackSlash",
             Player.Root.GetRoot(EquipmentType.Weapon).transform.position, Quaternion.Euler(euler), null, true);

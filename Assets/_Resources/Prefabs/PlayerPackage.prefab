@@ -172,7 +172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c68160de1f5b840a61635c1ad5c3e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SaveKey: SaveStatus
   ExtraStat:
     HP: 0
     MP: 0
@@ -344,7 +343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 840854af83b59874c8c0e48b6ce9085b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SaveKey: SaveSkillTree
   _skillInits:
   - Data: {fileID: 11400000, guid: 61820652fd9d0474088f623794e4e778, type: 2}
     ChildrenData:
@@ -728,8 +726,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1466335507391902505}
   - component: {fileID: 1466335507391902500}
-  - component: {fileID: 1466335507391902507}
   - component: {fileID: 1466335507391902506}
+  - component: {fileID: 311281591352623674}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -764,7 +762,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1466335507391902507
+--- !u!114 &1466335507391902506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466335507391902504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damping: {x: 0, y: 0, z: 0.5}
+  ShoulderOffset: {x: 0, y: 0.25, z: -0.25}
+  VerticalArmLength: 0.4
+  CameraSide: 0.5
+  CameraDistance: 5
+  CameraCollisionFilter:
+    serializedVersion: 2
+    m_Bits: 4097
+  IgnoreTag: Player
+  CameraRadius: 0.15
+  DampingIntoCollision: 0
+  DampingFromCollision: 0
+--- !u!114 &311281591352623674
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -786,35 +808,11 @@ MonoBehaviour:
   m_ScreenY: 0.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0.4
-  m_SoftZoneHeight: 0.4
+  m_SoftZoneWidth: 0.3
+  m_SoftZoneHeight: 0.3
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
---- !u!114 &1466335507391902506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466335507391902504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Damping: {x: 0, y: 0, z: 0.5}
-  ShoulderOffset: {x: 0, y: 0.25, z: -0.25}
-  VerticalArmLength: 0.4
-  CameraSide: 0.5
-  CameraDistance: 5
-  CameraCollisionFilter:
-    serializedVersion: 2
-    m_Bits: 1
-  IgnoreTag: Player
-  CameraRadius: 0.15
-  DampingIntoCollision: 0
-  DampingFromCollision: 0
 --- !u!1 &2211473122247056915
 GameObject:
   m_ObjectHideFlags: 0

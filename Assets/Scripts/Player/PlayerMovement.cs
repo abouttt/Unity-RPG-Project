@@ -69,8 +69,8 @@ public class PlayerMovement : MonoBehaviour
     private float _posXBlend;
     private float _posZBlend;
     private float _animationBlend;
-    private float _lockOffRotation = 0f;
-    private float _lockOnRotation = 0f;
+    private float _lockOffRotation;
+    private float _lockOnRotation;
     private float _rotationVelocity;
     private float _verticalVelocity;
     private const float _terminalVelocity = 53.0f;
@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
             // 점프
             if (Managers.Input.Jump && CanJump && _jumpTimeoutDelta <= 0f)
             {
-                if (Player.Status.SP >= _requiredJumpSP)
+                if (Player.Status.SP > 0f)
                 {
                     Player.Status.SP -= _requiredJumpSP;
 
@@ -145,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            if (_jumpTimeoutDelta >= 0.0f)
+            if (_jumpTimeoutDelta >= 0f)
             {
                 _jumpTimeoutDelta -= Time.deltaTime;
             }
@@ -154,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _jumpTimeoutDelta = _jumpTimeout;
 
-            if (_fallTimeoutDelta >= 0.0f)
+            if (_fallTimeoutDelta >= 0f)
             {
                 _fallTimeoutDelta -= Time.deltaTime;
             }
@@ -191,7 +191,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Managers.Input.Sprint && CanMove && CanSprint)
             {
-                if (Player.Status.SP > 0)
+                if (Player.Status.SP > 0f)
                 {
                     targetSpeed = _sprintSpeed;
 
@@ -212,7 +212,7 @@ public class PlayerMovement : MonoBehaviour
             targetSpeed = 0f;
         }
 
-        var currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+        var currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0f, _controller.velocity.z).magnitude;
         var finalSpeedChangeRate = Time.deltaTime * _speedChangeRate;
         float speedOffset = 0.1f;
 
@@ -237,7 +237,7 @@ public class PlayerMovement : MonoBehaviour
             _animationBlend = 0f;
         }
 
-        var inputDirection = new Vector3(Managers.Input.Move.x, 0.0f, Managers.Input.Move.y).normalized;
+        var inputDirection = new Vector3(Managers.Input.Move.x, 0f, Managers.Input.Move.y).normalized;
 
         if (CanRotation && Managers.Input.Move != Vector2.zero)
         {
@@ -277,11 +277,11 @@ public class PlayerMovement : MonoBehaviour
         // 회전.
         float finalTargetRotation = Player.Camera.IsLockOn ? _lockOnRotation : _lockOffRotation;
         var rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, finalTargetRotation, ref _rotationVelocity, _rotationSmoothTime);
-        transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+        transform.rotation = Quaternion.Euler(0f, rotation, 0f);
 
         // 움직임.
-        var targetDirection = Quaternion.Euler(0.0f, _lockOffRotation, 0.0f) * Vector3.forward;
-        _controller.Move((targetDirection.normalized * _speed + new Vector3(0.0f, _verticalVelocity, 0.0f)) * Time.deltaTime);
+        var targetDirection = Quaternion.Euler(0f, _lockOffRotation, 0.0f) * Vector3.forward;
+        _controller.Move((targetDirection.normalized * _speed + new Vector3(0f, _verticalVelocity, 0f)) * Time.deltaTime);
 
         // 애니메이터 업데이트.
         Player.Animator.SetFloat(_animIDPosX, _posXBlend);

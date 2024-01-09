@@ -63,7 +63,7 @@ public class ItemInventory : MonoBehaviour
                     if (TryGetEmptyIndex(itemData.ItemType, out var emptyIndex))
                     {
                         SetItem(countableItemData, emptyIndex, count);
-                        count = Mathf.Clamp(count - countableItemData.MaxCount, 0, countableItemData.MaxCount);
+                        count = Mathf.Max(count - countableItemData.MaxCount, 0);
                     }
                     else
                     {

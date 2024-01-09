@@ -74,7 +74,7 @@ public class ResourceManager
         }
         else
         {
-            Addressables.LoadAssetAsync<T>(key).Completed += (op) =>
+            Addressables.LoadAssetAsync<T>(key).Completed += op =>
             {
                 if (!_resources.ContainsKey(key))
                 {
@@ -88,7 +88,7 @@ public class ResourceManager
 
     public void LoadAllAsync<T>(string label, Action callback) where T : Object
     {
-        Addressables.LoadResourceLocationsAsync(label, typeof(T)).Completed += (op) =>
+        Addressables.LoadResourceLocationsAsync(label, typeof(T)).Completed += op =>
         {
             int loadCount = 0;
             int totalCount = op.Result.Count;
@@ -101,7 +101,7 @@ public class ResourceManager
             {
                 foreach (var result in op.Result)
                 {
-                    LoadAsync<T>(result.PrimaryKey, (obj) =>
+                    LoadAsync<T>(result.PrimaryKey, obj =>
                     {
                         loadCount++;
                         if (loadCount == totalCount)

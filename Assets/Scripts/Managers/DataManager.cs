@@ -29,7 +29,7 @@ public class DataManager
 
     public void Save()
     {
-        JObject saveData = new()
+        var saveData = new JObject()
         {
             { SceneManagerEx.SaveKey, Managers.Scene.GetSaveData() },
             { PlayerMovement.SaveKey, Player.Movement.GetSaveData() },

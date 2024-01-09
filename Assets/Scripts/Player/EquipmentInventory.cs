@@ -7,8 +7,9 @@ public class EquipmentInventory : MonoBehaviour
 {
     public static readonly string SaveKey = "SaveEquipmentInventory";
 
-    private readonly Dictionary<EquipmentType, EquipmentItem> _items = new();
     public event Action<EquipmentType> EquipmentChanged;
+
+    private readonly Dictionary<EquipmentType, EquipmentItem> _items = new();
 
     private void Awake()
     {

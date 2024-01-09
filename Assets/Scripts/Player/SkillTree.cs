@@ -25,12 +25,12 @@ public class SkillTree : MonoBehaviour
     private void Awake()
     {
         InitSkills();
+        LoadSaveData();
     }
 
     private void Start()
     {
         Player.Status.SkillPointChanged += CheckRootSkills;
-        LoadSaveData();
         CheckRootSkills();
     }
 
