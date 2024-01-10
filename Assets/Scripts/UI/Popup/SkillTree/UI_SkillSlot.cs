@@ -112,8 +112,8 @@ public class UI_SkillSlot : UI_BaseSlot
             return;
         }
 
-        if (IsOnPointerSameBy(eventData, GetButton((int)Buttons.LevelUpButton).gameObject) ||
-            IsOnPointerSameBy(eventData, GetImage((int)Imagess.LevelUpDisabledImage).gameObject))
+        if (IsOnPointerSameGameObject(eventData, GetButton((int)Buttons.LevelUpButton).gameObject) ||
+            IsOnPointerSameGameObject(eventData, GetImage((int)Imagess.LevelUpDisabledImage).gameObject))
         {
             return;
         }
@@ -123,8 +123,8 @@ public class UI_SkillSlot : UI_BaseSlot
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
-        if (IsOnPointerSameBy(eventData, GetButton((int)Buttons.LevelUpButton).gameObject) ||
-            IsOnPointerSameBy(eventData, GetImage((int)Imagess.LevelUpDisabledImage).gameObject))
+        if (IsOnPointerSameGameObject(eventData, GetButton((int)Buttons.LevelUpButton).gameObject) ||
+            IsOnPointerSameGameObject(eventData, GetImage((int)Imagess.LevelUpDisabledImage).gameObject))
         {
             return;
         }
@@ -137,7 +137,7 @@ public class UI_SkillSlot : UI_BaseSlot
         Managers.UI.Get<UI_SkillTooltipTop>().Target = null;
     }
 
-    private bool IsOnPointerSameBy(PointerEventData eventData, GameObject gameObject)
+    private bool IsOnPointerSameGameObject(PointerEventData eventData, GameObject gameObject)
     {
         var result = eventData.pointerCurrentRaycast;
         return result.gameObject == gameObject;

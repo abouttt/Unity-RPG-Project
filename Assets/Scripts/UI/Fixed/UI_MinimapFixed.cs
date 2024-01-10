@@ -29,7 +29,7 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
     private float _height;
 
     [SerializeField, Tooltip("Distance from mouse")]
-    private Vector2 _deltaPosition;
+    private Vector2 _offset;
     private RectTransform _rt;
 
     protected override void Init()
@@ -104,8 +104,8 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
     {
         var nextPosition = new Vector3
         {
-            x = position.x + (_rt.rect.width * 0.5f) + _deltaPosition.x,
-            y = position.y + (_rt.rect.height * 0.5f) + _deltaPosition.y
+            x = position.x + (_rt.rect.width * 0.5f) + _offset.x,
+            y = position.y + (_rt.rect.height * 0.5f) + _offset.y
         };
 
         _rt.position = nextPosition;

@@ -56,6 +56,7 @@ public enum EquipmentType
     Boots,
     Weapon,
     Shield,
+    Count,
 }
 
 public enum UIType

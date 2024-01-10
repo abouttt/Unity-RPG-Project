@@ -30,7 +30,10 @@ public class UI_OptionPopup : UI_Popup
     {
         base.Init();
 
-        BindButton(typeof(Buttons));
+        if (UIType == UIType.Popup)
+        {
+            BindButton(typeof(Buttons));
+        }
         Bind<Slider>(typeof(Sliders));
         Bind<TMP_Dropdown>(typeof(Dropdowns));
         Bind<Toggle>(typeof(Toggles));
@@ -39,7 +42,10 @@ public class UI_OptionPopup : UI_Popup
         Get<Slider>((int)Sliders.SESlider).value = Managers.Sound.GetVolume(SoundType.Effect);
         Get<Slider>((int)Sliders.BGMSlider).onValueChanged.AddListener(volume => Managers.Sound.SetVolume(SoundType.Bgm, volume));
         Get<Slider>((int)Sliders.SESlider).onValueChanged.AddListener(volume => Managers.Sound.SetVolume(SoundType.Effect, volume));
-        GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_OptionPopup>);
+        if (UIType == UIType.Popup)
+        {
+            GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_OptionPopup>);
+        }
 
         MSAADropdownInit();
         FrameDropdownInit();

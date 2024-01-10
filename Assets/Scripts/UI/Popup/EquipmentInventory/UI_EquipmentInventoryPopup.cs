@@ -29,7 +29,6 @@ public class UI_EquipmentInventoryPopup : UI_Popup
     }
 
     private readonly Dictionary<EquipmentType, UI_EquipmentSlot> _equipmentSlots = new();
-    private int _equipmentTypeCount = -1;
 
     protected override void Init()
     {
@@ -72,7 +71,7 @@ public class UI_EquipmentInventoryPopup : UI_Popup
 
     private void RefreshAllSlot()
     {
-        for (int i = 0; i < _equipmentTypeCount; i++)
+        for (int i = 0; i < (int)EquipmentType.Count; i++)
         {
             EquipmentType type = (EquipmentType)i;
             RefreshSlot(type);
@@ -98,8 +97,7 @@ public class UI_EquipmentInventoryPopup : UI_Popup
     {
         var equipmentTypes = Enum.GetValues(typeof(EquipmentType));
         var equipmentSlots = Enum.GetValues(typeof(EquipmentSlots));
-        _equipmentTypeCount = equipmentTypes.Length;
-        for (int i = 0; i < _equipmentTypeCount; i++)
+        for (int i = 0; i < (int)EquipmentType.Count; i++)
         {
             var type = (EquipmentType)equipmentTypes.GetValue(i);
             var slot = (EquipmentSlots)equipmentSlots.GetValue(i);

@@ -59,15 +59,6 @@ public class UI_QuestPopup : UI_Popup
 
         Managers.Game.GameStarted += LoadSaveData;
 
-        foreach (var quest in Managers.Quest.ActiveQuests)
-        {
-            OnQuestRegisterd(quest);
-            if (quest.State is QuestState.Completable)
-            {
-                OnQuestCompletabled(quest);
-            }
-        }
-
         Clear();
     }
 
@@ -97,7 +88,7 @@ public class UI_QuestPopup : UI_Popup
         GetText((int)Texts.QuestDescriptionText).text = quest.Data.Description;
         RefreshTargetText();
         SetRewardText(quest.Data);
-        ShowCompleteButton(quest, quest.State is QuestState.Completable);
+        ToggleCompleteButton(quest, quest.State is QuestState.Completable);
         GetButton((int)Buttons.CancelButton).gameObject.SetActive(true);
         GetText((int)Texts.NOQuestText).gameObject.SetActive(false);
     }
@@ -145,7 +136,7 @@ public class UI_QuestPopup : UI_Popup
         if (_titleSubitems.TryGetValue(quest, out var subitem))
         {
             subitem.ToggleCompleteText(true);
-            ShowCompleteButton(quest, _selectedQuest == quest);
+            ToggleCompleteButton(quest, _selectedQuest == quest);
         }
     }
 
@@ -154,7 +145,7 @@ public class UI_QuestPopup : UI_Popup
         if (_titleSubitems.TryGetValue(quest, out var subitem))
         {
             subitem.ToggleCompleteText(false);
-            ShowCompleteButton(quest, !(_selectedQuest == quest));
+            ToggleCompleteButton(quest, !(_selectedQuest == quest));
         }
     }
 
@@ -209,11 +200,11 @@ public class UI_QuestPopup : UI_Popup
         }
     }
 
-    private void ShowCompleteButton(Quest quest, bool condition)
+    private void ToggleCompleteButton(Quest quest, bool toggle)
     {
         if (quest.Data.CanRemoteComplete)
         {
-            GetButton((int)Buttons.CompleteButton).gameObject.SetActive(condition);
+            GetButton((int)Buttons.CompleteButton).gameObject.SetActive(toggle);
         }
     }
 

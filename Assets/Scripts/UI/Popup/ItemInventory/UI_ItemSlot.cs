@@ -13,8 +13,7 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
         CooldownImage,
     }
 
-    [ReadOnly]
-    public int Index = -1;
+    public int Index { get; set; } = -1;
 
     protected override void Init()
     {

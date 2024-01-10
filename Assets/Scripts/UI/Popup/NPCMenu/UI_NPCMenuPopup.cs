@@ -57,7 +57,7 @@ public class UI_NPCMenuPopup : UI_Popup
 
         if (npc.Conversation)
         {
-            AddSubtiem("대화", () =>
+            AddSubitem("대화", () =>
             {
                 ToggleMenu(false);
                 Managers.UI.Show<UI_ConversationPopup>().SetNPC(npc);
@@ -66,20 +66,20 @@ public class UI_NPCMenuPopup : UI_Popup
 
         if (npc.Shop)
         {
-            AddSubtiem("상점", () =>
+            AddSubitem("상점", () =>
             {
                 ToggleMenu(false);
                 Managers.UI.Show<UI_ShopPopup>().SetNPCSaleItems(npc);
             });
         }
 
-        AddSubtiem("퀘스트", () =>
+        AddSubitem("퀘스트", () =>
         {
             ToggleMenu(false);
             Managers.UI.Show<UI_NPCQuestPopup>().SetNPCQuest(npc);
         });
 
-        AddSubtiem("떠난다", () =>
+        AddSubitem("떠난다", () =>
         {
             Managers.UI.Close<UI_NPCMenuPopup>();
         });
@@ -90,7 +90,7 @@ public class UI_NPCMenuPopup : UI_Popup
         PopupRT.gameObject.SetActive(toggle);
     }
 
-    private void AddSubtiem(string text, UnityEngine.Events.UnityAction call)
+    private void AddSubitem(string text, UnityEngine.Events.UnityAction call)
     {
         var go = Managers.Resource.Instantiate("UI_NPCMenuSubitem", GetObject((int)GameObjects.NPCMenuSubitems).transform, true);
         var subitem = go.GetComponent<UI_NPCMenuSubitem>();

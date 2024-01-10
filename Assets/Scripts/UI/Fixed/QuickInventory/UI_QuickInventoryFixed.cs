@@ -12,9 +12,7 @@ public class UI_QuickInventoryFixed : UI_Base
     protected override void Init()
     {
         BindRT(typeof(RectTransforms));
-
         InitSlots();
-
         Player.QuickInventory.InventoryChanged += index => _quickSlots[index].RefreshSlot();
     }
 
@@ -27,7 +25,7 @@ public class UI_QuickInventoryFixed : UI_Base
     {
         for (int i = 0; i < Player.QuickInventory.Capacity; i++)
         {
-            var go = Managers.Resource.Instantiate("UI_QuickSlot", GetRT((int)RectTransforms.QuickSlots).transform);
+            var go = Managers.Resource.Instantiate("UI_QuickSlot", GetRT((int)RectTransforms.QuickSlots));
             var quickSlot = go.GetComponent<UI_QuickSlot>();
             quickSlot.InitSlot(i);
         }
