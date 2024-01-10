@@ -182,6 +182,12 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         float targetSpeed = _moveSpeed;
+        float sp = 0f;
+
+        if (!Managers.Input.Sprint && !Player.Movement.CanSprint)
+        {
+            Player.Movement.CanSprint = true;
+        }
 
         if (_isJumpLand)
         {
@@ -189,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (Managers.Input.Sprint && CanMove && CanSprint)
+            if (Managers.Input.Sprint && CanSprint)
             {
                 if (Player.Status.SP > 0f)
                 {
@@ -197,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
 
                     if (IsGrounded && !IsJumping && !_isJumpLand)
                     {
-                        Player.Status.SP -= _requiredSprintSP * Time.deltaTime;
+                        sp = _requiredSprintSP * Time.deltaTime;
                     }
                 }
                 else
@@ -210,6 +216,7 @@ public class PlayerMovement : MonoBehaviour
         if (!CanMove || Managers.Input.Move == Vector2.zero)
         {
             targetSpeed = 0f;
+            sp = 0f;
         }
 
         var currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0f, _controller.velocity.z).magnitude;
@@ -282,6 +289,7 @@ public class PlayerMovement : MonoBehaviour
         // 움직임.
         var targetDirection = Quaternion.Euler(0f, _lockOffRotation, 0.0f) * Vector3.forward;
         _controller.Move((targetDirection.normalized * _speed + new Vector3(0f, _verticalVelocity, 0f)) * Time.deltaTime);
+        Player.Status.SP -= sp;
 
         // 애니메이터 업데이트.
         Player.Animator.SetFloat(_animIDPosX, _posXBlend);

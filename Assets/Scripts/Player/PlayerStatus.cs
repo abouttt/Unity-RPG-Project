@@ -156,11 +156,6 @@ public class PlayerStatus : MonoBehaviour
 
     private void Update()
     {
-        if (!Managers.Input.Sprint && !Player.Movement.CanSprint)
-        {
-            Player.Movement.CanSprint = true;
-        }
-
         RecoverySP();
     }
 
