@@ -43,6 +43,7 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: ae8ae0ca3a1b42d4fbe85a776224be27, type: 2}
   - {fileID: 11400000, guid: dd9157328d858124fbe20fbac8ad2a78, type: 2}
+  - {fileID: 11400000, guid: d7c02f160dbfe634dacfed37d0128f29, type: 2}
   - {fileID: 11400000, guid: 73338827b558c4c4183a37effbe61252, type: 2}
   - {fileID: 11400000, guid: 39cc74d4a9f9f5648910034a68156870, type: 2}
   - {fileID: 11400000, guid: 15ec926348ae3274cb2948cbdb25d5ce, type: 2}
@@ -87,6 +88,7 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - Default
+    - MainMenu
     - Game
   m_SchemaTemplates: []
   m_GroupTemplateObjects:

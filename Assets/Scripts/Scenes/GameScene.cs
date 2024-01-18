@@ -21,19 +21,12 @@ public class GameScene : BaseScene
         base.Init();
 
         Player.Init();
-        InitUI();
+        InitUIPackage("UIPackage_Game");
         StartCoroutine(GameStart());
 
         Managers.Input.ToggleCursor(false);
 
         Player.Status.Gold += 10000;
-    }
-
-    private void InitUI()
-    {
-        var UIPackage = Managers.Resource.Instantiate("UIPackage");
-        UIPackage.transform.DetachChildren();
-        Destroy(UIPackage);
     }
 
     private IEnumerator GameStart()

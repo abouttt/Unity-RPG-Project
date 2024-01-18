@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1068357995056106555}
   m_Layer: 0
-  m_Name: UIPackage
+  m_Name: UIPackage_Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

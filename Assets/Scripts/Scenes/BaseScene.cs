@@ -33,6 +33,13 @@ public class BaseScene : MonoBehaviour
         Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
     }
 
+    protected void InitUIPackage(string packageName)
+    {
+        var UIPackage = Managers.Resource.Instantiate(packageName);
+        UIPackage.transform.DetachChildren();
+        Destroy(UIPackage);
+    }
+
     private void InitDefaultPrefabs()
     {
         foreach (var prefab in SceneSetting.GetInstance.DefaultPrefabs)

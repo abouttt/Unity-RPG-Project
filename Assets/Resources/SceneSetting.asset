@@ -17,13 +17,13 @@ MonoBehaviour:
   <LoadResourceLabels>k__BackingField:
     _serializedList:
     - Key: 1
-      Value: 00000000
+      Value: 0000000001000000
     - Key: 2
       Value: 00000000
     - Key: 3
-      Value: 0000000001000000
+      Value: 0000000002000000
     - Key: 4
-      Value: 0000000001000000
+      Value: 0000000002000000
   <Background>k__BackingField:
     _serializedList:
     - Key: 1

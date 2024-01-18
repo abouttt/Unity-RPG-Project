@@ -12103,9 +12103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SceneType>k__BackingField: 1
   _sceneBGM: {fileID: 0}
-  _prefabs:
-  - {fileID: 6607892212063116465, guid: 2bc3c4b8156c86d49bc2d2bdead30d72, type: 3}
-  - {fileID: 7148502467087218341, guid: ec5603f8fb056f94aa160bd6fe0aa53b, type: 3}
+  _prefabs: []
 --- !u!1001 &1596215791
 PrefabInstance:
   m_ObjectHideFlags: 0

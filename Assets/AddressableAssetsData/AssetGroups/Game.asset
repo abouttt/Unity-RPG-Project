@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: f88537c2a0e8ae044ae6faf13419f74c
   m_SerializeEntries:
   - m_GUID: 4cdc642d2937e8641908baf8aca975ae
-    m_Address: UIPackage
+    m_Address: UIPackage_Game
     m_ReadOnly: 0
     m_SerializedLabels:
     - UI

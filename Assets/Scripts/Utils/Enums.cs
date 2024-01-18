@@ -79,6 +79,7 @@ public enum SoundType
 public enum AddressableLabel
 {
     Default,
+    MainMenu,
     Game,
 }
 
