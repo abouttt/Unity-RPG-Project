@@ -15,6 +15,10 @@ public class PlayerCameraController : MonoBehaviour
             Player.Animator.SetFloat(_animIDLockOn, IsLockOn ? 1f : 0f);
             _stateDrivenCameraAnimator.SetBool(_animIDLockOn, IsLockOn);
             _lockOnTargetImageFollowTarget.SetTarget(_targetCamera.LookAt);
+            if (IsLockOn)
+            {
+                _targetCamera.LookAt.GetComponent<MonsterController>().IsLockOnTarget = true;
+            }
         }
     }
 
