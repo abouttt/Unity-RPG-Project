@@ -15,8 +15,9 @@ public class PlayerBattleController : MonoBehaviour
     [SerializeField]
     private List<Vector3> _attackEffectDirection;
     private int _currentAttackComboCount = 0;
-
     private bool _hasReservedAttack = false;
+
+    private readonly Collider[] _monsters = new Collider[10];
 
     private readonly int _animIDAttack = Animator.StringToHash("Attack");
     private readonly int _animIDDefense = Animator.StringToHash("Defense");
@@ -97,6 +98,18 @@ public class PlayerBattleController : MonoBehaviour
         Player.Animator.SetBool(_animIDDefense, false);
     }
 
+    private bool GiveDamageToMonster(Vector3 attackOffset, float radius, int damage)
+    {
+        int monsterCnt = Physics.OverlapSphereNonAlloc(attackOffset, radius, _monsters, 1 << LayerMask.NameToLayer("Monster"));
+
+        for (int i = 0; i < monsterCnt; i++)
+        {
+            _monsters[i].GetComponent<MonsterController>().TakeDamage(damage);
+        }
+
+        return monsterCnt > 0;
+    }
+
     private void OnBeginMeleeAnim()
     {
         CanAttack = false;
@@ -133,6 +146,13 @@ public class PlayerBattleController : MonoBehaviour
     private void OnEnableWeapon()
     {
         CreateAttackEffect();
+        if (GiveDamageToMonster(
+            _attackOffset.transform.position,
+            Player.EquipmentInventory.GetItem(EquipmentType.Weapon).EquipmentData.AttackRadius,
+            Player.Status.Damage))
+        {
+
+        }
     }
 
     private void CreateAttackEffect()

@@ -32,6 +32,24 @@ public class MonsterController : MonoBehaviour
         CurrentHP = Stat.MaxHP;
     }
 
+    public void TakeDamage(int damage)
+    {
+        ShowHPBar();
+        CurrentDamage = Mathf.Clamp(damage - Stat.Defense, 0, damage);
+        CurrentHP -= CurrentDamage;
+        HPChanged?.Invoke();
+        CurrentDamage = 0;
+
+        if (CurrentHP <= 0)
+        {
+            // DIE
+        }
+        else
+        {
+            // DAMAGED
+        }
+    }
+
     private void ShowHPBar()
     {
         if (_hpBar == null)

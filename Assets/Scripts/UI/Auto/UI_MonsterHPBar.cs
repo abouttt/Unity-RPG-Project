@@ -43,7 +43,11 @@ public class UI_MonsterHPBar : UI_Base
             return;
         }
 
-        if (!_target.IsLockOnTarget)
+        if (_target.IsLockOnTarget)
+        {
+            _currentShowHPBarTime = 0f;
+        }
+        else
         {
             if (!_isChanged)
             {
@@ -55,8 +59,12 @@ public class UI_MonsterHPBar : UI_Base
                 _currentShowHPBarTime += Time.deltaTime;
                 if (_currentShowHPBarTime >= _showHPBarTime)
                 {
-                    gameObject.SetActive(false);
-                    return;
+                    if (Player.Camera.LockOnTarget != transform)
+                    {
+                        _isChanged = false;
+                        gameObject.SetActive(false);
+                        return;
+                    }
                 }
             }
         }

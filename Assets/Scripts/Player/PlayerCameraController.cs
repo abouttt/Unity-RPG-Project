@@ -15,10 +15,6 @@ public class PlayerCameraController : MonoBehaviour
             Player.Animator.SetFloat(_animIDLockOn, IsLockOn ? 1f : 0f);
             _stateDrivenCameraAnimator.SetBool(_animIDLockOn, IsLockOn);
             _lockOnTargetImageFollowTarget.SetTarget(_targetCamera.LookAt);
-            if (IsLockOn)
-            {
-                _targetCamera.LookAt.GetComponent<MonsterController>().IsLockOnTarget = true;
-            }
         }
     }
 
@@ -74,12 +70,16 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (IsLockOn)
             {
-                LockOnTarget.GetComponent<MonsterController>().IsLockOnTarget = false;
+                LockOnTarget.GetComponentInParent<MonsterController>().IsLockOnTarget = false;
                 LockOnTarget = null;
             }
             else
             {
                 FindTarget();
+                if (IsLockOn)
+                {
+                    _targetCamera.LookAt.GetComponentInParent<MonsterController>().IsLockOnTarget = true;
+                }
             }
         }
     }
@@ -157,7 +157,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private void TrackingTarget()
     {
-        if (!LockOnTarget.gameObject.activeSelf ||
+        if (!LockOnTarget.gameObject.activeInHierarchy ||
             Vector3.Distance(_cinemachineCameraTarget.transform.position, LockOnTarget.transform.position) > _radius)
         {
             LockOnTarget = null;
