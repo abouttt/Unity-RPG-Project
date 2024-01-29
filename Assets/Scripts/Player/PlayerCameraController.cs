@@ -74,6 +74,7 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (IsLockOn)
             {
+                LockOnTarget.GetComponent<MonsterController>().IsLockOnTarget = false;
                 LockOnTarget = null;
             }
             else

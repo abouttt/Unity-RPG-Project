@@ -5,8 +5,9 @@ public class UI_FollowTarget : UI_Base
     public Transform Target { get; private set; }
 
     [SerializeField]
+    private Vector3 _offset;
+    [SerializeField]
     private bool _ignoreBoundsCenter;
-    private Vector3 _deltaPos;
     private RectTransform _rt;
     private Collider _targetCollider;
 
@@ -28,13 +29,16 @@ public class UI_FollowTarget : UI_Base
             targetPos.y = _targetCollider.bounds.center.y;
         }
 
-        _rt.position = Camera.main.WorldToScreenPoint(new Vector3(targetPos.x, targetPos.y, targetPos.z) + _deltaPos);
+        _rt.position = Camera.main.WorldToScreenPoint(new Vector3(targetPos.x, targetPos.y, targetPos.z) + _offset);
     }
 
     public void SetTarget(Transform target, Vector3? deltaPos = null)
     {
         Target = target;
-        _deltaPos = deltaPos ?? Vector3.zero;
+        if (_offset == Vector3.zero)
+        {
+            _offset = deltaPos ?? Vector3.zero;
+        }
 
         if (target != null && !_ignoreBoundsCenter)
         {

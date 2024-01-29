@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class MonsterStat : MonoBehaviour
+[CreateAssetMenu(menuName = "Monster Stat", fileName = "Monster Stat")]
+public class MonsterStat : ScriptableObject
 {
     [field: SerializeField]
-    public int MonsterID { get; private set; }
+    public string MonsterID { get; private set; }
     [field: SerializeField]
     public int MaxHP { get; private set; }
     [field: SerializeField]

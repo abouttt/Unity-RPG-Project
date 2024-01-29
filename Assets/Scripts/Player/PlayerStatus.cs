@@ -109,11 +109,10 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField]
     private PlayerStatTable _playerStatTable;
 
-    private float _recoverySPTime;  // SP 회복 현재 딜레이 시간
-
     private readonly PlayerStat _currentStat = new();
     private int _currentGold = 0;
     private int _skillPoint = 0;
+    private float _recoverySPTime;  // SP 회복 현재 딜레이 시간
 
     private void Awake()
     {

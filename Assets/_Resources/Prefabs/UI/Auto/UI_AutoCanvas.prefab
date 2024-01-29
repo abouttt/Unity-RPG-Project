@@ -237,6 +237,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_InteractionKeyGuide
       objectReference: {fileID: 0}
+    - target: {fileID: 7100675823436263401, guid: 5f06a006feede73438f1101eb1006baf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f06a006feede73438f1101eb1006baf, type: 3}
 --- !u!114 &3078045517612849450 stripped
@@ -265,6 +269,10 @@ PrefabInstance:
     - target: {fileID: 2854748361686122377, guid: 2f417358a9414434c8447343b80d29a3, type: 3}
       propertyPath: m_Name
       value: UI_LockOnTargetImage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2854748361686122377, guid: 2f417358a9414434c8447343b80d29a3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3191473892815083879, guid: 2f417358a9414434c8447343b80d29a3, type: 3}
       propertyPath: m_Pivot.x
