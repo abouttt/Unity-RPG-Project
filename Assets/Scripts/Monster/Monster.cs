@@ -8,6 +8,16 @@ public class Monster : MonoBehaviour
     [field: SerializeField]
     public MonsterStat Stat { get; private set; }
 
+    [field: SerializeField, Header("플레이어 탐지")]
+    public float DetectionRadius { get; private set; }
+    [field: SerializeField, Range(0, 360)]
+    public float DetectionAngle { get; private set; }
+    [field: SerializeField]
+    public LayerMask TargetMask { get; private set; }
+    [field: SerializeField]
+    public LayerMask ObstacleMask { get; private set; }
+
+    public Collider Collider { get; private set; }
     public int CurrentHP { get; set; }
     public int CurrentDamage { get; private set; }
 
@@ -30,6 +40,7 @@ public class Monster : MonoBehaviour
     private void Awake()
     {
         gameObject.layer = LayerMask.NameToLayer("Monster");
+        Collider = gameObject.GetComponent<Collider>();
     }
 
     private void OnEnable()
