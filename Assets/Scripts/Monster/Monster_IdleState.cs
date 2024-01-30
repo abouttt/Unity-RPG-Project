@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster_IdleState : StateMachineBehaviour
@@ -17,20 +15,22 @@ public class Monster_IdleState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        var monsterBodyPos = _monster.Collider.bounds.center;
-        int cnt = Physics.OverlapSphereNonAlloc(monsterBodyPos, _monster.DetectionRadius, _playerCollider, _monster.TargetMask);
+        var monsterCenterPos = _monster.Collider.bounds.center;
+        int cnt = Physics.OverlapSphereNonAlloc(monsterCenterPos, _monster.DetectionRadius, _playerCollider, _monster.TargetMask);
         if (cnt != 0)
         {
             Debug.Log("물체 감지");
-            var playerBodyPos = _playerCollider[0].bounds.center;
-            var dir = playerBodyPos - monsterBodyPos;
-            if (Vector3.Angle(_monster.transform.forward, dir) < _monster.DetectionAngle * 0.5f)
+            var playerCenterPos = _playerCollider[0].bounds.center;
+            var centerDir = (playerCenterPos - monsterCenterPos).normalized;
+            if (Vector3.Angle(_monster.transform.forward, centerDir) < _monster.DetectionAngle * 0.5f)
             {
-                var dist = Vector3.Distance(monsterBodyPos, playerBodyPos);
-                if (!Physics.Raycast(monsterBodyPos, dir.normalized, dist, _monster.ObstacleMask))
+                var monsterEyesPos = _monster.Eyes.position;
+                var eyesDir = playerCenterPos - monsterEyesPos;
+                var EyesToPlayerCenterDist = Vector3.Distance(monsterEyesPos, playerCenterPos);
+                if (!Physics.Raycast(monsterEyesPos, eyesDir.normalized, EyesToPlayerCenterDist, _monster.ObstacleMask))
                 {
                     Debug.Log("플레이어 감지");
-                    Debug.DrawRay(monsterBodyPos, dir, Color.red);
+                    Debug.DrawRay(monsterEyesPos, eyesDir, Color.red);
                 }
             }
         }

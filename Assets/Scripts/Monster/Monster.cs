@@ -13,6 +13,8 @@ public class Monster : MonoBehaviour
     [field: SerializeField, Range(0, 360)]
     public float DetectionAngle { get; private set; }
     [field: SerializeField]
+    public Transform Eyes { get; private set; }
+    [field: SerializeField]
     public LayerMask TargetMask { get; private set; }
     [field: SerializeField]
     public LayerMask ObstacleMask { get; private set; }
