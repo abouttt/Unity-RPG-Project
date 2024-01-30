@@ -70,7 +70,7 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (IsLockOn)
             {
-                LockOnTarget.GetComponentInParent<MonsterController>().IsLockOnTarget = false;
+                LockOnTarget.GetComponentInParent<Monster>().IsLockOnTarget = false;
                 LockOnTarget = null;
             }
             else
@@ -78,7 +78,7 @@ public class PlayerCameraController : MonoBehaviour
                 FindTarget();
                 if (IsLockOn)
                 {
-                    _targetCamera.LookAt.GetComponentInParent<MonsterController>().IsLockOnTarget = true;
+                    _targetCamera.LookAt.GetComponentInParent<Monster>().IsLockOnTarget = true;
                 }
             }
         }

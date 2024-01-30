@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class MonsterController : MonoBehaviour
+public class Monster : MonoBehaviour
 {
     public event Action HPChanged;
 
@@ -26,6 +26,11 @@ public class MonsterController : MonoBehaviour
 
     private UI_MonsterHPBar _hpBar;
     private bool _isLockOnTarget;
+
+    private void Awake()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Monster");
+    }
 
     private void OnEnable()
     {
@@ -62,35 +67,5 @@ public class MonsterController : MonoBehaviour
         {
             HPChanged?.Invoke();
         }
-    }
-
-    private void OnIdle()
-    {
-
-    }
-
-    private void OnTracking()
-    {
-
-    }
-
-    private void OnAttack()
-    {
-
-    }
-
-    private void OnDamaged()
-    {
-
-    }
-
-    private void OnRestorePosition()
-    {
-
-    }
-
-    private void OnDead()
-    {
-
     }
 }

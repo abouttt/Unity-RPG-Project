@@ -17,7 +17,7 @@ public class UI_MonsterHPBar : UI_Base
     [SerializeField]
     private float _showDamageTime;
 
-    private MonsterController _target;
+    private Monster _target;
     private UI_FollowTarget _followTarget;
     private int _targetPrevHP;
     private int _totalDamage;
@@ -80,7 +80,7 @@ public class UI_MonsterHPBar : UI_Base
         }
     }
 
-    public void SetTarget(MonsterController target)
+    public void SetTarget(Monster target)
     {
         _target = target;
 

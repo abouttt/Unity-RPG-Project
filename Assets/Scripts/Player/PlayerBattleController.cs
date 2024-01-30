@@ -104,7 +104,7 @@ public class PlayerBattleController : MonoBehaviour
 
         for (int i = 0; i < monsterCnt; i++)
         {
-            _monsters[i].GetComponent<MonsterController>().TakeDamage(damage);
+            _monsters[i].GetComponent<Monster>().TakeDamage(damage);
         }
 
         return monsterCnt > 0;
