@@ -64,21 +64,22 @@ public class Monster : MonoBehaviour
         _stateAnimID.Add(BasicMonsterState.Idle, Animator.StringToHash("Idle"));
         _stateAnimID.Add(BasicMonsterState.Tracking, Animator.StringToHash("Tracking"));
         _stateAnimID.Add(BasicMonsterState.Restore, Animator.StringToHash("Restore"));
-        _stateAnimID.Add(BasicMonsterState.Damaged, Animator.StringToHash("Damaged"));
+        _stateAnimID.Add(BasicMonsterState.Damaged, -1);
+        _stateAnimID.Add(BasicMonsterState.Dead, -1);
     }
 
     private void OnEnable()
     {
         CurrentHP = Stat.MaxHP;
         OriginalPosition = transform.position;
-        Collider.enabled = true;
+        Collider.isTrigger = false;
     }
 
     public void Transition(BasicMonsterState state)
     {
-        if (state == BasicMonsterState.Damaged)
+        if (_stateAnimID[state] == -1)
         {
-            Animator.Play(_stateAnimID[state], -1, 0f);
+            Animator.Play(state.ToString(), -1, 0f);
         }
         else
         {
@@ -88,6 +89,11 @@ public class Monster : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (CurrentHP <= 0)
+        {
+            return;
+        }
+
         ShowHPBar();
         CurrentDamage = Mathf.Clamp(damage - Stat.Defense, 0, damage);
         CurrentHP -= CurrentDamage;
@@ -96,7 +102,7 @@ public class Monster : MonoBehaviour
 
         if (CurrentHP <= 0)
         {
-            // DIE
+            Transition(BasicMonsterState.Dead);
         }
         else
         {
