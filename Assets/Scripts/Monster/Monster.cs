@@ -8,7 +8,7 @@ public class Monster : MonoBehaviour
     public event Action HPChanged;
 
     [field: SerializeField]
-    public MonsterStat Stat { get; private set; }
+    public MonsterData Data { get; private set; }
 
     [field: SerializeField, Header("플레이어 탐지")]
     public float DetectionRadius { get; private set; }
@@ -70,7 +70,7 @@ public class Monster : MonoBehaviour
 
     private void OnEnable()
     {
-        CurrentHP = Stat.MaxHP;
+        CurrentHP = Data.MaxHP;
         OriginalPosition = transform.position;
         Collider.isTrigger = false;
     }
@@ -95,7 +95,7 @@ public class Monster : MonoBehaviour
         }
 
         ShowHPBar();
-        CurrentDamage = Mathf.Clamp(damage - Stat.Defense, 0, damage);
+        CurrentDamage = Mathf.Clamp(damage - Data.Defense, 0, damage);
         CurrentHP -= CurrentDamage;
         HPChanged?.Invoke();
         CurrentDamage = 0;

@@ -20,9 +20,9 @@ public class Monster_DeadState : StateMachineBehaviour
             Player.Camera.LockOnTarget = null;
         }
 
-        Player.Status.XP += _monster.Stat.GetXP();
-        Player.Status.Gold += _monster.Stat.GetGold();
-        Managers.Quest.ReceiveReport(Category.Monster, _monster.Stat.MonsterID, 1);
+        Player.Status.XP += _monster.Data.GetXP();
+        Player.Status.Gold += _monster.Data.GetGold();
+        Managers.Quest.ReceiveReport(Category.Monster, _monster.Data.MonsterID, 1);
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

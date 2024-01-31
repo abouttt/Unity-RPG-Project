@@ -106,7 +106,7 @@ public class UI_MonsterHPBar : UI_Base
         }
 
         gameObject.SetActive(true);
-        GetImage((int)Images.HPBar).fillAmount = (float)_target.CurrentHP / _target.Stat.MaxHP;
+        GetImage((int)Images.HPBar).fillAmount = (float)_target.CurrentHP / _target.Data.MaxHP;
         _totalDamage += _targetPrevHP - _target.CurrentHP;
         _targetPrevHP = _target.CurrentHP;
         _currentShowHPBarTime = 0f;
