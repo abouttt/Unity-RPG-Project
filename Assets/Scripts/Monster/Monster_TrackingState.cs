@@ -11,31 +11,23 @@ public class Monster_TrackingState : StateMachineBehaviour
             _monster = animator.GetComponent<Monster>();
         }
 
-        _monster.NavMeshAgent.isStopped = false;
-        _monster.NavMeshAgent.updateRotation = true;
         _monster.ResetAllTriggers();
+        _monster.NaveMeshAgentUpdateToggle(true);
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (Vector3.Distance(Player.GameObject.transform.position, _monster.transform.position) > _monster.TrackingDistance)
         {
-            _monster.Animator.SetTrigger(_monster.AnimIDIdle);
+            _monster.Transition(BasicMonsterState.Restore);
         }
         else if (_monster.IsThePlayerInAttackRange())
         {
-            
+
         }
         else
         {
             _monster.NavMeshAgent.SetDestination(Player.GameObject.transform.position);
         }
-    }
-
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        _monster.NavMeshAgent.isStopped = true;
-        _monster.NavMeshAgent.updateRotation = false;
-        _monster.NavMeshAgent.velocity = Vector3.zero;
     }
 }

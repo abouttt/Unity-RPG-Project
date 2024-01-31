@@ -1,4 +1,11 @@
 
+public enum BasicMonsterState
+{
+    Idle,
+    Tracking,
+    Restore,
+}
+
 public enum Category
 {
     Item,

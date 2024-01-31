@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,7 +26,7 @@ public class Monster : MonoBehaviour
     public float TrackingDistance { get; private set; }
 
     [field: SerializeField, Header("¿¸≈ı")]
-    public float AttackDistance {  get; private set; }
+    public float AttackDistance { get; private set; }
 
     public Collider Collider { get; private set; }
     public Animator Animator { get; private set; }
@@ -33,9 +34,7 @@ public class Monster : MonoBehaviour
 
     public int CurrentHP { get; set; }
     public int CurrentDamage { get; private set; }
-
-    public readonly int AnimIDIdle = Animator.StringToHash("Idle");
-    public readonly int AnimIDTracking = Animator.StringToHash("Tracking");
+    public Vector3 OriginalPosition { get; private set; }
 
     public bool IsLockOnTarget
     {
@@ -52,6 +51,8 @@ public class Monster : MonoBehaviour
 
     private UI_MonsterHPBar _hpBar;
     private bool _isLockOnTarget;
+    private readonly Collider[] _playerCollider = new Collider[1];
+    private Dictionary<BasicMonsterState, int> _stateAnimID = new();
 
     private void Awake()
     {
@@ -59,11 +60,22 @@ public class Monster : MonoBehaviour
         Collider = GetComponent<Collider>();
         Animator = GetComponent<Animator>();
         NavMeshAgent = GetComponent<NavMeshAgent>();
+
+        _stateAnimID.Add(BasicMonsterState.Idle, Animator.StringToHash("Idle"));
+        _stateAnimID.Add(BasicMonsterState.Tracking, Animator.StringToHash("Tracking"));
+        _stateAnimID.Add(BasicMonsterState.Restore, Animator.StringToHash("Restore"));
     }
 
     private void OnEnable()
     {
         CurrentHP = Stat.MaxHP;
+        OriginalPosition = transform.position;
+        Collider.enabled = true;
+    }
+
+    public void Transition(BasicMonsterState state)
+    {
+        Animator.SetTrigger(_stateAnimID[state]);
     }
 
     public void TakeDamage(int damage)
@@ -84,9 +96,37 @@ public class Monster : MonoBehaviour
         }
     }
 
+    public bool PlayerDetect()
+    {
+        var monsterCenterPos = Collider.bounds.center;
+        int cnt = Physics.OverlapSphereNonAlloc(monsterCenterPos, DetectionRadius, _playerCollider, TargetMask);
+        if (cnt != 0)
+        {
+            var playerCenterPos = _playerCollider[0].bounds.center;
+            var centerDir = (playerCenterPos - monsterCenterPos).normalized;
+            if (Vector3.Angle(transform.forward, centerDir) < DetectionAngle * 0.5f)
+            {
+                var monsterEyesPos = Eyes.position;
+                var eyesDir = playerCenterPos - monsterEyesPos;
+                var EyesToPlayerCenterDist = Vector3.Distance(monsterEyesPos, playerCenterPos);
+                if (!Physics.Raycast(monsterEyesPos, eyesDir.normalized, EyesToPlayerCenterDist, ObstacleMask))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public bool IsThePlayerInAttackRange()
     {
         return Vector3.Distance(Player.GameObject.transform.position, transform.position) <= AttackDistance;
+    }
+
+    public bool IsArrivedCurrentDestination()
+    {
+        return !NavMeshAgent.pathPending && NavMeshAgent.remainingDistance <= 0f;
     }
 
     public void ResetAllTriggers()
@@ -97,6 +137,17 @@ public class Monster : MonoBehaviour
             {
                 Animator.ResetTrigger(param.name);
             }
+        }
+    }
+
+    public void NaveMeshAgentUpdateToggle(bool toggle)
+    {
+        NavMeshAgent.isStopped = !toggle;
+        NavMeshAgent.updatePosition = toggle;
+        NavMeshAgent.updateRotation = toggle;
+        if (!toggle)
+        {
+            NavMeshAgent.velocity = Vector3.zero;
         }
     }
 
