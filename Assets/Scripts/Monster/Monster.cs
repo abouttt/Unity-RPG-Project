@@ -64,6 +64,7 @@ public class Monster : MonoBehaviour
         _stateAnimID.Add(BasicMonsterState.Idle, Animator.StringToHash("Idle"));
         _stateAnimID.Add(BasicMonsterState.Tracking, Animator.StringToHash("Tracking"));
         _stateAnimID.Add(BasicMonsterState.Restore, Animator.StringToHash("Restore"));
+        _stateAnimID.Add(BasicMonsterState.Damaged, Animator.StringToHash("Damaged"));
     }
 
     private void OnEnable()
@@ -75,7 +76,14 @@ public class Monster : MonoBehaviour
 
     public void Transition(BasicMonsterState state)
     {
-        Animator.SetTrigger(_stateAnimID[state]);
+        if (state == BasicMonsterState.Damaged)
+        {
+            Animator.Play(_stateAnimID[state], -1, 0f);
+        }
+        else
+        {
+            Animator.SetTrigger(_stateAnimID[state]);
+        }
     }
 
     public void TakeDamage(int damage)
@@ -92,7 +100,7 @@ public class Monster : MonoBehaviour
         }
         else
         {
-            // DAMAGED
+            Transition(BasicMonsterState.Damaged);
         }
     }
 

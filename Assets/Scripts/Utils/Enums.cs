@@ -4,6 +4,7 @@ public enum BasicMonsterState
     Idle,
     Tracking,
     Restore,
+    Damaged,
 }
 
 public enum Category
