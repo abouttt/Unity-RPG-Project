@@ -20,6 +20,11 @@ public class Monster_DeadState : StateMachineBehaviour
             Player.Camera.LockOnTarget = null;
         }
 
+        foreach (var collider in _monster.LockOnTargetColliders)
+        {
+            collider.enabled = false;
+        }
+
         Player.Status.XP += _monster.Data.GetXP();
         Player.Status.Gold += _monster.Data.GetGold();
         Managers.Quest.ReceiveReport(Category.Monster, _monster.Data.MonsterID, 1);

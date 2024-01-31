@@ -29,6 +29,7 @@ public class Monster : MonoBehaviour
     public float AttackDistance { get; private set; }
 
     public Collider Collider { get; private set; }
+    public IReadOnlyList<Collider> LockOnTargetColliders => _lockOnTargetColliders;
     public Animator Animator { get; private set; }
     public NavMeshAgent NavMeshAgent { get; private set; }
 
@@ -52,12 +53,21 @@ public class Monster : MonoBehaviour
     private UI_MonsterHPBar _hpBar;
     private bool _isLockOnTarget;
     private readonly Collider[] _playerCollider = new Collider[1];
-    private Dictionary<BasicMonsterState, int> _stateAnimID = new();
+    private readonly Dictionary<BasicMonsterState, int> _stateAnimID = new();
+    private readonly List<Collider> _lockOnTargetColliders = new();
 
     private void Awake()
     {
         gameObject.layer = LayerMask.NameToLayer("Monster");
         Collider = GetComponent<Collider>();
+        int lockOnTargetLayer = LayerMask.NameToLayer("LockOnTarget");
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.layer == lockOnTargetLayer)
+            {
+                _lockOnTargetColliders.Add(child.GetComponent<Collider>());
+            }
+        }
         Animator = GetComponent<Animator>();
         NavMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -73,6 +83,10 @@ public class Monster : MonoBehaviour
         CurrentHP = Data.MaxHP;
         OriginalPosition = transform.position;
         Collider.isTrigger = false;
+        foreach (var collider in _lockOnTargetColliders)
+        {
+            collider.enabled = true;
+        }
     }
 
     public void Transition(BasicMonsterState state)
