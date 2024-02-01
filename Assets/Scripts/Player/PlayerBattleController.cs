@@ -156,15 +156,6 @@ public class PlayerBattleController : MonoBehaviour
         return monsterCnt > 0;
     }
 
-    private void OnBeginMeleeAnim()
-    {
-        CanAttack = false;
-        CanDefense = false;
-        Player.Movement.CanMove = false;
-        Player.Movement.CanRotation = false;
-        Player.Movement.CanJump = false;
-    }
-
     private void OnCanAttackCombo()
     {
         if (IsAttacking)
@@ -174,19 +165,6 @@ public class PlayerBattleController : MonoBehaviour
         }
 
         CanAttack = true;
-    }
-
-    private void OnEndMeleeAnim()
-    {
-        _currentAttackComboCount = 0;
-        _hasReservedAttack = false;
-        IsAttacking = false;
-        CanAttack = true;
-        CanDefense = true;
-        Player.Movement.CanMove = true;
-        Player.Movement.CanRotation = true;
-        Player.Movement.CanJump = true;
-        Player.Animator.ResetTrigger(_animIDAttack);
     }
 
     private void OnEnableWeapon()
