@@ -55,10 +55,15 @@ public class Player : MonoBehaviour
     private static void GetPositionAndRotationYaw(out Vector3 position, out float yaw)
     {
         var gameScene = Managers.Scene.CurrentScene as GameScene;
-        position = gameScene.DefaultSpawnPosition;
-        yaw = gameScene.DefaultSpawnRotationYaw;
+        position = Vector3.zero;
+        yaw = 0f;
 
-        if (Managers.Game.IsPortalSpawnPosition)
+        if (Managers.Game.IsDefaultSpawnPosition)
+        {
+            position = gameScene.DefaultSpawnPosition;
+            yaw = gameScene.DefaultSpawnRotationYaw;
+        }
+        else if (Managers.Game.IsPortalSpawnPosition)
         {
             position = gameScene.PortalSpawnPosition;
             yaw = gameScene.PortalSpawnRotationYaw;

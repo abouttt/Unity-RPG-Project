@@ -85,7 +85,7 @@ public class PlayerBattleController : MonoBehaviour
 
         if (Player.Status.HP <= 0)
         {
-
+            Player.Animator.Play("Dead", -1, 0f);
         }
         else
         {

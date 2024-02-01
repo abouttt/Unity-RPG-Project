@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MonsterID>k__BackingField: GOBLIN
   <MaxHP>k__BackingField: 100
-  <Damage>k__BackingField: 10
+  <Damage>k__BackingField: 20
   <Defense>k__BackingField: 3
   <DropMinXP>k__BackingField: 30
   <DropMaxXP>k__BackingField: 50
