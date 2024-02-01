@@ -55,6 +55,11 @@ public class PlayerBattleController : MonoBehaviour
         }
     }
 
+    public void TakeDamage(Vector3 attackPosition, int damage)
+    {
+        Debug.Log("Player Damaged!");
+    }
+
     private void Attack()
     {
         if (!CanAttack)

@@ -27,6 +27,14 @@ public class Monster : MonoBehaviour
 
     [field: SerializeField, Header("¿¸≈ı")]
     public float AttackDistance { get; private set; }
+    [field: SerializeField]
+    public float RotationSmoothTime { get; private set; }
+    [field: SerializeField]
+    public float AttackDelayTime { get; private set; }
+    [field: SerializeField]
+    public Transform AttackOffset { get; private set; }
+    [field: SerializeField]
+    public float AttackRadius { get; private set; }
 
     public Collider Collider { get; private set; }
     public IReadOnlyList<Collider> LockOnTargetColliders => _lockOnTargetColliders;
@@ -74,6 +82,7 @@ public class Monster : MonoBehaviour
         _stateAnimID.Add(BasicMonsterState.Idle, Animator.StringToHash("Idle"));
         _stateAnimID.Add(BasicMonsterState.Tracking, Animator.StringToHash("Tracking"));
         _stateAnimID.Add(BasicMonsterState.Restore, Animator.StringToHash("Restore"));
+        _stateAnimID.Add(BasicMonsterState.Attack, Animator.StringToHash("Attack"));
         _stateAnimID.Add(BasicMonsterState.Damaged, -1);
         _stateAnimID.Add(BasicMonsterState.Dead, -1);
     }
@@ -190,6 +199,15 @@ public class Monster : MonoBehaviour
         else
         {
             HPChanged?.Invoke();
+        }
+    }
+
+    private void OnAttack()
+    {
+        int cnt = Physics.OverlapSphereNonAlloc(AttackOffset.position, AttackRadius, _playerCollider, 1 << LayerMask.NameToLayer("Player"));
+        if (cnt != 0)
+        {
+            Player.Battle.TakeDamage(transform.position, Data.Damage);
         }
     }
 }
