@@ -274,6 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackOffset: {fileID: 8837614394007568240}
+  _defenseAngle: 45
   _requiredAttackSP: 15
   _attackEffectDirection:
   - {x: 45, y: 0, z: 0}

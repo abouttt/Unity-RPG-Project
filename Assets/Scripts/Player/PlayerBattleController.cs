@@ -11,6 +11,8 @@ public class PlayerBattleController : MonoBehaviour
     [SerializeField]
     private Transform _attackOffset;
     [SerializeField]
+    private float _defenseAngle;
+    [SerializeField]
     private float _requiredAttackSP;
     [SerializeField]
     private List<Vector3> _attackEffectDirection;
@@ -21,6 +23,7 @@ public class PlayerBattleController : MonoBehaviour
 
     private readonly int _animIDAttack = Animator.StringToHash("Attack");
     private readonly int _animIDDefense = Animator.StringToHash("Defense");
+    private readonly int _animIDDefenseDamaged = Animator.StringToHash("DefenseDamaged");
 
     private void Update()
     {
@@ -55,9 +58,47 @@ public class PlayerBattleController : MonoBehaviour
         }
     }
 
-    public void TakeDamage(Vector3 attackPosition, int damage)
+    public void TakeDamage(Vector3 attackedPosition, int damage)
     {
-        Debug.Log("Player Damaged!");
+        if (Player.Status.HP <= 0)
+        {
+            return;
+        }
+
+        if (IsDefending)
+        {
+            Vector3 dir = (attackedPosition - transform.position).normalized;
+            if (Vector3.Angle(transform.forward, dir) < _defenseAngle)
+            {
+                Player.Animator.SetTrigger(_animIDDefenseDamaged);
+                return;
+            }
+            else
+            {
+                IsDefending = false;
+                Player.Animator.SetBool(_animIDDefense, false);
+                CanDefense = false;
+            }
+        }
+
+        Player.Status.HP -= Mathf.Clamp(damage - Player.Status.Defense, 0, damage);
+
+        if (Player.Status.HP <= 0)
+        {
+
+        }
+        else
+        {
+            Player.Animator.Play("Damaged", -1, 0f);
+        }
+    }
+
+    public void ClearAttackInfo()
+    {
+        _currentAttackComboCount = 0;
+        _hasReservedAttack = false;
+        IsAttacking = false;
+        Player.Animator.ResetTrigger(_animIDAttack);
     }
 
     private void Attack()
