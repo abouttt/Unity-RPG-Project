@@ -19,14 +19,18 @@ public class FieldItem : Interactive
 
     protected override void Awake()
     {
+        base.Awake();
+        _count = _items.Count;
+    }
+
+    private void Start()
+    {
         if (_items == null || _items.Count == 0)
         {
+            Managers.Game.ResourceLoaded -= LoadMinimapIcon;
             Managers.Resource.Destroy(gameObject);
             return;
         }
-
-        base.Awake();
-        _count = _items.Count;
     }
 
     public override void Interaction()

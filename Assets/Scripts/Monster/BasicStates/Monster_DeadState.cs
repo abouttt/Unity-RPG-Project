@@ -34,6 +34,7 @@ public class Monster_DeadState : StateMachineBehaviour
     {
         if (stateInfo.normalizedTime >= 1f)
         {
+            _monster.Data.DropItems(_monster.transform.position);
             Managers.Resource.Destroy(_monster.gameObject);
         }
     }
