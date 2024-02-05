@@ -29,21 +29,25 @@ public class DataManager
 
     public void Save()
     {
-        var saveData = new JObject()
+        if (Managers.Scene.CurrentScene is GameScene)
         {
-            { SceneManagerEx.SaveKey, Managers.Scene.GetSaveData() },
-            { PlayerMovement.SaveKey, Player.Movement.GetSaveData() },
-            { PlayerCameraController.SaveKey, Player.Camera.GetSaveData() },
-            { PlayerStatus.SaveKey, Player.Status.GetSaveData() },
-            { ItemInventory.SaveKey, Player.ItemInventory.GetSaveData() },
-            { EquipmentInventory.SaveKey, Player.EquipmentInventory.GetSaveData() },
-            { SkillTree.SaveKey, Player.SkillTree.GetSaveData() },
-            { QuickInventory.SaveKey, Player.QuickInventory.GetSaveData() },
-            { QuestManager.SaveKey, Managers.Quest.GetSaveData() },
-            { UI_QuestPopup.SaveKey, Managers.UI.Get<UI_QuestPopup>().GetSaveData() },
-        };
+            var saveData = new JObject()
+            {
+                { SceneManagerEx.SaveKey, Managers.Scene.GetSaveData() },
+                { PlayerMovement.SaveKey, Player.Movement.GetSaveData() },
+                { PlayerCameraController.SaveKey, Player.Camera.GetSaveData() },
+                { PlayerStatus.SaveKey, Player.Status.GetSaveData() },
+                { ItemInventory.SaveKey, Player.ItemInventory.GetSaveData() },
+                { EquipmentInventory.SaveKey, Player.EquipmentInventory.GetSaveData() },
+                { SkillTree.SaveKey, Player.SkillTree.GetSaveData() },
+                { QuickInventory.SaveKey, Player.QuickInventory.GetSaveData() },
+                { QuestManager.SaveKey, Managers.Quest.GetSaveData() },
+                { UI_QuestPopup.SaveKey, Managers.UI.Get<UI_QuestPopup>().GetSaveData() },
+            };
 
-        SaveToFile(SaveFilePath, saveData.ToString());
+            SaveToFile(SaveFilePath, saveData.ToString());
+        }
+
         SaveGameOption();
     }
 
@@ -84,6 +88,20 @@ public class DataManager
         _saveDatas?.RemoveAll();
     }
 
+    public void SaveGameOption()
+    {
+        GameOptionSaveData saveData = new()
+        {
+            BGMVolume = Managers.Sound.GetVolume(SoundType.Bgm),
+            EffectVolume = Managers.Sound.GetVolume(SoundType.Effect),
+            MSAA = QualitySettings.antiAliasing,
+            Frame = Application.targetFrameRate,
+            VSync = QualitySettings.vSyncCount
+        };
+
+        SaveToFile(GameOptionSavePath, JsonUtility.ToJson(saveData));
+    }
+
     public void LoadGameOption()
     {
         if (!LoadFromFile(GameOptionSavePath, out var json))
@@ -97,20 +115,6 @@ public class DataManager
         QualitySettings.antiAliasing = saveData.MSAA;
         Application.targetFrameRate = saveData.Frame;
         QualitySettings.vSyncCount = saveData.VSync;
-    }
-
-    private void SaveGameOption()
-    {
-        GameOptionSaveData saveData = new()
-        {
-            BGMVolume = Managers.Sound.GetVolume(SoundType.Bgm),
-            EffectVolume = Managers.Sound.GetVolume(SoundType.Effect),
-            MSAA = QualitySettings.antiAliasing,
-            Frame = Application.targetFrameRate,
-            VSync = QualitySettings.vSyncCount
-        };
-
-        SaveToFile(GameOptionSavePath, JsonUtility.ToJson(saveData));
     }
 
     private void SaveToFile(string path, string json)
