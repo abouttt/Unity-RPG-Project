@@ -13,7 +13,7 @@ public class BaseScene : MonoBehaviour
     {
         Managers.Init();
         InitDefaultPrefabs();
-        InitResources(Init);
+        Init();
     }
 
     protected virtual void Init()
@@ -23,6 +23,30 @@ public class BaseScene : MonoBehaviour
         {
             Managers.Resource.Instantiate("EventSystem");
         }
+    }
+
+    protected void LoadResourcesAsync(SceneType sceneType, Action callback = null)
+    {
+        var loadResourceLabels = SceneSetting.GetInstance.LoadResourceLabels[sceneType];
+
+        if (loadResourceLabels == null || loadResourceLabels.Length == 0)
+        {
+            return;
+        }
+
+        Managers.Resource.LoadAllAsync<UnityEngine.Object>(loadResourceLabels[_currentLabelIndex].ToString(), () =>
+        {
+            if (_currentLabelIndex == loadResourceLabels.Length - 1)
+            {
+                _currentLabelIndex = 0;
+                callback?.Invoke();
+            }
+            else
+            {
+                _currentLabelIndex++;
+                LoadResourcesAsync(sceneType, callback);
+            }
+        });
     }
 
     protected void InitUIPackage(string packageName)
@@ -40,26 +64,8 @@ public class BaseScene : MonoBehaviour
         }
     }
 
-    private void InitResources(Action callback)
+    private void OnDestroy()
     {
-        var loadResourceLabels = SceneSetting.GetInstance.LoadResourceLabels[SceneType];
-
-        if (loadResourceLabels == null || loadResourceLabels.Length == 0)
-        {
-            return;
-        }
-
-        Managers.Resource.LoadAllAsync<UnityEngine.Object>(loadResourceLabels[_currentLabelIndex].ToString(), () =>
-        {
-            if (_currentLabelIndex == loadResourceLabels.Length - 1)
-            {
-                callback?.Invoke();
-            }
-            else
-            {
-                _currentLabelIndex++;
-                InitResources(callback);
-            }
-        });
+        Managers.Clear();
     }
 }

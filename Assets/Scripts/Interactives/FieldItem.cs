@@ -27,7 +27,6 @@ public class FieldItem : Interactive
     {
         if (_items == null || _items.Count == 0)
         {
-            Managers.Game.ResourceLoaded -= LoadMinimapIcon;
             Managers.Resource.Destroy(gameObject);
             return;
         }

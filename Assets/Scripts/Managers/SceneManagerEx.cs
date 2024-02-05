@@ -18,6 +18,7 @@ public class SceneManagerEx
 
         NextScene = scene;
         PrevScene = CurrentScene.SceneType;
+        Managers.Resource.Clear();
         SceneManager.LoadScene(SceneType.LoadingScene.ToString());
     }
 

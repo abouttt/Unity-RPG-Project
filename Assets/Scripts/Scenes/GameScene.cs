@@ -24,25 +24,30 @@ public class GameScene : BaseScene
 
         Player.Init();
         InitUIPackage("UIPackage_Game");
-        StartCoroutine(GameStart());
-
         Managers.Input.ToggleCursor(false);
 
         Player.Status.Gold += 10000;
+
+        StartCoroutine(GameStart());
+    }
+
+    private void Start()
+    {
+        Managers.Quest.SaveLoadCleanup();
     }
 
     private IEnumerator GameStart()
     {
-        Managers.Game.OnResourceLoaded();
         yield return null;
-        Managers.Quest.Init();
+
         Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
-        Managers.Game.OnGameStarted();
-        Managers.Game.IsDefaultSpawnPosition = false;
-        Managers.Game.IsPortalSpawnPosition = false;
-        yield return null;
         Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
         Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
         Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
+
+        yield return null;
+
+        Managers.Game.IsDefaultSpawnPosition = false;
+        Managers.Game.IsPortalSpawnPosition = false;
     }
 }

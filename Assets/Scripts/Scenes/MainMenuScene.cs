@@ -7,8 +7,12 @@ public class MainMenuScene : BaseScene
         base.Init();
 
         Managers.Data.LoadGameOption();
-        InitUIPackage("UIPackage_MainMenu");
-        Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
-        Managers.Input.ToggleCursor(true);
+
+        LoadResourcesAsync(SceneType, () =>
+        {
+            InitUIPackage("UIPackage_MainMenu");
+            Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
+            Managers.Input.ToggleCursor(true);
+        });
     }
 }

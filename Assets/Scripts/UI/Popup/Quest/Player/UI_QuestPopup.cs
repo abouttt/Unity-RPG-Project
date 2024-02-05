@@ -40,6 +40,8 @@ public class UI_QuestPopup : UI_Popup
 
     protected override void Init()
     {
+        Managers.UI.Register<UI_QuestPopup>(this);
+
         base.Init();
 
         BindObject(typeof(GameObjects));
@@ -57,14 +59,12 @@ public class UI_QuestPopup : UI_Popup
         Managers.Quest.QuestCompleted += OnQuestCompletedOrCanceled;
         Managers.Quest.QuestUnRegistered += OnQuestCompletedOrCanceled;
 
-        Managers.Game.GameStarted += LoadSaveData;
-
         Clear();
     }
 
     private void Start()
     {
-        Managers.UI.Register<UI_QuestPopup>(this);
+        LoadSaveData();
     }
 
     public void SetQuestDescription(Quest quest)

@@ -40,15 +40,15 @@ public class NPC : Interactive
         s_NPCs.Add(NPCID, this);
         _quests = QuestDatabase.GetInstance.FindQuestsBy(NPCID);
 
-        Managers.Game.ResourceLoaded += () =>
-        {
-            _questPresenceNotifier = Managers.Resource.Instantiate("QuestPresenceNotifier", _questNotifierPosition, transform);
-            _questCompletableNotifier = Managers.Resource.Instantiate("QuestCompletableNotifier", _questNotifierPosition, transform);
-            _questPresenceNotifier.SetActive(false);
-            _questCompletableNotifier.SetActive(false);
-        };
+        _questPresenceNotifier = Managers.Resource.Instantiate("QuestPresenceNotifier", _questNotifierPosition, transform);
+        _questCompletableNotifier = Managers.Resource.Instantiate("QuestCompletableNotifier", _questNotifierPosition, transform);
+        _questPresenceNotifier.SetActive(false);
+        _questCompletableNotifier.SetActive(false);
+    }
 
-        Managers.Game.GameStarted += CheckQuests;
+    private void Start()
+    {
+        CheckQuests();
     }
 
     public static NPC GetNPC(string id)

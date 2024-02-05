@@ -29,7 +29,7 @@ public class MonsterData : ScriptableObject
 
     public void DropItems(Vector3 position)
     {
-        if (LootData == null)
+        if (LootData == null || LootData.Count == 0)
         {
             return;
         }

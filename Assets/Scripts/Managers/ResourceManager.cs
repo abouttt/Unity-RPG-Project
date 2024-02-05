@@ -18,7 +18,7 @@ public class ResourceManager
         return null;
     }
 
-    public GameObject Instantiate(string key, Transform parent = null, bool pooling = false)
+    public GameObject Instantiate(string key, Transform parent = null, bool pooling = false, Action<GameObject> callback = null)
     {
         GameObject prefab = Load<GameObject>(key);
         if (prefab == null)

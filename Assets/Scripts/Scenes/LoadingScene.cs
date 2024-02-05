@@ -13,7 +13,7 @@ public class LoadingScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        Managers.UI.Get<UI_TopCanvas>().ActiveFalseInitBG();
+
         _background.sprite = SceneSetting.GetInstance.Background[Managers.Scene.NextScene];
         _background.color = Color.white;
         if (_background.sprite == null)
@@ -21,7 +21,7 @@ public class LoadingScene : BaseScene
             _background.color = Color.black;
         }
 
-        StartCoroutine(LoadSceneAsync());
+        LoadResourcesAsync(Managers.Scene.NextScene, () => StartCoroutine(LoadSceneAsync()));
     }
 
     private IEnumerator LoadSceneAsync()

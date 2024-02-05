@@ -27,11 +27,6 @@ public class UI_TopCanvas : UI_Base
         Managers.UI.Register<UI_TopCanvas>(this);
     }
 
-    public void ActiveFalseInitBG()
-    {
-        GetObject((int)GameObjects.InitBG).SetActive(false);
-    }
-
     public void FadeInitBG()
     {
         GetObject((int)GameObjects.InitBG).GetComponent<DOTweenAnimation>().DOPlay();

@@ -274,8 +274,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SceneType>k__BackingField: 2
-  _sceneBGM: {fileID: 0}
-  _prefabs: []
   _background: {fileID: 1281750147}
   _loadingBar: {fileID: 938520658}
 --- !u!1 &1694284888
@@ -440,6 +438,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_LoadingFixed
       objectReference: {fileID: 0}
+    - target: {fileID: 2245493930681927539, guid: cf9a0449bcf6cba47934233a6595efb8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2245493930681927540, guid: cf9a0449bcf6cba47934233a6595efb8, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -523,6 +525,14 @@ PrefabInstance:
     - target: {fileID: 2245493930681927540, guid: cf9a0449bcf6cba47934233a6595efb8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245493930681927542, guid: cf9a0449bcf6cba47934233a6595efb8, type: 3}
+      propertyPath: m_ReferencePixelsPerUnit
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245493930681927543, guid: cf9a0449bcf6cba47934233a6595efb8, type: 3}
+      propertyPath: m_SortingOrder
+      value: 9999
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf9a0449bcf6cba47934233a6595efb8, type: 3}

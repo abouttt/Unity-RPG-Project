@@ -43,12 +43,13 @@ public class Managers : Singleton<Managers>
     {
         if (s_isInit)
         {
-            Clear();
+            return;
         }
 
         Data.Init();
         Input.Init();
         Pool.Init();
+        Quest.Init();
         Sound.Init();
         UI.Init();
 
@@ -66,7 +67,6 @@ public class Managers : Singleton<Managers>
         Input.Clear();
         Pool.Clear();
         Quest.Clear();
-        Resource.Clear();
         Sound.Clear();
         UI.Clear();
 
