@@ -6,10 +6,6 @@ public class BaseScene : MonoBehaviour
 {
     [field: SerializeField]
     public SceneType SceneType { get; protected set; } = SceneType.Unknown;
-    [SerializeField]
-    private AudioClip _sceneBGM;
-    [SerializeField]
-    private GameObject[] _prefabs;
 
     private int _currentLabelIndex = 0;
 
@@ -27,10 +23,6 @@ public class BaseScene : MonoBehaviour
         {
             Managers.Resource.Instantiate("EventSystem");
         }
-
-        InitPrefabs();
-        Managers.Game.OnResourceLoaded();
-        Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
     }
 
     protected void InitUIPackage(string packageName)
@@ -45,17 +37,6 @@ public class BaseScene : MonoBehaviour
         foreach (var prefab in SceneSetting.GetInstance.DefaultPrefabs)
         {
             Instantiate(prefab);
-        }
-    }
-
-    private void InitPrefabs()
-    {
-        if (_prefabs != null)
-        {
-            foreach (var prefab in _prefabs)
-            {
-                Instantiate(prefab);
-            }
         }
     }
 
