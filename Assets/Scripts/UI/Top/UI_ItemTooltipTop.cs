@@ -51,6 +51,8 @@ public class UI_ItemTooltipTop : UI_Base
 
     protected override void Init()
     {
+        Managers.UI.Register<UI_ItemTooltipTop>(this);
+
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
         _rt = GetObject((int)GameObjects.ItemTooltip).GetComponent<RectTransform>();
@@ -58,7 +60,6 @@ public class UI_ItemTooltipTop : UI_Base
 
     private void Start()
     {
-        Managers.UI.Register<UI_ItemTooltipTop>(this);
         Close();
     }
 

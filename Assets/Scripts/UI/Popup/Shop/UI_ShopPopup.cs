@@ -30,12 +30,12 @@ public class UI_ShopPopup : UI_Popup, IDropHandler
         BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_ShopPopup>);
+
+        Managers.UI.Register<UI_ShopPopup>(this);
     }
 
     private void Start()
     {
-        Managers.UI.Register<UI_ShopPopup>(this);
-
         Showed += () =>
         {
             var itemInventory = Managers.UI.Get<UI_ItemInventoryPopup>();

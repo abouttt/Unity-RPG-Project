@@ -34,6 +34,8 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
 
     protected override void Init()
     {
+        Managers.UI.Register<UI_MinimapFixed>(this);
+
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
         Bind<RawImage>(typeof(RawImages));
@@ -43,7 +45,6 @@ public class UI_MinimapFixed : UI_Base, IPointerMoveHandler, IPointerExitHandler
 
     private void Start()
     {
-        Managers.UI.Register<UI_MinimapFixed>(this);
         GetObject((int)GameObjects.MinimapIconName).SetActive(false);
     }
 

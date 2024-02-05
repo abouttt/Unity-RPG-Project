@@ -15,6 +15,8 @@ public class UI_MainMenuFixed : UI_Base
 
     protected override void Init()
     {
+        Managers.UI.Register<UI_MainMenuFixed>(this);
+
         BindButton((typeof(Buttons)));
 
         GetButton((int)Buttons.ContinueButton).onClick.AddListener(() =>
@@ -58,7 +60,6 @@ public class UI_MainMenuFixed : UI_Base
 
     private void Start()
     {
-        Managers.UI.Register<UI_MainMenuFixed>(this);
         ToggleOptionMenu(false);
     }
 

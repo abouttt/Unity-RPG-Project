@@ -29,12 +29,12 @@ public class UI_ConfirmationPopup : UI_Popup
         _dotween = PopupRT.GetComponent<DOTweenAnimation>();
 
         GetButton((int)Buttons.NOButton).onClick.AddListener(Managers.UI.Close<UI_ConfirmationPopup>);
+
+        Managers.UI.Register<UI_ConfirmationPopup>(this);
     }
 
     private void Start()
     {
-        Managers.UI.Register<UI_ConfirmationPopup>(this);
-
         Showed += () =>
         {
             PopupRT.localScale = new Vector3(0f, 1f, 1f);

@@ -40,8 +40,6 @@ public class UI_QuestPopup : UI_Popup
 
     protected override void Init()
     {
-        Managers.UI.Register<UI_QuestPopup>(this);
-
         base.Init();
 
         BindObject(typeof(GameObjects));
@@ -53,6 +51,7 @@ public class UI_QuestPopup : UI_Popup
         GetButton((int)Buttons.CompleteButton).onClick.AddListener(() => Managers.Quest.Complete(_selectedQuest));
         GetButton((int)Buttons.CancelButton).onClick.AddListener(() => Managers.Quest.Unregister(_selectedQuest));
 
+        Managers.Game.GameStarted += LoadSaveData;
         Managers.Quest.QuestRegistered += OnQuestRegisterd;
         Managers.Quest.QuestCompletabled += OnQuestCompletabled;
         Managers.Quest.QuestCompletableCanceled += OnQuestCompletableCanceld;
@@ -60,11 +59,8 @@ public class UI_QuestPopup : UI_Popup
         Managers.Quest.QuestUnRegistered += OnQuestCompletedOrCanceled;
 
         Clear();
-    }
 
-    private void Start()
-    {
-        LoadSaveData();
+        Managers.UI.Register<UI_QuestPopup>(this);
     }
 
     public void SetQuestDescription(Quest quest)

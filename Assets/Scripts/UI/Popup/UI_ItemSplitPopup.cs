@@ -54,6 +54,8 @@ public class UI_ItemSplitPopup : UI_Popup
         GetButton((int)Buttons.UpButton).onClick.AddListener(() => OnClickUpAndDownButton(1));
         GetButton((int)Buttons.DownButton).onClick.AddListener(() => OnClickUpAndDownButton(-1));
         GetButton((int)Buttons.NOButton).onClick.AddListener(Managers.UI.Close<UI_ItemSplitPopup>);
+
+        Managers.UI.Register<UI_ItemSplitPopup>(this);
     }
 
     public void SetEvent(UnityAction call, string text, int minCount, int maxCount, int price = 0, bool showPrice = false)
@@ -74,8 +76,6 @@ public class UI_ItemSplitPopup : UI_Popup
 
     private void Start()
     {
-        Managers.UI.Register<UI_ItemSplitPopup>(this);
-
         Showed += () =>
         {
             PopupRT.localScale = new Vector3(0f, 1f, 1f);

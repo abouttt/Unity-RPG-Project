@@ -40,6 +40,8 @@ public class UI_SkillTooltipTop : UI_Base
 
     protected override void Init()
     {
+        Managers.UI.Register<UI_SkillTooltipTop>(this);
+
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
         _rt = GetObject((int)GameObjects.SkillTooltip).GetComponent<RectTransform>();
@@ -47,7 +49,6 @@ public class UI_SkillTooltipTop : UI_Base
 
     private void Start()
     {
-        Managers.UI.Register<UI_SkillTooltipTop>(this);
         Close();
     }
 

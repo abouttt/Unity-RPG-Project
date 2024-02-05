@@ -36,12 +36,12 @@ public class UI_LootPopup : UI_Popup
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_LootPopup>);
         GetButton((int)Buttons.LootAllButton).onClick.AddListener(AddAllItemToItemInventory);
         GetText((int)Texts.LootAllText).text = $"[{Managers.Input.GetBindingPath("Interaction")}] ¸ðµÎ È¹µæ";
+
+        Managers.UI.Register<UI_LootPopup>(this);
     }
 
     private void Start()
     {
-        Managers.UI.Register<UI_LootPopup>(this);
-
         Closed += () =>
         {
             Clear();

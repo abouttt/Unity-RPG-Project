@@ -40,6 +40,7 @@ public class GameScene : BaseScene
     {
         yield return null;
 
+        Managers.Game.OnGameStarted();
         Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
         Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
         Managers.UI.Get<UI_TopCanvas>().FadeInitBG();

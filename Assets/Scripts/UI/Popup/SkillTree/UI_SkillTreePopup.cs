@@ -24,11 +24,12 @@ public class UI_SkillTreePopup : UI_Popup
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_SkillTreePopup>);
 
         Player.Status.SkillPointChanged += RefreshSkillPointText;
+
+        Managers.UI.Register<UI_SkillTreePopup>(this);
     }
 
     private void Start()
     {
-        Managers.UI.Register<UI_SkillTreePopup>(this);
         RefreshSkillPointText();
     }
 

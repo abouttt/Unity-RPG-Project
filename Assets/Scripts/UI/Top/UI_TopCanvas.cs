@@ -15,16 +15,13 @@ public class UI_TopCanvas : UI_Base
 
     protected override void Init()
     {
+        Managers.UI.Register<UI_TopCanvas>(this);
+
         BindObject(typeof(GameObjects));
         BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.GameMenuButton).onClick.AddListener(Managers.UI.ShowOrClose<UI_GameMenuPopup>);
         GetButton((int)Buttons.GameMenuButton).gameObject.SetActive(false);
-    }
-
-    private void Start()
-    {
-        Managers.UI.Register<UI_TopCanvas>(this);
     }
 
     public void FadeInitBG()

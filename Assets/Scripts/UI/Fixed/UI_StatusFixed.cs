@@ -17,6 +17,8 @@ public class UI_StatusFixed : UI_Base
 
     protected override void Init()
     {
+        Managers.UI.Register<UI_StatusFixed>(this);
+
         BindImage(typeof(Images));
         BindText(typeof(Texts));
 
@@ -26,11 +28,6 @@ public class UI_StatusFixed : UI_Base
         Player.Status.SPChanged += RefreshSPImage;
         Player.Status.XPChanged += RefreshXPImage;
         Player.Status.StatChanged += RefreshAllStatusImage;
-    }
-
-    private void Start()
-    {
-        Managers.UI.Register<UI_StatusFixed>(this);
     }
 
     private void RefreshAllStatusImage()

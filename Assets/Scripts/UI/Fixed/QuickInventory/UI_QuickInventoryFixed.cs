@@ -11,14 +11,11 @@ public class UI_QuickInventoryFixed : UI_Base
 
     protected override void Init()
     {
+        Managers.UI.Register<UI_QuickInventoryFixed>(this);
+
         BindRT(typeof(RectTransforms));
         InitSlots();
         Player.QuickInventory.InventoryChanged += index => _quickSlots[index].RefreshSlot();
-    }
-
-    private void Start()
-    {
-        Managers.UI.Register<UI_QuickInventoryFixed>(this);
     }
 
     private void InitSlots()

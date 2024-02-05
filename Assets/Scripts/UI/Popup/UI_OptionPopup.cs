@@ -34,6 +34,7 @@ public class UI_OptionPopup : UI_Popup
         {
             BindButton(typeof(Buttons));
         }
+
         Bind<Slider>(typeof(Sliders));
         Bind<TMP_Dropdown>(typeof(Dropdowns));
         Bind<Toggle>(typeof(Toggles));
@@ -50,10 +51,7 @@ public class UI_OptionPopup : UI_Popup
         MSAADropdownInit();
         FrameDropdownInit();
         VSyncToggleInit();
-    }
 
-    private void Start()
-    {
         Managers.UI.Register<UI_OptionPopup>(this);
     }
 

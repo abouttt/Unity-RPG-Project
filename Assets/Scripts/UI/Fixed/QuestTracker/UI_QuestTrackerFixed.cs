@@ -17,6 +17,7 @@ public class UI_QuestTrackerFixed : UI_Base
     protected override void Init()
     {
         Managers.UI.Register<UI_QuestTrackerFixed>(this);
+
         Bind<VerticalLayoutGroup>(typeof(Layouts));
     }
 

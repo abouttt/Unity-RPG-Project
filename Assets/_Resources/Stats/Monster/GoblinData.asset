@@ -20,3 +20,9 @@ MonoBehaviour:
   <DropMaxXP>k__BackingField: 50
   <DropMinGold>k__BackingField: 5
   <DropMaxGold>k__BackingField: 15
+  <LootData>k__BackingField:
+  - ItemData: {fileID: 11400000, guid: de34922a05749ec4595dc9c8a7da9ea9, type: 2}
+    DropProbability: 100
+    Count:
+      Min: 1
+      Max: 5
