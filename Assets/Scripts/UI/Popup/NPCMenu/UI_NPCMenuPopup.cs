@@ -21,12 +21,12 @@ public class UI_NPCMenuPopup : UI_Popup
 
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
-
-        Managers.UI.Register<UI_NPCMenuPopup>(this);
     }
 
     private void Start()
     {
+        Managers.UI.Register<UI_NPCMenuPopup>(this);
+
         Showed += () =>
         {
             Player.Movement.CanMove = false;

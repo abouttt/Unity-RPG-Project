@@ -76,12 +76,12 @@ public class UI_NPCQuestPopup : UI_Popup
         };
 
         Clear();
-
-        Managers.UI.Register<UI_NPCQuestPopup>(this);
     }
 
     private void Start()
     {
+        Managers.UI.Register<UI_NPCQuestPopup>(this);
+
         Closed += () =>
         {
             foreach (var element in _titleSubitems.ToList())

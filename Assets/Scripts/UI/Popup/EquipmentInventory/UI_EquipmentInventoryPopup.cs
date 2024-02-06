@@ -47,12 +47,11 @@ public class UI_EquipmentInventoryPopup : UI_Popup
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_EquipmentInventoryPopup>);
 
         InitSlots();
-
-        Managers.UI.Register<UI_EquipmentInventoryPopup>(this);
     }
 
     private void Start()
     {
+        Managers.UI.Register<UI_EquipmentInventoryPopup>(this);
         RefreshAllSlot();
         RefreshAllStatusText();
     }

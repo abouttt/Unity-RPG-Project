@@ -59,7 +59,10 @@ public class UI_QuestPopup : UI_Popup
         Managers.Quest.QuestUnRegistered += OnQuestCompletedOrCanceled;
 
         Clear();
+    }
 
+    private void Start()
+    {
         Managers.UI.Register<UI_QuestPopup>(this);
     }
 
@@ -216,6 +219,7 @@ public class UI_QuestPopup : UI_Popup
         GetButton((int)Buttons.CompleteButton).gameObject.SetActive(false);
         GetButton((int)Buttons.CancelButton).gameObject.SetActive(false);
         GetText((int)Texts.NOQuestText).gameObject.SetActive(true);
+
         foreach (Transform reward in GetRT((int)RectTransforms.QuestRewardSlots))
         {
             if (reward.gameObject == GetText((int)Texts.QuestRewardText).gameObject)

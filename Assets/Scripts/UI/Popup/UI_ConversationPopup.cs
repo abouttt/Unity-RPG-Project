@@ -28,12 +28,12 @@ public class UI_ConversationPopup : UI_Popup, IPointerClickHandler
         BindText(typeof(Texts));
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_ConversationPopup>);
-
-        Managers.UI.Register<UI_ConversationPopup>(this);
     }
 
     private void Start()
     {
+        Managers.UI.Register<UI_ConversationPopup>(this);
+
         Closed += () =>
         {
             GetText((int)Texts.ScriptText).DOKill();

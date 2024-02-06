@@ -76,7 +76,10 @@ public class UI_GameMenuPopup : UI_Popup
         });
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_GameMenuPopup>);
+    }
 
+    private void Start()
+    {
         Managers.UI.Register<UI_GameMenuPopup>(this);
     }
 }

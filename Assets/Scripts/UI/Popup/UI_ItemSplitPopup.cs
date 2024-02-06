@@ -54,8 +54,17 @@ public class UI_ItemSplitPopup : UI_Popup
         GetButton((int)Buttons.UpButton).onClick.AddListener(() => OnClickUpAndDownButton(1));
         GetButton((int)Buttons.DownButton).onClick.AddListener(() => OnClickUpAndDownButton(-1));
         GetButton((int)Buttons.NOButton).onClick.AddListener(Managers.UI.Close<UI_ItemSplitPopup>);
+    }
 
+    private void Start()
+    {
         Managers.UI.Register<UI_ItemSplitPopup>(this);
+
+        Showed += () =>
+        {
+            PopupRT.localScale = new Vector3(0f, 1f, 1f);
+            _dotween.DORestart();
+        };
     }
 
     public void SetEvent(UnityAction call, string text, int minCount, int maxCount, int price = 0, bool showPrice = false)
@@ -72,15 +81,6 @@ public class UI_ItemSplitPopup : UI_Popup
         Get<TMP_InputField>((int)InputFields.InputField).text = CurrentCount.ToString();
         GetText((int)Texts.PriceText).color = (_price * CurrentCount) <= Player.Status.Gold ? Color.white : Color.red;
         GetObject((int)GameObjects.ItemPrice).SetActive(showPrice);
-    }
-
-    private void Start()
-    {
-        Showed += () =>
-        {
-            PopupRT.localScale = new Vector3(0f, 1f, 1f);
-            _dotween.DORestart();
-        };
     }
 
     private void OnValueChanged()

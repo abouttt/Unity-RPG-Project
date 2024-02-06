@@ -51,7 +51,10 @@ public class UI_OptionPopup : UI_Popup
         MSAADropdownInit();
         FrameDropdownInit();
         VSyncToggleInit();
+    }
 
+    private void Start()
+    {
         Managers.UI.Register<UI_OptionPopup>(this);
     }
 

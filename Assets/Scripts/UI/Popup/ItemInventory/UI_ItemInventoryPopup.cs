@@ -78,12 +78,12 @@ public class UI_ItemInventoryPopup : UI_Popup
         RefreshAllSlots(ItemType.Equipment);
         RefreshAllSlots(ItemType.Consumable);
         RefreshAllSlots(ItemType.Etc);
-
-        Managers.UI.Register<UI_ItemInventoryPopup>(this);
     }
 
     private void Start()
     {
+        Managers.UI.Register<UI_ItemInventoryPopup>(this);
+
         Showed += () =>
         {
             GetRT((int)RectTransforms.ItemInventory).SetParent(transform);
