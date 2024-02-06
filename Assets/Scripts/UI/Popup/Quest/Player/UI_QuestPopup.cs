@@ -51,7 +51,6 @@ public class UI_QuestPopup : UI_Popup
         GetButton((int)Buttons.CompleteButton).onClick.AddListener(() => Managers.Quest.Complete(_selectedQuest));
         GetButton((int)Buttons.CancelButton).onClick.AddListener(() => Managers.Quest.Unregister(_selectedQuest));
 
-        Managers.Game.GameStarted += LoadSaveData;
         Managers.Quest.QuestRegistered += OnQuestRegisterd;
         Managers.Quest.QuestCompletabled += OnQuestCompletabled;
         Managers.Quest.QuestCompletableCanceled += OnQuestCompletableCanceld;
@@ -64,6 +63,8 @@ public class UI_QuestPopup : UI_Popup
     private void Start()
     {
         Managers.UI.Register<UI_QuestPopup>(this);
+
+        LoadSaveData();
     }
 
     public void SetQuestDescription(Quest quest)

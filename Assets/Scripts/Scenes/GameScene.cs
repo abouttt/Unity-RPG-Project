@@ -40,15 +40,11 @@ public class GameScene : BaseScene
     {
         yield return null;
 
-        Managers.Game.OnGameStarted();
+        Managers.Game.IsDefaultSpawnPosition = false;
+        Managers.Game.IsPortalSpawnPosition = false;
         Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
         Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
         Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
         Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
-
-        yield return null;
-
-        Managers.Game.IsDefaultSpawnPosition = false;
-        Managers.Game.IsPortalSpawnPosition = false;
     }
 }
