@@ -43,6 +43,7 @@ public class Managers : Singleton<Managers>
     {
         if (s_isInit)
         {
+            Debug.Log("[Managers/Init] Can't init bacause Must clear.");
             return;
         }
 
