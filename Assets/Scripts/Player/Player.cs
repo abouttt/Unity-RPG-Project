@@ -50,6 +50,8 @@ public class Player : MonoBehaviour
         Destroy(playerPackage);
         FindObjectOfType<CinemachineStateDrivenCamera>().transform.SetParent(UnityEngine.Camera.main.transform);
         Movement.InitRotationYaw = yaw;
+
+        playerPackagePrefab.FindChild("Player").transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
     }
 
     private static void GetPositionAndRotationYaw(out Vector3 position, out float yaw)
