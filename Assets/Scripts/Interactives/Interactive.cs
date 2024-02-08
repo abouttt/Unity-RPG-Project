@@ -7,7 +7,7 @@ public abstract class Interactive : MonoBehaviour
     [field: SerializeField]
     public Vector3 InteractionKeyGuideDeltaPos { get; private set; }
     [field: SerializeField]
-    public bool CanInteraction { get; set; } = true;
+    public bool CanInteraction { get; protected set; } = true;
     [field: SerializeField]
     public string MinimapIconSpriteName { get; protected set; }
     [field: SerializeField]

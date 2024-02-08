@@ -131,7 +131,7 @@ public class QuestManager
         return quest.State is QuestState.Completable;
     }
 
-    public void SaveLoadCleanup()
+    public void LoadCleanup()
     {
         if (_isSaveLoadCleanup)
         {

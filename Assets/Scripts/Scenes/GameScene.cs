@@ -33,7 +33,7 @@ public class GameScene : BaseScene
 
     private void Start()
     {
-        Managers.Quest.SaveLoadCleanup();
+        Managers.Quest.LoadCleanup();
     }
 
     private IEnumerator GameStart()

@@ -30,6 +30,8 @@ public class NPC : Interactive
     private GameObject _questPresenceNotifier;
     private GameObject _questCompletableNotifier;
 
+    private bool _originCanInteraction;
+
     protected override void Awake()
     {
         MinimapIconName = Name;
@@ -44,6 +46,8 @@ public class NPC : Interactive
         _questCompletableNotifier = Managers.Resource.Instantiate("QuestCompletableNotifier", _questNotifierPosition, transform);
         _questPresenceNotifier.SetActive(false);
         _questCompletableNotifier.SetActive(false);
+
+        _originCanInteraction = CanInteraction;
     }
 
     private void Start()
@@ -106,6 +110,15 @@ public class NPC : Interactive
         {
             _questPresenceNotifier.SetActive(!hasCompletableQuest);
             _questCompletableNotifier.SetActive(hasCompletableQuest);
+        }
+
+        if (!CanInteraction && (_questPresenceNotifier.activeSelf || _questCompletableNotifier.activeSelf))
+        {
+            CanInteraction = true;
+        }
+        else if (CanInteraction && !_originCanInteraction)
+        {
+            CanInteraction = false;
         }
     }
 
