@@ -58,9 +58,10 @@ public class Monster : MonoBehaviour
         }
     }
 
+    protected readonly Collider[] PlayerCollider = new Collider[1];
+
     private UI_MonsterHPBar _hpBar;
     private bool _isLockOnTarget;
-    private readonly Collider[] _playerCollider = new Collider[1];
     private readonly Dictionary<BasicMonsterState, int> _stateAnimID = new();
     private readonly List<Collider> _lockOnTargetColliders = new();
 
@@ -136,10 +137,10 @@ public class Monster : MonoBehaviour
     public bool PlayerDetect()
     {
         var monsterCenterPos = Collider.bounds.center;
-        int cnt = Physics.OverlapSphereNonAlloc(monsterCenterPos, DetectionRadius, _playerCollider, TargetMask);
+        int cnt = Physics.OverlapSphereNonAlloc(monsterCenterPos, DetectionRadius, PlayerCollider, TargetMask);
         if (cnt != 0)
         {
-            var playerCenterPos = _playerCollider[0].bounds.center;
+            var playerCenterPos = PlayerCollider[0].bounds.center;
             var centerDir = (playerCenterPos - monsterCenterPos).normalized;
             if (Vector3.Angle(transform.forward, centerDir) < DetectionAngle * 0.5f)
             {
@@ -199,15 +200,6 @@ public class Monster : MonoBehaviour
         else
         {
             HPChanged?.Invoke();
-        }
-    }
-
-    private void OnAttack()
-    {
-        int cnt = Physics.OverlapSphereNonAlloc(AttackOffset.position, AttackRadius, _playerCollider, 1 << LayerMask.NameToLayer("Player"));
-        if (cnt != 0)
-        {
-            Player.Battle.TakeDamage(transform.position, Data.Damage);
         }
     }
 }
