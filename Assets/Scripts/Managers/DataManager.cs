@@ -9,6 +9,8 @@ public class DataManager
     public static readonly string SaveFilePath = $"{SavePath}/Saves.json";
     public static readonly string GameOptionSavePath = $"{SavePath}/GameOption.json";
 
+    public bool HasSaveDatas => File.Exists(SaveFilePath);
+
     private JObject _saveDatas;
     private readonly BinaryFormatter _binaryFormatter = new();
 
@@ -65,11 +67,6 @@ public class DataManager
         }
 
         return data is not null;
-    }
-
-    public bool HasSaveDatas()
-    {
-        return File.Exists(SaveFilePath);
     }
 
     public void ClearSaveDatas()

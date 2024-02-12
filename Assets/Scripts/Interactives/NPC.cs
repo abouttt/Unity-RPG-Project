@@ -42,10 +42,13 @@ public class NPC : Interactive
         s_NPCs.Add(NPCID, this);
         _quests = QuestDatabase.GetInstance.FindQuestsBy(NPCID);
 
-        _questPresenceNotifier = Managers.Resource.Instantiate("QuestPresenceNotifier", _questNotifierPosition, transform);
-        _questCompletableNotifier = Managers.Resource.Instantiate("QuestCompletableNotifier", _questNotifierPosition, transform);
-        _questPresenceNotifier.SetActive(false);
-        _questCompletableNotifier.SetActive(false);
+        if (Managers.Resource.HasResources)
+        {
+            _questPresenceNotifier = Managers.Resource.Instantiate("QuestPresenceNotifier", _questNotifierPosition, transform);
+            _questCompletableNotifier = Managers.Resource.Instantiate("QuestCompletableNotifier", _questNotifierPosition, transform);
+            _questPresenceNotifier.SetActive(false);
+            _questCompletableNotifier.SetActive(false);
+        }
 
         _originCanInteraction = CanInteraction;
     }

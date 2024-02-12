@@ -11,7 +11,7 @@ public class SceneManagerEx
 
     public void LoadScene(SceneType scene)
     {
-        if (CurrentScene is GameScene)
+        if (CurrentScene is GameScene && Managers.Resource.HasResources)
         {
             Managers.Data.Save();
         }

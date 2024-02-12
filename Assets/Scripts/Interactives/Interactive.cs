@@ -18,6 +18,9 @@ public abstract class Interactive : MonoBehaviour
     protected virtual void Awake()
     {
         tag = "Interactive";
-        Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup(MinimapIconSpriteName, MinimapIconName);
+        if (Managers.Resource.HasResources)
+        {
+            Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup(MinimapIconSpriteName, MinimapIconName);
+        }
     }
 }

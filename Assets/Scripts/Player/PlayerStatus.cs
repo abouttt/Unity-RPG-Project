@@ -119,7 +119,7 @@ public class PlayerStatus : MonoBehaviour
         LoadSaveData();
         RefreshAllStat();
         FillCurrentMeleeStat();
-        if (Managers.Data.HasSaveDatas())
+        if (Managers.Data.HasSaveDatas)
         {
             SP = MaxStat.SP;
         }

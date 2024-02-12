@@ -20,6 +20,16 @@ public class GameScene : BaseScene
 
     protected override void Init()
     {
+        if (!Managers.Resource.HasResources)
+        {
+            if (!Managers.Data.HasSaveDatas)
+            {
+                Managers.Game.IsDefaultSpawnPosition = true;
+            }
+            Managers.Scene.LoadScene(Managers.Scene.CurrentScene.SceneType);
+            return;
+        }
+
         base.Init();
 
         Player.Init();

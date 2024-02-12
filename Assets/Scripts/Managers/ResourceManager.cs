@@ -6,6 +6,8 @@ using Object = UnityEngine.Object;
 
 public class ResourceManager
 {
+    public bool HasResources => _resources.Count > 0;
+
     private readonly Dictionary<string, Object> _resources = new();
 
     public T Load<T>(string key) where T : Object

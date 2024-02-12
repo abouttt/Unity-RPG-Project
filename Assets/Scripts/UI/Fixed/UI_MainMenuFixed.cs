@@ -55,7 +55,7 @@ public class UI_MainMenuFixed : UI_Base
 #endif
         });
 
-        _hasSaveFile = Managers.Data.HasSaveDatas();
+        _hasSaveFile = Managers.Data.HasSaveDatas;
     }
 
     private void Start()
