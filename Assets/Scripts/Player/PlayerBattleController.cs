@@ -15,6 +15,8 @@ public class PlayerBattleController : MonoBehaviour
     [SerializeField]
     private float _requiredAttackSP;
     [SerializeField]
+    private float _requiredDefenseSP;
+    [SerializeField]
     private List<Vector3> _attackEffectDirection;
     private int _currentAttackComboCount = 0;
     private bool _hasReservedAttack = false;
@@ -71,13 +73,14 @@ public class PlayerBattleController : MonoBehaviour
             if (Vector3.Angle(transform.forward, dir) < _defenseAngle)
             {
                 Player.Animator.SetTrigger(_animIDDefenseDamaged);
+                Player.Status.SP -= _requiredDefenseSP;
                 return;
             }
             else
             {
                 IsDefending = false;
-                Player.Animator.SetBool(_animIDDefense, false);
                 CanDefense = false;
+                Player.Animator.SetBool(_animIDDefense, false);
             }
         }
 
