@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Monster_DamagedState : StateMachineBehaviour
+public class Monster_StunnedState : StateMachineBehaviour
 {
     private Monster _monster;
 

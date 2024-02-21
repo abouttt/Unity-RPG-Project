@@ -84,6 +84,7 @@ public class Monster : MonoBehaviour
         _stateAnimID.Add(BasicMonsterState.Tracking, Animator.StringToHash("Tracking"));
         _stateAnimID.Add(BasicMonsterState.Restore, Animator.StringToHash("Restore"));
         _stateAnimID.Add(BasicMonsterState.Attack, Animator.StringToHash("Attack"));
+        _stateAnimID.Add(BasicMonsterState.Stunned, Animator.StringToHash("Stunned"));
         _stateAnimID.Add(BasicMonsterState.Damaged, -1);
         _stateAnimID.Add(BasicMonsterState.Dead, -1);
     }
@@ -132,6 +133,16 @@ public class Monster : MonoBehaviour
         {
             Transition(BasicMonsterState.Damaged);
         }
+    }
+
+    public void Stunned()
+    {
+        if (CurrentHP <= 0)
+        {
+            return;
+        }
+
+        Transition(BasicMonsterState.Stunned);
     }
 
     public bool PlayerDetect()

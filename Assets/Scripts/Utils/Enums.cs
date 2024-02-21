@@ -6,6 +6,7 @@ public enum BasicMonsterState
     Restore,
     Attack,
     Damaged,
+    Stunned,
     Dead,
 }
 

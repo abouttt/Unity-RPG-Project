@@ -12,6 +12,7 @@ public class InputManager : GameControls.IPlayerActions
     public bool Interaction { get; private set; }
     public bool LockOn { get; private set; }
     public bool Attack { get; private set; }
+    public bool Parry { get; private set; }
 
     //Pass Through
     public bool Sprint { get; private set; }
@@ -51,6 +52,7 @@ public class InputManager : GameControls.IPlayerActions
         _controls.Player.Interaction.Reset();
         _controls.Player.LockOn.Reset();
         _controls.Player.Attack.Reset();
+        _controls.Player.Parry.Reset();
     }
 
     public void Clear()
@@ -93,6 +95,11 @@ public class InputManager : GameControls.IPlayerActions
     public void OnAttack(InputAction.CallbackContext context)
     {
         Attack = context.ReadValueAsButton();
+    }
+
+    public void OnParry(InputAction.CallbackContext context)
+    {
+        Parry = context.ReadValueAsButton();
     }
 
     public void OnDefense(InputAction.CallbackContext context)

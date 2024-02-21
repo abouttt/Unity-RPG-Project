@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class PlayerBattleController : MonoBehaviour
@@ -15,15 +16,20 @@ public class PlayerBattleController : MonoBehaviour
     [SerializeField]
     private float _requiredAttackSP;
     [SerializeField]
+    private float _requiredParrySP;
+    [SerializeField]
     private float _requiredDefenseSP;
     [SerializeField]
     private List<Vector3> _attackEffectDirection;
+
     private int _currentAttackComboCount = 0;
     private bool _hasReservedAttack = false;
+    private bool _canParry = false;
 
     private readonly Collider[] _monsters = new Collider[10];
 
     private readonly int _animIDAttack = Animator.StringToHash("Attack");
+    private readonly int _animIDParry = Animator.StringToHash("Parry");
     private readonly int _animIDDefense = Animator.StringToHash("Defense");
     private readonly int _animIDDefenseDamaged = Animator.StringToHash("DefenseDamaged");
 
@@ -58,19 +64,31 @@ public class PlayerBattleController : MonoBehaviour
         {
             OffDefense();
         }
+
+        if (Managers.Input.Parry && Player.Root.IsEquip(EquipmentType.Shield))
+        {
+            Parry();
+        }
     }
 
-    public void TakeDamage(Vector3 attackedPosition, int damage)
+    public void TakeDamage(Monster monster, Vector3 attackedPosition, int damage)
     {
         if (Player.Status.HP <= 0)
         {
             return;
         }
 
-        if (IsDefending)
+        if (_canParry)
         {
-            Vector3 dir = (attackedPosition - transform.position).normalized;
-            if (Vector3.Angle(transform.forward, dir) < _defenseAngle)
+            if (IsRangeOfDefenseAngle(attackedPosition))
+            {
+                monster.Stunned();
+                return;
+            }
+        }
+        else if (IsDefending)
+        {
+            if (IsRangeOfDefenseAngle(attackedPosition))
             {
                 Player.Animator.SetTrigger(_animIDDefenseDamaged);
                 Player.Status.SP -= _requiredDefenseSP;
@@ -100,8 +118,10 @@ public class PlayerBattleController : MonoBehaviour
     {
         _currentAttackComboCount = 0;
         _hasReservedAttack = false;
+        _canParry = false;
         IsAttacking = false;
         Player.Animator.ResetTrigger(_animIDAttack);
+        Player.Animator.ResetTrigger(_animIDParry);
     }
 
     private void Attack()
@@ -128,6 +148,28 @@ public class PlayerBattleController : MonoBehaviour
         Player.Movement.CanRotation = true;
         Player.Animator.SetTrigger(_animIDAttack);
         Player.Status.SP -= _requiredAttackSP;
+    }
+
+    private void Parry()
+    {
+        if (!CanAttack)
+        {
+            return;
+        }
+
+        if (Player.Status.SP <= 0f)
+        {
+            return;
+        }
+
+        if (IsDefending)
+        {
+            OffDefense();
+            CanDefense = false;
+        }
+
+        Player.Animator.SetTrigger(_animIDParry);
+        Player.Status.SP -= _requiredParrySP;
     }
 
     private void Defense()
@@ -159,6 +201,17 @@ public class PlayerBattleController : MonoBehaviour
         return monsterCnt > 0;
     }
 
+    private bool IsRangeOfDefenseAngle(Vector3 attackedPosition)
+    {
+        Vector3 dir = (attackedPosition - transform.position).normalized;
+        if (Vector3.Angle(transform.forward, dir) < _defenseAngle)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private void OnCanAttackCombo()
     {
         if (IsAttacking)
@@ -180,6 +233,16 @@ public class PlayerBattleController : MonoBehaviour
         {
 
         }
+    }
+
+    private void OnBeginParry()
+    {
+        _canParry = true;
+    }
+
+    private void OnEndParry()
+    {
+        _canParry = false;
     }
 
     private void CreateAttackEffect()

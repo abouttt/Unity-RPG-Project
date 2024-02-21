@@ -60,6 +60,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Parry",
+                    "type": "Button",
+                    "id": "42dceccf-c908-4e20-bdeb-9bfe920316ce",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Defense",
                     "type": "PassThrough",
                     "id": "838c5c2d-de8d-48bd-8484-a866220d0e87",
@@ -447,6 +456,17 @@
                     "processors": "",
                     "groups": "Keyboard/Mouse",
                     "action": "Defense",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ce62f556-a99d-4a95-8553-e4bba549aa04",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Parry",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
