@@ -71,7 +71,7 @@ public class PlayerBattleController : MonoBehaviour
         }
     }
 
-    public void TakeDamage(Monster monster, Vector3 attackedPosition, int damage)
+    public void TakeDamage(Monster monster, Vector3 attackedPosition, int damage, bool parry)
     {
         if (Player.Status.HP <= 0)
         {
