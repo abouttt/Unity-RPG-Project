@@ -7,6 +7,8 @@ public class MonsterData : ScriptableObject
     [field: SerializeField]
     public string MonsterID { get; private set; }
     [field: SerializeField]
+    public string MonsterName {  get; private set; }
+    [field: SerializeField]
     public int MaxHP { get; private set; }
     [field: SerializeField]
     public int Damage { get; private set; }

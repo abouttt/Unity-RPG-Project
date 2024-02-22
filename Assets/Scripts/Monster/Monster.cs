@@ -69,6 +69,9 @@ public class Monster : MonoBehaviour
     {
         gameObject.layer = LayerMask.NameToLayer("Monster");
         Collider = GetComponent<Collider>();
+        Animator = GetComponent<Animator>();
+        NavMeshAgent = GetComponent<NavMeshAgent>();
+
         int lockOnTargetLayer = LayerMask.NameToLayer("LockOnTarget");
         foreach (Transform child in transform)
         {
@@ -77,8 +80,6 @@ public class Monster : MonoBehaviour
                 _lockOnTargetColliders.Add(child.GetComponent<Collider>());
             }
         }
-        Animator = GetComponent<Animator>();
-        NavMeshAgent = GetComponent<NavMeshAgent>();
 
         _stateAnimID.Add(BasicMonsterState.Idle, Animator.StringToHash("Idle"));
         _stateAnimID.Add(BasicMonsterState.Tracking, Animator.StringToHash("Tracking"));
@@ -87,6 +88,11 @@ public class Monster : MonoBehaviour
         _stateAnimID.Add(BasicMonsterState.Stunned, Animator.StringToHash("Stunned"));
         _stateAnimID.Add(BasicMonsterState.Damaged, -1);
         _stateAnimID.Add(BasicMonsterState.Dead, -1);
+
+        if (Managers.Resource.HasResources)
+        {
+            Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup("MonsterMinimapIcon", Data.MonsterName);
+        }
     }
 
     private void OnEnable()

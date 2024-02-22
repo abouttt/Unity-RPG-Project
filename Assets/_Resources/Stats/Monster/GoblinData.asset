@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f79808dae2f33d419677f5576fc654c, type: 3}
   m_Name: GoblinData
   m_EditorClassIdentifier: 
-  <MonsterID>k__BackingField: GOBLIN
+  <MonsterID>k__BackingField: GOBLIN_WARRIOR
+  <MonsterName>k__BackingField: "\uACE0\uBE14\uB9B0 \uC804\uC0AC"
   <MaxHP>k__BackingField: 100
   <Damage>k__BackingField: 20
   <Defense>k__BackingField: 3
