@@ -15,6 +15,7 @@ public class Player_MeleeState : StateMachineBehaviour
     {
         if (stateInfo.normalizedTime >= 1f)
         {
+            Player.Movement.ClearJumpInfo();
             Player.Battle.ClearAttackInfo();
             Player.Battle.CanAttack = true;
             Player.Battle.CanDefense = true;

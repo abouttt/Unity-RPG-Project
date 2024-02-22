@@ -105,6 +105,12 @@ public class PlayerMovement : MonoBehaviour
         Move();
     }
 
+    public void ClearJumpInfo()
+    {
+        _isJumpLand = false;
+        IsJumping = false;
+    }
+
     public string GetSaveData()
     {
         TransformSaveData saveData = new()
@@ -301,11 +307,5 @@ public class PlayerMovement : MonoBehaviour
     private void OnBeginJumpLand()
     {
         _isJumpLand = true;
-    }
-
-    private void OnEndJumpLand()
-    {
-        _isJumpLand = false;
-        IsJumping = false;
     }
 }
