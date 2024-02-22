@@ -80,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
     private float _fallTimeoutDelta;
 
     private bool _isJumpLand;
+    private bool _isJumpWithSprint;
     private bool _isPrevLockOn;
     private bool _isInit = false;
 
@@ -147,6 +148,7 @@ public class PlayerMovement : MonoBehaviour
                     // 원하는 높이에 도달하는 데 필요한 속도 = H * -2 * G 의 제곱근.
                     _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
                     Player.Animator.SetBool(_animIDJump, true);
+                    _isJumpWithSprint = Managers.Input.Sprint;
                     IsJumping = true;
                 }
             }
@@ -205,7 +207,17 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (Player.Status.SP > 0f)
                 {
-                    targetSpeed = _sprintSpeed;
+                    if (IsJumping)
+                    {
+                        if (_isJumpWithSprint)
+                        {
+                            targetSpeed = _sprintSpeed;
+                        }
+                    }
+                    else
+                    {
+                        targetSpeed = _sprintSpeed;
+                    }
 
                     if (IsGrounded && !IsJumping && !_isJumpLand)
                     {
