@@ -5,8 +5,6 @@ public class GameScene : BaseScene
 {
     [field: SerializeField, Space(10)]
     public string SceneID { get; private set; }
-    [SerializeField]
-    private AudioClip _sceneBGM;
 
     [field: SerializeField, Space(10)]
     public Vector3 DefaultSpawnPosition { get; private set; }
@@ -27,18 +25,19 @@ public class GameScene : BaseScene
                 Managers.Game.IsDefaultSpawnPosition = true;
             }
             Managers.Scene.LoadScene(Managers.Scene.CurrentScene.SceneType);
-            return;
         }
+        else
+        {
+            base.Init();
 
-        base.Init();
+            Player.Init();
+            InitUIPackage("UIPackage_Game");
+            Managers.Input.ToggleCursor(false);
 
-        Player.Init();
-        InitUIPackage("UIPackage_Game");
-        Managers.Input.ToggleCursor(false);
+            Player.Status.Gold += 10000;
 
-        Player.Status.Gold += 10000;
-
-        StartCoroutine(GameStart());
+            StartCoroutine(GameStart());
+        }
     }
 
     private void Start()
@@ -53,7 +52,6 @@ public class GameScene : BaseScene
         Managers.Game.IsDefaultSpawnPosition = false;
         Managers.Game.IsPortalSpawnPosition = false;
         Managers.Quest.ReceiveReport(Category.Scene, SceneID, 1);
-        Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
         Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
         Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
     }

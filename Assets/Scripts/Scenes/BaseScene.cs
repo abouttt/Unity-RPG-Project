@@ -6,6 +6,8 @@ public class BaseScene : MonoBehaviour
 {
     [field: SerializeField]
     public SceneType SceneType { get; protected set; } = SceneType.Unknown;
+    [SerializeField]
+    private AudioClip _sceneBGM;
 
     private int _currentLabelIndex = 0;
 
@@ -14,6 +16,7 @@ public class BaseScene : MonoBehaviour
         Managers.Init();
         InitDefaultPrefabs();
         Init();
+        Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
     }
 
     protected virtual void Init()
