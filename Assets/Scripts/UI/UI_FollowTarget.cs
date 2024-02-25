@@ -32,13 +32,10 @@ public class UI_FollowTarget : UI_Base
         _rt.position = Camera.main.WorldToScreenPoint(new Vector3(targetPos.x, targetPos.y, targetPos.z) + _offset);
     }
 
-    public void SetTarget(Transform target, Vector3? deltaPos = null)
+    public void SetTarget(Transform target, Vector3? offset = null)
     {
         Target = target;
-        if (_offset == Vector3.zero)
-        {
-            _offset = deltaPos ?? Vector3.zero;
-        }
+        _offset = offset ?? _offset;
 
         if (target != null && !_ignoreBoundsCenter)
         {
