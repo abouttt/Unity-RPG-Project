@@ -20,7 +20,7 @@ MonoBehaviour:
   <LimitLevel>k__BackingField: 1
   <Price>k__BackingField: 800
   <EquipmentType>k__BackingField: 5
-  <ItemPrefab>k__BackingField: {fileID: 134266, guid: 9a3460fac6eccf446a920db0922d6fae, type: 3}
+  <ItemPrefab>k__BackingField: {fileID: 134266, guid: f63536f45264a0646bb5eaae69564c37, type: 3}
   <HP>k__BackingField: 0
   <MP>k__BackingField: 0
   <SP>k__BackingField: 0

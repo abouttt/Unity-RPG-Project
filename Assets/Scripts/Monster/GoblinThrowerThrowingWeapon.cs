@@ -27,6 +27,10 @@ public class GoblinThrowerThrowingWeapon : MonoBehaviour
         {
             Player.Battle.TakeDamage(null, transform.position, _goblinThrowerData.Damage, false);
         }
+        else if (other.CompareTag("Shield"))
+        {
+            Player.Battle.HitShield();
+        }
 
         Managers.Resource.Destroy(gameObject);
     }

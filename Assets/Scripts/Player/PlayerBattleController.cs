@@ -90,8 +90,7 @@ public class PlayerBattleController : MonoBehaviour
         {
             if (IsRangeOfDefenseAngle(attackedPosition))
             {
-                Player.Animator.SetTrigger(_animIDDefenseDamaged);
-                Player.Status.SP -= _requiredDefenseSP;
+                HitShield();
                 return;
             }
             else
@@ -112,6 +111,17 @@ public class PlayerBattleController : MonoBehaviour
         {
             Player.Animator.Play("Damaged", -1, 0f);
         }
+    }
+
+    public void HitShield()
+    {
+        if (!IsDefending)
+        {
+            return;
+        }
+
+        Player.Animator.SetTrigger(_animIDDefenseDamaged);
+        Player.Status.SP -= _requiredDefenseSP;
     }
 
     public void ClearAttackInfo()
