@@ -964,6 +964,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character_Hero_Knight_Male_FixedScale
       objectReference: {fileID: 0}
+    - target: {fileID: 1428387009061096, guid: a96b63f27d072234bbc3d7818166e4eb, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4524380348334466, guid: a96b63f27d072234bbc3d7818166e4eb, type: 3}
       propertyPath: m_RootOrder
       value: 0
