@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Monster : MonoBehaviour
+public abstract class Monster : MonoBehaviour
 {
     public event Action HPChanged;
 

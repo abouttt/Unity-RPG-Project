@@ -19,7 +19,14 @@ public class Monster_IdleState : StateMachineBehaviour
     {
         if (_monster.PlayerDetect())
         {
-            _monster.Transition(BasicMonsterState.Tracking);
+            if (_monster.IsThePlayerInAttackRange())
+            {
+                _monster.Transition(BasicMonsterState.Attack);
+            }
+            else
+            {
+                _monster.Transition(BasicMonsterState.Tracking);
+            }
         }
     }
 }
