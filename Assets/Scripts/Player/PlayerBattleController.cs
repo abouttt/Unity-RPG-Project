@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class PlayerBattleController : MonoBehaviour
 {
     public bool IsAttacking { get; private set; } = false;
     public bool IsDefending { get; private set; } = false;
+    public bool IsDamaging { get; private set; } = false;
     public bool CanAttack { get; set; } = true;
     public bool CanDefense { get; set; } = true;
 
@@ -35,7 +35,7 @@ public class PlayerBattleController : MonoBehaviour
 
     private void Update()
     {
-        if (!Managers.Input.CursorLocked || Player.Movement.IsJumping)
+        if (!Managers.Input.CursorLocked || Player.Movement.IsJumping || Player.Movement.IsRolling)
         {
             if (IsDefending)
             {
@@ -78,6 +78,11 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
+        if (Player.Movement.IsRolling)
+        {
+            return;
+        }
+
         if (_canParry)
         {
             if (IsRangeOfDefenseAngle(attackedPosition))
@@ -101,6 +106,7 @@ public class PlayerBattleController : MonoBehaviour
             }
         }
 
+        IsDamaging = true;
         Player.Status.HP -= Mathf.Clamp(damage - Player.Status.Defense, 0, damage);
 
         if (Player.Status.HP <= 0)
@@ -124,12 +130,13 @@ public class PlayerBattleController : MonoBehaviour
         Player.Status.SP -= _requiredDefenseSP;
     }
 
-    public void ClearAttackInfo()
+    public void ClearBattleInfo()
     {
         _currentAttackComboCount = 0;
         _hasReservedAttack = false;
         _canParry = false;
         IsAttacking = false;
+        IsDamaging = false;
         Player.Animator.ResetTrigger(_animIDAttack);
         Player.Animator.ResetTrigger(_animIDParry);
     }

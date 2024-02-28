@@ -9,6 +9,7 @@ public class InputManager : GameControls.IPlayerActions
 
     // Button
     public bool Jump { get; private set; }
+    public bool Roll { get; private set; }
     public bool Interaction { get; private set; }
     public bool LockOn { get; private set; }
     public bool Attack { get; private set; }
@@ -49,6 +50,7 @@ public class InputManager : GameControls.IPlayerActions
     public void ResetActions()
     {
         _controls.Player.Jump.Reset();
+        _controls.Player.Roll.Reset();
         _controls.Player.Interaction.Reset();
         _controls.Player.LockOn.Reset();
         _controls.Player.Attack.Reset();
@@ -80,6 +82,11 @@ public class InputManager : GameControls.IPlayerActions
     public void OnJump(InputAction.CallbackContext context)
     {
         Jump = context.ReadValueAsButton();
+    }
+
+    public void OnRoll(InputAction.CallbackContext context)
+    {
+        Roll = context.ReadValueAsButton();
     }
 
     public void OnSprint(InputAction.CallbackContext context)

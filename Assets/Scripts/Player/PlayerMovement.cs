@@ -5,12 +5,14 @@ public class PlayerMovement : MonoBehaviour
     public static readonly string SaveKey = "SaveTransform";
 
     public bool CanMove { get; set; } = true;
+    public bool CanRotation { get; set; } = true;
     public bool CanSprint { get; set; } = true;
     public bool CanJump { get; set; } = true;
-    public bool CanRotation { get; set; } = true;
+    public bool CanRoll { get; set; } = true;
 
     public bool IsGrounded { get; private set; }
     public bool IsJumping { get; private set; }
+    public bool IsRolling { get; private set; }
 
     public float InitRotationYaw
     {
@@ -55,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
     private float _requiredSprintSP;
     [SerializeField]
     private float _requiredJumpSP;
+    [SerializeField]
+    private float _requiredRollSP;
 
     [Space(10)]
     [SerializeField]
@@ -93,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
     private readonly int _animIDJump = Animator.StringToHash("Jump");
     private readonly int _animIDFreeFall = Animator.StringToHash("FreeFall");
     private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+    private readonly int _animIDRoll = Animator.StringToHash("Roll");
 
     private void Awake()
     {
@@ -104,12 +109,19 @@ public class PlayerMovement : MonoBehaviour
         JumpAndGravity();
         GroundedCheck();
         Move();
+        Roll();
     }
 
     public void ClearJumpInfo()
     {
         _isJumpLand = false;
         IsJumping = false;
+    }
+
+    public void ClearRollInfo()
+    {
+        IsRolling = false;
+        Player.Animator.SetBool(_animIDRoll, false);
     }
 
     public string GetSaveData()
@@ -233,9 +245,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (!CanMove || Managers.Input.Move == Vector2.zero)
         {
-            targetSpeed = 0f;
-            sp = 0f;
+            if (!IsRolling)
+            {
+                targetSpeed = 0f;
+                sp = 0f;
+            }
         }
+
 
         var currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0f, _controller.velocity.z).magnitude;
         var finalSpeedChangeRate = Time.deltaTime * _speedChangeRate;
@@ -262,6 +278,7 @@ public class PlayerMovement : MonoBehaviour
             _animationBlend = 0f;
         }
 
+
         var inputDirection = new Vector3(Managers.Input.Move.x, 0f, Managers.Input.Move.y).normalized;
 
         if (CanRotation && Managers.Input.Move != Vector2.zero)
@@ -269,7 +286,9 @@ public class PlayerMovement : MonoBehaviour
             _lockOffRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
         }
 
-        if (Player.Camera.IsLockOn)
+        bool isLockOn = Player.Camera.IsLockOn;
+
+        if (isLockOn)
         {
             if (!_isPrevLockOn)
             {
@@ -277,7 +296,7 @@ public class PlayerMovement : MonoBehaviour
                 _isPrevLockOn = true;
             }
 
-            if (!Managers.Input.Sprint && !IsJumping)
+            if (!Managers.Input.Sprint && !IsJumping && !IsRolling)
             {
                 if (Managers.Input.Move != Vector2.zero)
                 {
@@ -287,7 +306,10 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                _lockOnRotation = _lockOffRotation;
+                if (Managers.Input.Move != Vector2.zero)
+                {
+                    _lockOnRotation = _lockOffRotation;
+                }
             }
         }
         else
@@ -300,12 +322,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // 회전.
-        float finalTargetRotation = Player.Camera.IsLockOn ? _lockOnRotation : _lockOffRotation;
+        float finalTargetRotation = isLockOn ? _lockOnRotation : _lockOffRotation;
         var rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, finalTargetRotation, ref _rotationVelocity, _rotationSmoothTime);
         transform.rotation = Quaternion.Euler(0f, rotation, 0f);
 
         // 움직임.
-        var targetDirection = Quaternion.Euler(0f, _lockOffRotation, 0.0f) * Vector3.forward;
+        var targetDirection = isLockOn && IsRolling ?
+            Quaternion.Euler(0f, _lockOnRotation, 0.0f) * Vector3.forward : Quaternion.Euler(0f, _lockOffRotation, 0.0f) * Vector3.forward;
         _controller.Move((targetDirection.normalized * _speed + new Vector3(0f, _verticalVelocity, 0f)) * Time.deltaTime);
         Player.Status.SP -= sp;
 
@@ -316,8 +339,32 @@ public class PlayerMovement : MonoBehaviour
         Player.Animator.SetFloat(_animIDMotionSpeed, _animationBlend);
     }
 
+    private void Roll()
+    {
+        if (Player.Status.SP <= 0)
+        {
+            return;
+        }
+
+        if (Managers.Input.Roll && CanRoll && !IsRolling && IsGrounded)
+        {
+            Player.Status.SP -= _requiredRollSP;
+            Player.Animator.SetBool(_animIDRoll, true);
+        }
+    }
+
     private void OnBeginJumpLand()
     {
         _isJumpLand = true;
+    }
+
+    private void OnBeginRoll()
+    {
+        ClearJumpInfo();
+        IsRolling = true;
+        CanJump = false;
+        CanRoll = false;
+        Player.Battle.CanAttack = false;
+        Player.Battle.CanDefense = false;
     }
 }

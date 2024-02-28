@@ -229,6 +229,7 @@ MonoBehaviour:
   _fallTimeout: 0.4
   _requiredSprintSP: 15
   _requiredJumpSP: 10
+  _requiredRollSP: 10
   _groundedOffset: 0.08
   _groundedRadius: 0.21
   _groundLayers:

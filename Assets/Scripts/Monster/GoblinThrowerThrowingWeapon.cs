@@ -25,6 +25,11 @@ public class GoblinThrowerThrowingWeapon : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (Player.Movement.IsRolling)
+            {
+                return;
+            }
+
             Player.Battle.TakeDamage(null, transform.position, _goblinThrowerData.Damage, false);
         }
         else if (other.CompareTag("Shield"))
