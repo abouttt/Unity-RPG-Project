@@ -252,7 +252,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-
         var currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0f, _controller.velocity.z).magnitude;
         var finalSpeedChangeRate = Time.deltaTime * _speedChangeRate;
         float speedOffset = 0.1f;
@@ -277,7 +276,6 @@ public class PlayerMovement : MonoBehaviour
         {
             _animationBlend = 0f;
         }
-
 
         var inputDirection = new Vector3(Managers.Input.Move.x, 0f, Managers.Input.Move.y).normalized;
 
@@ -310,6 +308,10 @@ public class PlayerMovement : MonoBehaviour
                 {
                     _lockOnRotation = _lockOffRotation;
                 }
+                else
+                {
+                    _lockOffRotation = _lockOnRotation;
+                }
             }
         }
         else
@@ -327,8 +329,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, rotation, 0f);
 
         // ¿òÁ÷ÀÓ.
-        var targetDirection = isLockOn && IsRolling ?
-            Quaternion.Euler(0f, _lockOnRotation, 0.0f) * Vector3.forward : Quaternion.Euler(0f, _lockOffRotation, 0.0f) * Vector3.forward;
+        var targetDirection = Quaternion.Euler(0f, _lockOffRotation, 0.0f) * Vector3.forward;
         _controller.Move((targetDirection.normalized * _speed + new Vector3(0f, _verticalVelocity, 0f)) * Time.deltaTime);
         Player.Status.SP -= sp;
 
