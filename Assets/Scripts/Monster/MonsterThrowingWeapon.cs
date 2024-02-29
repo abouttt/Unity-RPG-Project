@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GoblinThrowerThrowingWeapon : MonoBehaviour
+public class MonsterThrowingWeapon : MonoBehaviour
 {
     [SerializeField]
     private MonsterData _goblinThrowerData;
