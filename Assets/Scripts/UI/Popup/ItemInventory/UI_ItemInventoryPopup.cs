@@ -173,7 +173,7 @@ public class UI_ItemInventoryPopup : UI_Popup
     {
         for (int i = 0; i < capacity; i++)
         {
-            var go = Managers.Resource.Instantiate("UI_ItemSlot", parent);
+            var go = Managers.Resource.Instantiate("UI_ItemSlot.prefab", parent);
             go.GetComponent<UI_ItemSlot>().Index = i;
         }
     }

@@ -111,7 +111,7 @@ public class UI_NPCQuestPopup : UI_Popup
                 continue;
             }
 
-            var go = Managers.Resource.Instantiate("UI_NPCQuestTitleSubitem", GetRT((int)RectTransforms.QuestTitleSubitems), true);
+            var go = Managers.Resource.Instantiate("UI_NPCQuestTitleSubitem.prefab", GetRT((int)RectTransforms.QuestTitleSubitems), true);
             var questTitleSubitem = go.GetComponent<UI_NPCQuestTitleSubitem>();
             questTitleSubitem.SetQuestTitle(questData);
             questTitleSubitem.ToggleCompleteText(Managers.Quest.IsCompletable(questData));
@@ -191,7 +191,7 @@ public class UI_NPCQuestPopup : UI_Popup
 
         foreach (var element in questData.RewardItems)
         {
-            var go = Managers.Resource.Instantiate("UI_QuestRewardSlot", GetRT((int)RectTransforms.QuestRewardSlots), true);
+            var go = Managers.Resource.Instantiate("UI_QuestRewardSlot.prefab", GetRT((int)RectTransforms.QuestRewardSlots), true);
             go.GetComponent<UI_QuestRewardSlot>().SetReward(element.Key, element.Value);
         }
     }

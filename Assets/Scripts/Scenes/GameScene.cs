@@ -31,7 +31,7 @@ public class GameScene : BaseScene
             base.Init();
 
             Player.Init();
-            InitUIPackage("UIPackage_Game");
+            InitUIPackage("UIPackage_Game.prefab");
             Managers.Input.ToggleCursor(false);
 
             Player.Status.Gold += 10000;

@@ -62,7 +62,7 @@ MonoBehaviour:
   <InteractionMessage>k__BackingField: "\uC791\uB3D9"
   <InteractionKeyGuideDeltaPos>k__BackingField: {x: 0, y: 0, z: 0}
   <CanInteraction>k__BackingField: 1
-  <MinimapIconSpriteName>k__BackingField: PortalMinimapIcon
+  <MinimapIconSpriteName>k__BackingField: PortalMinimapIcon.sprite
   <MinimapIconName>k__BackingField: "\uD3EC\uD0C8"
   _loadScene: 0
 --- !u!1001 &5249989356138418490

@@ -10,7 +10,7 @@ public class MainMenuScene : BaseScene
 
         LoadResourcesAsync(SceneType, () =>
         {
-            InitUIPackage("UIPackage_MainMenu");
+            InitUIPackage("UIPackage_MainMenu.prefab");
             Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
             Managers.Input.ToggleCursor(true);
         });

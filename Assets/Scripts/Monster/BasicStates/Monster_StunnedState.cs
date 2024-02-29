@@ -17,7 +17,7 @@ public class Monster_StunnedState : StateMachineBehaviour
         _monster.NaveMeshAgentUpdateToggle(false);
 
         var bounds = _monster.Collider.bounds;
-        _stunnedEffect = Managers.Resource.Instantiate("StunnedEffect", bounds.center + new Vector3(0.0f, bounds.extents.y, 0.0f), null, true);
+        _stunnedEffect = Managers.Resource.Instantiate("StunnedEffect.prefab", bounds.center + new Vector3(0.0f, bounds.extents.y, 0.0f), null, true);
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

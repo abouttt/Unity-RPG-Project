@@ -36,7 +36,7 @@ public class MonsterData : ScriptableObject
             return;
         }
 
-        var go = Managers.Resource.Instantiate("FieldItem", null, true);
+        var go = Managers.Resource.Instantiate("FieldItem.prefab", null, true);
         var fieldItem = go.GetComponent<FieldItem>();
 
         foreach (var data in LootData)

@@ -18,52 +18,52 @@ MonoBehaviour:
   m_GUID: d86438c59006fae4191cc8ebb2567101
   m_SerializeEntries:
   - m_GUID: 77eece479ee79b846b494a0d9dc7b36b
-    m_Address: UI_ItemSlot
+    m_Address: UI_ItemSlot.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 0c6c902940efdc543a504eaf24721dc8
-    m_Address: UI_QuickSlot
+    m_Address: UI_QuickSlot.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 5f0910e5840cc014abeb160f6c694458
-    m_Address: UI_LootSubitem
+    m_Address: UI_LootSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 13249998d3dee444bb645a5a52e1d846
-    m_Address: UI_NPCMenuSubitem
+    m_Address: UI_NPCMenuSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: ba4bc9aab90c9b642804636f1857e7ad
-    m_Address: UI_ShopSlot
+    m_Address: UI_ShopSlot.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: b60716e3dda291f45be02661924c069c
-    m_Address: UI_QuestRewardSlot
+    m_Address: UI_QuestRewardSlot.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: c1159ecc224484343b36d6b088b3361f
-    m_Address: UI_QuestTitleSubitem
+    m_Address: UI_QuestTitleSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: c5133b168a3b39145a41805897a5a491
-    m_Address: UI_NPCQuestTitleSubitem
+    m_Address: UI_NPCQuestTitleSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 48c7b2a223f0499478cbaa3ffc4f96a4
-    m_Address: UI_QuestTrackerSubitem
+    m_Address: UI_QuestTrackerSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 822964928454eb54eb87fb0f40dde334
-    m_Address: UI_MonsterHPBar
+    m_Address: UI_MonsterHPBar.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game

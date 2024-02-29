@@ -18,27 +18,27 @@ MonoBehaviour:
   m_GUID: c9010e0a1b499054eaec4dd40248f47e
   m_SerializeEntries:
   - m_GUID: 1c98c2e35b694c24ebfd8a6ac0297151
-    m_Address: NPCMinimapIcon
+    m_Address: NPCMinimapIcon.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: f370575d72311de4c875699b047a3184
-    m_Address: PlayerMinimapIcon
+    m_Address: PlayerMinimapIcon.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 3ac26685c1e95004e9bde23fea2af139
-    m_Address: ItemMinimapIcon
+    m_Address: ItemMinimapIcon.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 7f70ededc820b6b4e8f164ce27f2d3fd
-    m_Address: PortalMinimapIcon
+    m_Address: PortalMinimapIcon.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 1664a27e00f8e874196dcad5310f5c25
-    m_Address: MonsterMinimapIcon
+    m_Address: MonsterMinimapIcon.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game

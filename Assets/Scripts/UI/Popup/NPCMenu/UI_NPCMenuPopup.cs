@@ -92,7 +92,7 @@ public class UI_NPCMenuPopup : UI_Popup
 
     private void AddSubitem(string text, UnityEngine.Events.UnityAction call)
     {
-        var go = Managers.Resource.Instantiate("UI_NPCMenuSubitem", GetObject((int)GameObjects.NPCMenuSubitems).transform, true);
+        var go = Managers.Resource.Instantiate("UI_NPCMenuSubitem.prefab", GetObject((int)GameObjects.NPCMenuSubitems).transform, true);
         var subitem = go.GetComponent<UI_NPCMenuSubitem>();
         subitem.SetEvent(text, call);
         _subitems.Add(subitem);

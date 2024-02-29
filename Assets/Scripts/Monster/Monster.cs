@@ -91,7 +91,7 @@ public abstract class Monster : MonoBehaviour
 
         if (Managers.Resource.HasResources)
         {
-            Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup("MonsterMinimapIcon", Data.MonsterName);
+            Managers.Resource.Instantiate("MinimapIcon.prefab", transform).GetComponent<MinimapIcon>().Setup("MonsterMinimapIcon.sprite", Data.MonsterName);
         }
     }
 
@@ -210,7 +210,7 @@ public abstract class Monster : MonoBehaviour
     {
         if (_hpBar == null)
         {
-            _hpBar = Managers.Resource.Instantiate("UI_MonsterHPBar",
+            _hpBar = Managers.Resource.Instantiate("UI_MonsterHPBar.prefab",
                 Managers.UI.Get<UI_AutoCanvas>().transform, true).GetComponent<UI_MonsterHPBar>();
             _hpBar.SetTarget(this);
         }

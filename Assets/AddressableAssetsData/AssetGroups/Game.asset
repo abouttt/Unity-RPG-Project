@@ -18,38 +18,38 @@ MonoBehaviour:
   m_GUID: f88537c2a0e8ae044ae6faf13419f74c
   m_SerializeEntries:
   - m_GUID: 4cdc642d2937e8641908baf8aca975ae
-    m_Address: UIPackage_Game
+    m_Address: UIPackage_Game.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - UI
     - Game
   - m_GUID: 8d1bd6f4caaab354fb97717e4a386e18
-    m_Address: PlayerPackage
+    m_Address: PlayerPackage.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 9678f9888c159a04f81a3ee7ab555acf
-    m_Address: FieldItem
+    m_Address: FieldItem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 067db487627e74843bd1ae92b8afa7c0
-    m_Address: QuestCompletableNotifier
+    m_Address: QuestCompletableNotifier.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: e3178602cefa12f4aa3782b42ba87987
-    m_Address: QuestPresenceNotifier
+    m_Address: QuestPresenceNotifier.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: 16573c81735a45744a5c7dc040102e32
-    m_Address: AttackSlash
+    m_Address: AttackSlash.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game
   - m_GUID: e52128cbd871bcf4dae7d6879306114a
-    m_Address: MinimapIcon
+    m_Address: MinimapIcon.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game

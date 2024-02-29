@@ -92,7 +92,7 @@ public class UI_ShopPopup : UI_Popup, IDropHandler
 
     private void CreateShopSlot(ItemData itemData)
     {
-        var go = Managers.Resource.Instantiate("UI_ShopSlot", GetObject((int)GameObjects.ShopSlots).transform, true);
+        var go = Managers.Resource.Instantiate("UI_ShopSlot.prefab", GetObject((int)GameObjects.ShopSlots).transform, true);
         var slot = go.GetComponent<UI_ShopSlot>();
         slot.SetItem(itemData);
         _shopSlots.Add(go);

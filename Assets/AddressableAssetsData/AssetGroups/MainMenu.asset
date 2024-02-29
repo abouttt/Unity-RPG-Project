@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 416019f7f06076b4d8d982e585a35f63
   m_SerializeEntries:
   - m_GUID: 72423eac555af6d40ad5092c6b89d753
-    m_Address: UIPackage_MainMenu
+    m_Address: UIPackage_MainMenu.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - MainMenu

@@ -34,7 +34,7 @@ public class UI_QuestTrackerFixed : UI_Base
         }
 
         var layoutTransform = Get<VerticalLayoutGroup>((int)Layouts.QuestTracker).transform;
-        var go = Managers.Resource.Instantiate("UI_QuestTrackerSubitem", layoutTransform, true);
+        var go = Managers.Resource.Instantiate("UI_QuestTrackerSubitem.prefab", layoutTransform, true);
         var tracker = go.GetComponent<UI_QuestTrackerSubitem>();
         tracker.SetQuest(quest);
         tracker.gameObject.SetActive(true);

@@ -93,7 +93,7 @@ public class UI_LootPopup : UI_Popup
 
     private void AddLootSubitem(FieldItem.Data fieldItemData, int index)
     {
-        var go = Managers.Resource.Instantiate("UI_LootSubitem", GetRT((int)RectTransforms.LootSubitems), true);
+        var go = Managers.Resource.Instantiate("UI_LootSubitem.prefab", GetRT((int)RectTransforms.LootSubitems), true);
         var lootSubitem = go.GetComponent<UI_LootSubitem>();
         lootSubitem.SetFieldItemData(fieldItemData, index);
         _lootSubitems.Add(lootSubitem, fieldItemData);

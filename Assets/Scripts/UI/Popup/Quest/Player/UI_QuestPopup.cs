@@ -125,7 +125,7 @@ public class UI_QuestPopup : UI_Popup
 
     private void OnQuestRegisterd(Quest quest)
     {
-        var go = Managers.Resource.Instantiate("UI_QuestTitleSubitem", GetRT((int)RectTransforms.QuestTitleSubitems), true);
+        var go = Managers.Resource.Instantiate("UI_QuestTitleSubitem.prefab", GetRT((int)RectTransforms.QuestTitleSubitems), true);
         var questTitleSubitem = go.GetComponent<UI_QuestTitleSubitem>();
         questTitleSubitem.SetQuestTitle(quest);
         _titleSubitems.Add(quest, questTitleSubitem);
@@ -195,7 +195,7 @@ public class UI_QuestPopup : UI_Popup
 
         foreach (var element in questData.RewardItems)
         {
-            var go = Managers.Resource.Instantiate("UI_QuestRewardSlot", GetRT((int)RectTransforms.QuestRewardSlots), true);
+            var go = Managers.Resource.Instantiate("UI_QuestRewardSlot.prefab", GetRT((int)RectTransforms.QuestRewardSlots), true);
             go.GetComponent<UI_QuestRewardSlot>().SetReward(element.Key, element.Value);
         }
     }

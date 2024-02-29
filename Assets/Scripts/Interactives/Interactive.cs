@@ -20,7 +20,7 @@ public abstract class Interactive : MonoBehaviour
         tag = "Interactive";
         if (Managers.Resource.HasResources)
         {
-            Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup(MinimapIconSpriteName, MinimapIconName);
+            Managers.Resource.Instantiate("MinimapIcon.prefab", transform).GetComponent<MinimapIcon>().Setup(MinimapIconSpriteName, MinimapIconName);
         }
     }
 }

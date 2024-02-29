@@ -22,7 +22,7 @@ public class UI_QuickInventoryFixed : UI_Base
     {
         for (int i = 0; i < Player.QuickInventory.Capacity; i++)
         {
-            var go = Managers.Resource.Instantiate("UI_QuickSlot", GetRT((int)RectTransforms.QuickSlots));
+            var go = Managers.Resource.Instantiate("UI_QuickSlot.prefab", GetRT((int)RectTransforms.QuickSlots));
             var quickSlot = go.GetComponent<UI_QuickSlot>();
             quickSlot.InitSlot(i);
         }

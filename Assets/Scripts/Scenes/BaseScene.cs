@@ -24,7 +24,7 @@ public class BaseScene : MonoBehaviour
         var eventSystem = FindObjectOfType(typeof(EventSystem));
         if (eventSystem == null)
         {
-            Managers.Resource.Instantiate("EventSystem");
+            Managers.Resource.Instantiate("EventSystem.prefab");
         }
     }
 

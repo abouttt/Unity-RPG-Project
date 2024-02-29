@@ -128,7 +128,7 @@ public class PlayerBattleController : MonoBehaviour
 
         Player.Animator.SetTrigger(_animIDDefenseDamaged);
         Player.Status.SP -= _requiredDefenseSP;
-        Managers.Resource.Instantiate("ShieldHit", Player.Root.GetEquipment(EquipmentType.Shield).transform.position, null, true);
+        Managers.Resource.Instantiate("ShieldHit.prefab", Player.Root.GetEquipment(EquipmentType.Shield).transform.position, null, true);
     }
 
     public void ClearBattleInfo()
@@ -214,7 +214,7 @@ public class PlayerBattleController : MonoBehaviour
         for (int i = 0; i < monsterCnt; i++)
         {
             _monsters[i].GetComponent<Monster>().TakeDamage(damage);
-            Managers.Resource.Instantiate("SwordHit", _monsters[i].bounds.center, null, true);
+            Managers.Resource.Instantiate("SwordHit.prefab", _monsters[i].bounds.center, null, true);
         }
 
         return monsterCnt > 0;
@@ -265,7 +265,7 @@ public class PlayerBattleController : MonoBehaviour
         var euler = transform.rotation.eulerAngles;
         euler.y += 90f;
         euler += _attackEffectDirection[_currentAttackComboCount];
-        Managers.Resource.Instantiate("AttackSlash",
+        Managers.Resource.Instantiate("AttackSlash.prefab",
             Player.Root.GetRoot(EquipmentType.Weapon).transform.position, Quaternion.Euler(euler), null, true);
     }
 }

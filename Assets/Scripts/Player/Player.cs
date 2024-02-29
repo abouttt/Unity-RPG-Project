@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
         QuickInventory = GetComponent<QuickInventory>();
         SkillTree = GetComponent<SkillTree>();
 
-        Managers.Resource.Instantiate("MinimapIcon", transform).GetComponent<MinimapIcon>().Setup("PlayerMinimapIcon", "플레이어", 1.3f);
+        Managers.Resource.Instantiate("MinimapIcon.prefab", transform).GetComponent<MinimapIcon>().Setup("PlayerMinimapIcon.sprite", "플레이어", 1.3f);
     }
 
     public static void Init()
@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
 
         UnityEngine.Camera.main.transform.position = Vector3.zero;
 
-        var playerPackagePrefab = Managers.Resource.Load<GameObject>("PlayerPackage");
+        var playerPackagePrefab = Managers.Resource.Load<GameObject>("PlayerPackage.prefab");
         GetPositionAndRotationYaw(out var position, out var yaw);
         playerPackagePrefab.FindChild("Player").transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
 

@@ -62,7 +62,7 @@ MonoBehaviour:
   <InteractionMessage>k__BackingField: "\uC90D\uAE30"
   <InteractionKeyGuideDeltaPos>k__BackingField: {x: 0, y: 1, z: 0}
   <CanInteraction>k__BackingField: 1
-  <MinimapIconSpriteName>k__BackingField: ItemMinimapIcon
+  <MinimapIconSpriteName>k__BackingField: ItemMinimapIcon.sprite
   <MinimapIconName>k__BackingField: "\uC544\uC774\uD15C"
   _items: []
 --- !u!1001 &7229735503604059923
