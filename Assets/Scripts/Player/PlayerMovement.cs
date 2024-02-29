@@ -107,10 +107,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        JumpAndGravity();
-        GroundedCheck();
-        Move();
-
         if (Managers.Input.Roll && !IsRolling)
         {
             _hasReservedRoll = true;
@@ -120,6 +116,10 @@ public class PlayerMovement : MonoBehaviour
         {
             Roll();
         }
+
+        JumpAndGravity();
+        GroundedCheck();
+        Move();
     }
 
     public void ClearJumpInfo()
@@ -225,7 +225,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (Managers.Input.Sprint && CanSprint)
+            if (Managers.Input.Sprint && CanSprint && !IsRolling)
             {
                 if (Player.Status.SP > 0f)
                 {
@@ -241,7 +241,7 @@ public class PlayerMovement : MonoBehaviour
                         targetSpeed = _sprintSpeed;
                     }
 
-                    if (IsGrounded && !IsJumping && !_isJumpLand)
+                    if (IsGrounded && !IsJumping && !_isJumpLand && !IsRolling)
                     {
                         sp = _requiredSprintSP * Time.deltaTime;
                     }
