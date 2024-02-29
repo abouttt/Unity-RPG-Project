@@ -13,7 +13,7 @@ public class Monster_DeadState : StateMachineBehaviour
 
         _monster.ResetAllTriggers();
         _monster.NaveMeshAgentUpdateToggle(false);
-        _monster.Collider.isTrigger = true;
+        _monster.Collider.enabled = false;
 
         if (_monster.IsLockOnTarget)
         {

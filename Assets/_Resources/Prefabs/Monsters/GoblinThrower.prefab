@@ -829,7 +829,7 @@ MonoBehaviour:
   <TrackingDistance>k__BackingField: 15
   <AttackDistance>k__BackingField: 8
   <RotationSmoothTime>k__BackingField: 10
-  <AttackDelayTime>k__BackingField: 1
+  <AttackDelayTime>k__BackingField: 1.5
   <AttackOffset>k__BackingField: {fileID: 0}
   <AttackRadius>k__BackingField: 0
   _rightHand: {fileID: 6051869775995454498}

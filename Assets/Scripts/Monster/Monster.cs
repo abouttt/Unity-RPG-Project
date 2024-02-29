@@ -99,7 +99,7 @@ public abstract class Monster : MonoBehaviour
     {
         CurrentHP = Data.MaxHP;
         OriginalPosition = transform.position;
-        Collider.isTrigger = false;
+        Collider.enabled = true;
         foreach (var collider in _lockOnTargetColliders)
         {
             collider.enabled = true;
