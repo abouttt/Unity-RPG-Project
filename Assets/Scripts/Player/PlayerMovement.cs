@@ -111,7 +111,7 @@ public class PlayerMovement : MonoBehaviour
         GroundedCheck();
         Move();
 
-        if (Managers.Input.Roll)
+        if (Managers.Input.Roll && !IsRolling)
         {
             _hasReservedRoll = true;
         }
