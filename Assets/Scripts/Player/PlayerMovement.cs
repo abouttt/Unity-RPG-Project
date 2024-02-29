@@ -363,6 +363,8 @@ public class PlayerMovement : MonoBehaviour
     {
         ClearJumpInfo();
         IsRolling = true;
+        CanMove = true;
+        CanRotation = true;
         CanJump = false;
         CanRoll = false;
         Player.Battle.CanAttack = false;
