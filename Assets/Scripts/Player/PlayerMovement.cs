@@ -83,10 +83,11 @@ public class PlayerMovement : MonoBehaviour
     private float _jumpTimeoutDelta;
     private float _fallTimeoutDelta;
 
+    private bool _isInit = false;
     private bool _isJumpLand;
     private bool _isJumpWithSprint;
     private bool _isPrevLockOn;
-    private bool _isInit = false;
+    private bool _hasReservedRoll;
 
     private CharacterController _controller;
 
@@ -109,7 +110,16 @@ public class PlayerMovement : MonoBehaviour
         JumpAndGravity();
         GroundedCheck();
         Move();
-        Roll();
+
+        if (Managers.Input.Roll)
+        {
+            _hasReservedRoll = true;
+        }
+
+        if (_hasReservedRoll)
+        {
+            Roll();
+        }
     }
 
     public void ClearJumpInfo()
@@ -342,16 +352,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void Roll()
     {
+        if (!CanRoll || !IsGrounded)
+        {
+            return;
+        }
+
+        _hasReservedRoll = false;
+
         if (Player.Status.SP <= 0)
         {
             return;
         }
 
-        if (Managers.Input.Roll && CanRoll && !IsRolling && IsGrounded)
-        {
-            Player.Status.SP -= _requiredRollSP;
-            Player.Animator.SetBool(_animIDRoll, true);
-        }
+        Player.Status.SP -= _requiredRollSP;
+        Player.Animator.SetBool(_animIDRoll, true);
     }
 
     private void OnBeginJumpLand()
