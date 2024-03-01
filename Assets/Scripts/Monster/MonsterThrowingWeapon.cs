@@ -34,7 +34,7 @@ public class MonsterThrowingWeapon : MonoBehaviour
         }
         else if (other.CompareTag("Shield"))
         {
-            Player.Battle.HitShield();
+            Player.Battle.HitShield(other.bounds.ClosestPoint(transform.position));
         }
 
         Managers.Resource.Destroy(gameObject);

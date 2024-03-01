@@ -83,7 +83,7 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        if (_canParry)
+        if (parry && _canParry)
         {
             if (IsRangeOfDefenseAngle(attackedPosition))
             {
@@ -119,7 +119,7 @@ public class PlayerBattleController : MonoBehaviour
         }
     }
 
-    public void HitShield()
+    public void HitShield(Vector3? hitPosition = null)
     {
         if (!IsDefending)
         {
@@ -128,7 +128,8 @@ public class PlayerBattleController : MonoBehaviour
 
         Player.Animator.SetTrigger(_animIDDefenseDamaged);
         Player.Status.SP -= _requiredDefenseSP;
-        Managers.Resource.Instantiate("ShieldHit.prefab", Player.Root.GetEquipment(EquipmentType.Shield).transform.position, null, true);
+        var pos = hitPosition is not null ? hitPosition.Value : Player.Root.GetEquipment(EquipmentType.Shield).transform.position;
+        Managers.Resource.Instantiate("ShieldHit.prefab", pos, null, true);
     }
 
     public void ClearBattleInfo()
