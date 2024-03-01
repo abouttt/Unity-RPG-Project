@@ -266,6 +266,6 @@ public class PlayerBattleController : MonoBehaviour
         euler.y += 90f;
         euler += _attackEffectDirection[_currentAttackComboCount];
         Managers.Resource.Instantiate("AttackSlash.prefab",
-            Player.Root.GetRoot(EquipmentType.Weapon).transform.position, Quaternion.Euler(euler), null, true);
+            Player.Root.GetRoot(EquipmentType.Weapon).position, Quaternion.Euler(euler), null, true);
     }
 }

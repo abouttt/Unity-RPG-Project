@@ -274,6 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7768df37c0005504184d89cb8ff03582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Hand_R: {fileID: 1461814639809443017}
   _attackOffset: {fileID: 8837614394007568240}
   _defenseAngle: 45
   _requiredAttackSP: 15
