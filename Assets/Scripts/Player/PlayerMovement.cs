@@ -364,6 +364,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        CanRotation = true;
         Player.Status.SP -= _requiredRollSP;
         Player.Animator.SetBool(_animIDRoll, true);
     }
