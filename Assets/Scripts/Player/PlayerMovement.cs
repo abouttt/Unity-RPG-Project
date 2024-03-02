@@ -107,19 +107,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (Managers.Input.Roll && !IsRolling)
+        if (Managers.Input.Roll)
         {
             _hasReservedRoll = true;
-        }
-
-        if (_hasReservedRoll)
-        {
-            Roll();
         }
 
         JumpAndGravity();
         GroundedCheck();
         Move();
+
+        if (_hasReservedRoll)
+        {
+            Roll();
+        }
     }
 
     public void ClearJumpInfo()
@@ -377,8 +377,8 @@ public class PlayerMovement : MonoBehaviour
     {
         ClearJumpInfo();
         IsRolling = true;
-        CanMove = true;
-        CanRotation = true;
+        CanMove = false;
+        CanRotation = false;
         CanJump = false;
         CanRoll = false;
         Player.Battle.CanAttack = false;

@@ -242,6 +242,7 @@ public class PlayerBattleController : MonoBehaviour
 
         CanAttack = true;
         Player.Movement.CanRoll = true;
+        Player.Movement.CanRotation = true;
     }
 
     private void OnEnableWeapon()
