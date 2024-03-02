@@ -241,7 +241,7 @@ public class PlayerMovement : MonoBehaviour
                         targetSpeed = _sprintSpeed;
                     }
 
-                    if (IsGrounded && !IsJumping && !_isJumpLand && !IsRolling)
+                    if (IsGrounded && !IsJumping && !_isJumpLand)
                     {
                         sp = _requiredSprintSP * Time.deltaTime;
                     }

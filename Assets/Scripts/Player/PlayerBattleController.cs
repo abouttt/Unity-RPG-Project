@@ -214,8 +214,10 @@ public class PlayerBattleController : MonoBehaviour
 
         for (int i = 0; i < monsterCnt; i++)
         {
-            _monsters[i].GetComponent<Monster>().TakeDamage(damage);
-            Managers.Resource.Instantiate("SwordHit.prefab", _monsters[i].bounds.center, null, true);
+            if (_monsters[i].GetComponent<Monster>().TakeDamage(damage))
+            {
+                Managers.Resource.Instantiate("SwordHit.prefab", _monsters[i].bounds.center, null, true);
+            }
         }
 
         return monsterCnt > 0;
@@ -248,7 +250,7 @@ public class PlayerBattleController : MonoBehaviour
     private void OnEnableWeapon()
     {
         CreateAttackEffect();
-        GiveDamageToMonster(_attackOffset.transform.position,
+        GiveDamageToMonster(_attackOffset.position,
             Player.EquipmentInventory.GetItem(EquipmentType.Weapon).EquipmentData.AttackRadius, Player.Status.Damage);
     }
 

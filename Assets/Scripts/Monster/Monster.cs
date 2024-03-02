@@ -99,7 +99,7 @@ public abstract class Monster : MonoBehaviour
     {
         CurrentHP = Data.MaxHP;
         OriginalPosition = transform.position;
-        Collider.enabled = true;
+        Collider.isTrigger = false;
         foreach (var collider in _lockOnTargetColliders)
         {
             collider.enabled = true;
@@ -118,11 +118,11 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public bool TakeDamage(int damage)
     {
         if (CurrentHP <= 0)
         {
-            return;
+            return false;
         }
 
         ShowHPBar();
@@ -139,6 +139,8 @@ public abstract class Monster : MonoBehaviour
         {
             Transition(BasicMonsterState.Damaged);
         }
+
+        return true;
     }
 
     public void Stunned()
