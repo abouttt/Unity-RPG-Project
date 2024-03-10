@@ -56508,7 +56508,7 @@ MonoBehaviour:
   <NPCID>k__BackingField: FEDDLER
   <Name>k__BackingField: "\uC7A1\uC0C1\uC778"
   <Conversation>k__BackingField: 1
-  <Shop>k__BackingField: 0
+  <Shop>k__BackingField: 1
   _conversationScripts:
   - "\uC548\uB155\uD558\uC138\uC5EC \uC774\uAC83 \uC800\uAC83 \uD314\uACE0\uC788\uC2B5\uB2C8\uB2E4~"
   - "\uAF2D \uB458\uB7EC\uBCF4\uACE0 \uAC00\uC138\uC694~"

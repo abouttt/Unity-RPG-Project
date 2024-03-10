@@ -35,6 +35,7 @@ public class GameScene : BaseScene
             Managers.Input.ToggleCursor(false);
 
             Player.Status.Gold += 10000;
+            Player.Status.SkillPoint += 3;
 
             StartCoroutine(GameStart());
         }

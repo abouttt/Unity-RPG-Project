@@ -87,11 +87,6 @@ public abstract class Skill : IUsable
 
     public int ResetSkill()
     {
-        if (IsLock)
-        {
-            return 0;
-        }
-
         int skillPoint = 0;
         foreach (var element in _children)
         {

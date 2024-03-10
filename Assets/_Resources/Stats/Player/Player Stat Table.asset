@@ -31,6 +31,12 @@ MonoBehaviour:
     XP: 300
     Damage: 9
     Defense: 2
+  - HP: 150
+    MP: 150
+    SP: 150
+    XP: 350
+    Damage: 10
+    Defense: 2
   - HP: 160
     MP: 160
     SP: 160
@@ -73,9 +79,3 @@ MonoBehaviour:
     XP: 1000
     Damage: 23
     Defense: 9
-  - HP: 300
-    MP: 300
-    SP: 300
-    XP: 1100
-    Damage: 25
-    Defense: 10

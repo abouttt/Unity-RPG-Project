@@ -233,6 +233,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3276994012154927125, guid: 5f06a006feede73438f1101eb1006baf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7100675823436263401, guid: 5f06a006feede73438f1101eb1006baf, type: 3}
       propertyPath: m_Name
       value: UI_InteractionKeyGuide
