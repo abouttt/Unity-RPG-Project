@@ -15,61 +15,71 @@ MonoBehaviour:
   m_GroupName: UI
   m_Data:
     m_SerializedData: []
-  m_GUID: d86438c59006fae4191cc8ebb2567101
+  m_GUID: 5fac1a5fc32f9c04796619f875e18e98
   m_SerializeEntries:
-  - m_GUID: 77eece479ee79b846b494a0d9dc7b36b
+  - m_GUID: 72650efd6a89d8a41bbc9bbbe372bff5
     m_Address: UI_ItemSlot.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 0c6c902940efdc543a504eaf24721dc8
-    m_Address: UI_QuickSlot.prefab
+    - Game_UI
+  - m_GUID: a4b97f955f6ddd643a6eddd4a5796804
+    m_Address: UI_InteractionKeyGuide.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 5f0910e5840cc014abeb160f6c694458
+    - Game_UI
+  - m_GUID: adc5a5341c00efa4a9cb46496b696233
     m_Address: UI_LootSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 13249998d3dee444bb645a5a52e1d846
+    - Game_UI
+  - m_GUID: c7cd4ecd1d3559d40946222ead6106ab
+    m_Address: UI_QuickSlot.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_UI
+  - m_GUID: ef0d25da5245b0e418b867b2a215967d
     m_Address: UI_NPCMenuSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: ba4bc9aab90c9b642804636f1857e7ad
+    - Game_UI
+  - m_GUID: 54430d2fad46497449fd5f90907bc32c
     m_Address: UI_ShopSlot.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: b60716e3dda291f45be02661924c069c
+    - Game_UI
+  - m_GUID: 3fd1f31c0935c5645a6b6e9bc7f81df0
     m_Address: UI_QuestRewardSlot.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: c1159ecc224484343b36d6b088b3361f
-    m_Address: UI_QuestTitleSubitem.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Game
-  - m_GUID: c5133b168a3b39145a41805897a5a491
+    - Game_UI
+  - m_GUID: 92235c7b58da34d4b8181f8a42cccf42
     m_Address: UI_NPCQuestTitleSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 48c7b2a223f0499478cbaa3ffc4f96a4
+    - Game_UI
+  - m_GUID: 003ab1a9949907e41b3ffd0ab37ed1b2
+    m_Address: UI_QuestTitleSubitem.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_UI
+  - m_GUID: 3d1f9e321fa23fb4991b44f2b63ba96b
     m_Address: UI_QuestTrackerSubitem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 822964928454eb54eb87fb0f40dde334
+    - Game_UI
+  - m_GUID: 2228c9853b9f707438c5d8e3e7164e68
+    m_Address: UI_LockOnTargetImage.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_UI
+  - m_GUID: 1cfc38430a008b84ba8ecd9a6bc1efaf
     m_Address: UI_MonsterHPBar.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
+    - Game_UI
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
+  m_Settings: {fileID: 11400000, guid: 79f589af2fcff9e498e8cd6b33c6d8ce, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 143cbb506886a63469cb9ecc45730919, type: 2}
-    - {fileID: 11400000, guid: 557eab218e079a64f9b6fa4d8cdf5582, type: 2}
+    - {fileID: 11400000, guid: bf3249881d229594e9e62688e368c16c, type: 2}
+    - {fileID: 11400000, guid: bdd42012b857439478b4fb1452dfc57e, type: 2}

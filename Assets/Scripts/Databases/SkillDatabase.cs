@@ -14,29 +14,33 @@ public class SkillDatabase : SingletonScriptableObject<SkillDatabase>
     [SerializeField]
     private List<SkillData> _skills;
 
-    public SkillData FindSkillBy(string id) => _skills.FirstOrDefault(q => q.SkillID.Equals(id));
+    public SkillData FindSkillBy(string id)
+    {
+        return _skills.FirstOrDefault(skill => skill.SkillID.Equals(id));
+    }
 
 #if UNITY_EDITOR
     [ContextMenu("Find Skills")]
-    private void FindSkills()
+    public void FindSkills()
     {
         FindSkillsBy<SkillData>();
     }
 
     private void FindSkillsBy<T>() where T : SkillData
     {
-        _skills = new List<SkillData>();
-        string[] guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
-        foreach (string guid in guids)
+        _skills = new();
+
+        var guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
+        foreach (var guid in guids)
         {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            var skill = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+            var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            T skill = AssetDatabase.LoadAssetAtPath<T>(assetPath);
 
             _skills.Add(skill);
-
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
         }
+
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssets();
     }
 #endif
 }

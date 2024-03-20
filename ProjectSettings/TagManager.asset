@@ -4,25 +4,23 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Interactive
-  - MinimapCamera
   - Shield
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - Player
-  - Ignore Camera Collision
-  - Obstacle
-  - LockOnTarget
-  - Monster
-  - Minimap
   - Environment
-  - MonsterWeapon
+  - LockOnTarget
+  - InteractionDetector
+  - Interactive
+  - Minimap
+  - Weapon
   - Shield
+  - Projectile
+  - Enemy
   - 
   - 
   - 

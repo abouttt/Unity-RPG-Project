@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 public class UIManager
 {
     public int ActivePopupCount => _activePopups.Count;
-    public bool IsOnSelfishPopup { get; private set; }
+    public bool IsShowedSelfishPopup { get; private set; }
 
     private readonly Dictionary<UIType, Transform> _uiRoots = new();
     private readonly Dictionary<Type, UI_Base> _uiObjects = new();
@@ -18,18 +18,12 @@ public class UIManager
         _root = Util.FindOrInstantiate("UI_Root").transform;
 
         var names = Enum.GetNames(typeof(UIType));
-        var values = Enum.GetValues(typeof(UIType));
+        var types = Enum.GetValues(typeof(UIType));
         for (int i = 0; i < names.Length; i++)
         {
-            _uiRoots.Add((UIType)values.GetValue(i), new GameObject($"UI_{names[i]}_Root").transform);
-            _uiRoots[(UIType)values.GetValue(i)].SetParent(_root);
+            _uiRoots.Add((UIType)types.GetValue(i), new GameObject($"UI_{names[i]}_Root").transform);
+            _uiRoots[(UIType)types.GetValue(i)].SetParent(_root);
         }
-    }
-
-    public bool Register<T>() where T : UI_Base
-    {
-        var ui = Object.FindObjectOfType<T>();
-        return Register<T>(ui);
     }
 
     public bool Register<T>(UI_Base ui) where T : UI_Base
@@ -62,9 +56,9 @@ public class UIManager
             canvas.sortingOrder = (int)ui.UIType;
         }
 
-        if (ui.UIType is UIType.Popup)
+        if (ui.UIType == UIType.Popup)
         {
-            var popup = ui as UI_Popup;
+            UI_Popup popup = ui as UI_Popup;
             InitPopup(popup);
             popup.gameObject.SetActive(false);
         }
@@ -111,7 +105,7 @@ public class UIManager
         return _uiRoots[uiType];
     }
 
-    public bool IsOn<T>() where T : UI_Base
+    public bool IsShowed<T>() where T : UI_Base
     {
         if (_uiObjects.TryGetValue(typeof(T), out var ui))
         {
@@ -125,15 +119,11 @@ public class UIManager
     {
         if (_uiObjects.TryGetValue(typeof(T), out var ui))
         {
-            if (ui.gameObject.activeSelf)
-            {
-                return ui as T;
-            }
-
-            if (ui.UIType is UIType.Popup)
+            if (ui.UIType == UIType.Popup)
             {
                 var popup = ui as UI_Popup;
-                if (IsOnSelfishPopup && !popup.IgnoreSelfish)
+
+                if (IsShowedSelfishPopup && !popup.IgnoreSelfish)
                 {
                     return null;
                 }
@@ -141,7 +131,7 @@ public class UIManager
                 if (popup.IsSelfish)
                 {
                     CloseAll(UIType.Popup);
-                    IsOnSelfishPopup = true;
+                    IsShowedSelfishPopup = true;
                 }
 
                 _activePopups.AddFirst(popup);
@@ -159,12 +149,13 @@ public class UIManager
     {
         if (_uiObjects.TryGetValue(typeof(T), out var ui))
         {
-            if (ui.UIType is UIType.Popup)
+            if (ui.UIType == UIType.Popup)
             {
                 var popup = ui as UI_Popup;
+
                 if (popup.IsSelfish)
                 {
-                    IsOnSelfishPopup = false;
+                    IsShowedSelfishPopup = false;
                 }
 
                 _activePopups.Remove(popup);
@@ -176,7 +167,7 @@ public class UIManager
 
     public void ShowOrClose<T>() where T : UI_Base
     {
-        if (IsOn<T>())
+        if (IsShowed<T>())
         {
             Close<T>();
         }
@@ -188,14 +179,14 @@ public class UIManager
 
     public void CloseAll(UIType type)
     {
-        if (type is UIType.Popup)
+        if (type == UIType.Popup)
         {
             foreach (var popup in _activePopups)
             {
                 popup.gameObject.SetActive(false);
             }
 
-            IsOnSelfishPopup = false;
+            IsShowedSelfishPopup = false;
             _activePopups.Clear();
         }
         else
@@ -215,10 +206,12 @@ public class UIManager
         if (ActivePopupCount > 0)
         {
             var popup = _activePopups.First.Value;
+
             if (popup.IsSelfish)
             {
-                IsOnSelfishPopup = false;
+                IsShowedSelfishPopup = false;
             }
+
             _activePopups.RemoveFirst();
             popup.gameObject.SetActive(false);
         }
@@ -234,10 +227,10 @@ public class UIManager
             }
         }
 
+        IsShowedSelfishPopup = false;
         _uiRoots.Clear();
         _uiObjects.Clear();
         _activePopups.Clear();
-        IsOnSelfishPopup = false;
     }
 
     private void InitPopup(UI_Popup popup)
@@ -253,14 +246,14 @@ public class UIManager
 
         popup.Showed += () =>
         {
-            Managers.Input.ToggleCursor(true);
+            Managers.Input.CursorLocked = false;
         };
 
         popup.Closed += () =>
         {
             if (_activePopups.Count == 0)
             {
-                Managers.Input.ToggleCursor(false);
+                Managers.Input.CursorLocked = true;
             }
         };
     }

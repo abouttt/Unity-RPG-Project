@@ -9,15 +9,15 @@ public class UI_LootPopup : UI_Popup
         LootSubitems,
     }
 
+    enum Texts
+    {
+        LootAllText,
+    }
+
     enum Buttons
     {
         CloseButton,
         LootAllButton,
-    }
-
-    enum Texts
-    {
-        LootAllText,
     }
 
     [SerializeField]
@@ -30,12 +30,12 @@ public class UI_LootPopup : UI_Popup
         base.Init();
 
         BindRT(typeof(RectTransforms));
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
 
+        GetText((int)Texts.LootAllText).text = $"[{Managers.Input.GetBindingPath("Interaction")}] ¸ðµÎ È¹µæ";
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_LootPopup>);
         GetButton((int)Buttons.LootAllButton).onClick.AddListener(AddAllItemToItemInventory);
-        GetText((int)Texts.LootAllText).text = $"[{Managers.Input.GetBindingPath("Interaction")}] ¸ðµÎ È¹µæ";
     }
 
     private void Start()
@@ -70,7 +70,7 @@ public class UI_LootPopup : UI_Popup
 
         for (int i = 0; i < fieldItem.Items.Count; i++)
         {
-            if (fieldItem.Items[i] is not null)
+            if (fieldItem.Items[i] != null)
             {
                 AddLootSubitem(fieldItem.Items[i], i);
             }
@@ -94,9 +94,9 @@ public class UI_LootPopup : UI_Popup
     private void AddLootSubitem(FieldItem.Data fieldItemData, int index)
     {
         var go = Managers.Resource.Instantiate("UI_LootSubitem.prefab", GetRT((int)RectTransforms.LootSubitems), true);
-        var lootSubitem = go.GetComponent<UI_LootSubitem>();
-        lootSubitem.SetFieldItemData(fieldItemData, index);
-        _lootSubitems.Add(lootSubitem, fieldItemData);
+        var subitem = go.GetComponent<UI_LootSubitem>();
+        subitem.SetFieldItemData(fieldItemData, index);
+        _lootSubitems.Add(subitem, fieldItemData);
     }
 
     private void RemoveLootSubitem(UI_LootSubitem lootSubitem)
@@ -112,7 +112,7 @@ public class UI_LootPopup : UI_Popup
 
     private void TrackingFieldItem()
     {
-        var distance = Vector3.Distance(Player.GameObject.transform.position, _fieldItemRef.transform.position);
+        float distance = Vector3.Distance(Player.Transform.position, _fieldItemRef.transform.position);
         if (distance >= _trackingDistance)
         {
             Managers.UI.Close<UI_LootPopup>();
@@ -129,12 +129,17 @@ public class UI_LootPopup : UI_Popup
 
     private void Clear()
     {
-        foreach (var lootItem in _lootSubitems)
+        foreach (var element in _lootSubitems)
         {
-            Managers.Resource.Destroy(lootItem.Key.gameObject);
+            Managers.Resource.Destroy(element.Key.gameObject);
         }
 
         _lootSubitems.Clear();
-        _fieldItemRef = null;
+
+        if (_fieldItemRef != null)
+        {
+            _fieldItemRef.IsInteracted = false;
+            _fieldItemRef = null;
+        }
     }
 }

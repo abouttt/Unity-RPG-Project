@@ -6,6 +6,7 @@ public class BaseScene : MonoBehaviour
 {
     [field: SerializeField]
     public SceneType SceneType { get; protected set; } = SceneType.Unknown;
+
     [SerializeField]
     private AudioClip _sceneBGM;
 
@@ -14,24 +15,33 @@ public class BaseScene : MonoBehaviour
     private void Awake()
     {
         Managers.Init();
-        InitDefaultPrefabs();
         Init();
         Managers.Sound.Play(_sceneBGM, SoundType.Bgm);
     }
 
     protected virtual void Init()
     {
-        var eventSystem = FindObjectOfType(typeof(EventSystem));
-        if (eventSystem == null)
+        if (FindObjectOfType(typeof(EventSystem)) == null)
         {
             Managers.Resource.Instantiate("EventSystem.prefab");
         }
     }
 
+    protected void InstantiatePackage(string packageName)
+    {
+        var package = Managers.Resource.Instantiate(packageName);
+        package.transform.DetachChildren();
+        Destroy(package);
+    }
+
+    private void OnDestroy()
+    {
+        Managers.Clear();
+    }
+
     protected void LoadResourcesAsync(SceneType sceneType, Action callback = null)
     {
-        var loadResourceLabels = SceneSetting.GetInstance.LoadResourceLabels[sceneType];
-
+        var loadResourceLabels = SceneSettings.GetInstance.LoadResourceLabels[sceneType];
         if (loadResourceLabels == null || loadResourceLabels.Length == 0)
         {
             return;
@@ -50,25 +60,5 @@ public class BaseScene : MonoBehaviour
                 LoadResourcesAsync(sceneType, callback);
             }
         });
-    }
-
-    protected void InitUIPackage(string packageName)
-    {
-        var UIPackage = Managers.Resource.Instantiate(packageName);
-        UIPackage.transform.DetachChildren();
-        Destroy(UIPackage);
-    }
-
-    private void InitDefaultPrefabs()
-    {
-        foreach (var prefab in SceneSetting.GetInstance.DefaultPrefabs)
-        {
-            Instantiate(prefab);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        Managers.Clear();
     }
 }

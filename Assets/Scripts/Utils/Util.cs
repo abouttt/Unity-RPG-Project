@@ -1,6 +1,5 @@
 using System.Linq;
 using UnityEngine;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public static class Util
 {
@@ -62,8 +61,8 @@ public static class Util
 
     public static string GetLastSlashString(string str)
     {
-        var result = str;
-        var index = str.LastIndexOf('/');
+        string result = str;
+        int index = str.LastIndexOf('/');
         if (index >= 0)
         {
             result = str[(index + 1)..];

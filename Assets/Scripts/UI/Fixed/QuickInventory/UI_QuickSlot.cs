@@ -40,7 +40,7 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
     public void RefreshSlot()
     {
         var usable = Player.QuickInventory.GetUsable(Index);
-        if (usable is null)
+        if (usable == null)
         {
             Clear();
         }
@@ -68,7 +68,7 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
                 if (item is CountableItem countableItem)
                 {
                     item.ItemChanged += RefreshCountText;
-                    item.ItemChanged += CheckItemDestroyed;
+                    item.ItemChanged += IsItemDestroyed;
                 }
 
                 if (item.Data is ICooldownable cooldownable)
@@ -81,7 +81,7 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
             {
                 SetObject(usable, skill.Data.SkillImage);
 
-                skill.SkillChanged += CheckSkillLocked;
+                skill.SkillChanged += IsSkillLocked;
 
                 if (skill.Data is ICooldownable cooldownable)
                 {
@@ -97,7 +97,7 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
         if (ObjectRef is Item item)
         {
             item.ItemChanged -= RefreshCountText;
-            item.ItemChanged -= CheckItemDestroyed;
+            item.ItemChanged -= IsItemDestroyed;
 
             if (item.Data is ICooldownable cooldownable)
             {
@@ -106,7 +106,7 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
         }
         else if (ObjectRef is Skill skill)
         {
-            skill.SkillChanged -= CheckSkillLocked;
+            skill.SkillChanged -= IsSkillLocked;
 
             if (skill.Data is ICooldownable cooldownable)
             {
@@ -115,7 +115,7 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
         }
 
         base.Clear();
-        GetText((int)Texts.CountText).enabled = false;
+        GetText((int)Texts.CountText).gameObject.SetActive(false);
         Get<UI_CooldownImage>((int)CooldownImages.CooldownImage).Clear();
     }
 
@@ -123,16 +123,16 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
     {
         if (ObjectRef is CountableItem countableItem && countableItem.CurrentCount > 1)
         {
-            GetText((int)Texts.CountText).enabled = true;
+            GetText((int)Texts.CountText).gameObject.SetActive(true);
             GetText((int)Texts.CountText).text = countableItem.CurrentCount.ToString();
         }
         else
         {
-            GetText((int)Texts.CountText).enabled = false;
+            GetText((int)Texts.CountText).gameObject.SetActive(false);
         }
     }
 
-    private void CheckItemDestroyed()
+    private void IsItemDestroyed()
     {
         if (ObjectRef is Item item && item.IsDestroyed)
         {
@@ -140,7 +140,7 @@ public class UI_QuickSlot : UI_BaseSlot, IDropHandler
         }
     }
 
-    private void CheckSkillLocked()
+    private void IsSkillLocked()
     {
         if (ObjectRef is Skill skill && skill.IsLock)
         {

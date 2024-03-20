@@ -1,37 +1,53 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerBattleController : MonoBehaviour
 {
     public bool IsAttacking { get; private set; } = false;
+    public bool IsParrying { get; private set; } = false;
     public bool IsDefending { get; private set; } = false;
     public bool IsDamaging { get; private set; } = false;
     public bool CanAttack { get; set; } = true;
+    public bool CanParry { get; set; } = true;
     public bool CanDefense { get; set; } = true;
 
     [SerializeField]
-    private Transform _attackOffset;
-    [SerializeField]
     private float _defenseAngle;
+
     [SerializeField]
     private float _requiredAttackSP;
+
     [SerializeField]
     private float _requiredParrySP;
+
     [SerializeField]
     private float _requiredDefenseSP;
-    [SerializeField]
-    private List<Vector3> _attackEffectDirection;
-
-    private int _currentAttackComboCount = 0;
-    private bool _hasReservedAttack = false;
-    private bool _canParry = false;
 
     private readonly Collider[] _monsters = new Collider[10];
 
     private readonly int _animIDAttack = Animator.StringToHash("Attack");
     private readonly int _animIDParry = Animator.StringToHash("Parry");
     private readonly int _animIDDefense = Animator.StringToHash("Defense");
-    private readonly int _animIDDefenseDamaged = Animator.StringToHash("DefenseDamaged");
+    private readonly int _animIDDamaged = Animator.StringToHash("Damaged");
+
+    private int _currentAttackComboCount;
+    private bool _hasReservedAttack = false;
+    private bool _isParryable = false;
+
+    private Weapon _weapon;
+
+    private void Awake()
+    {
+        Player.Root.EquipmentChanged += (type) =>
+        {
+            if (type == EquipmentType.Weapon)
+            {
+                if (Player.EquipmentInventory.IsEquipped(EquipmentType.Weapon))
+                {
+                    _weapon = Player.Root.GetEquipment(EquipmentType.Weapon).GetComponent<Weapon>();
+                }
+            }
+        };
+    }
 
     private void Update()
     {
@@ -45,7 +61,7 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        if (Managers.Input.Attack && Player.Root.IsEquip(EquipmentType.Weapon))
+        if (Managers.Input.Attack && Player.EquipmentInventory.IsEquipped(EquipmentType.Weapon))
         {
             _hasReservedAttack = true;
         }
@@ -56,18 +72,21 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        if (Managers.Input.Defense && Player.Root.IsEquip(EquipmentType.Shield))
+        if (Player.EquipmentInventory.IsEquipped(EquipmentType.Shield))
         {
-            Defense();
-        }
-        else if (IsDefending)
-        {
-            OffDefense();
-        }
+            if (Managers.Input.Defense)
+            {
+                Defense();
+            }
+            else if (IsDefending)
+            {
+                OffDefense();
+            }
 
-        if (Managers.Input.Parry && Player.Root.IsEquip(EquipmentType.Shield))
-        {
-            Parry();
+            if (Managers.Input.Parry)
+            {
+                Parry();
+            }
         }
     }
 
@@ -83,11 +102,13 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        if (parry && _canParry)
+        if (parry && _isParryable)
         {
             if (IsRangeOfDefenseAngle(attackedPosition))
             {
                 monster.Stunned();
+                Managers.Resource.Instantiate(
+                    "ShieldHit.prefab", Player.Root.GetEquipment(EquipmentType.Shield).transform.position, null, true);
                 return;
             }
         }
@@ -116,6 +137,7 @@ public class PlayerBattleController : MonoBehaviour
         else
         {
             Player.Animator.Play("Damaged", -1, 0f);
+            Player.Animator.SetTrigger(_animIDDamaged);
         }
     }
 
@@ -126,21 +148,20 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        Player.Animator.SetTrigger(_animIDDefenseDamaged);
+        Player.Animator.Play("DefenseDamaged", -1, 0f);
         Player.Status.SP -= _requiredDefenseSP;
-        var pos = hitPosition is not null ? hitPosition.Value : Player.Root.GetEquipment(EquipmentType.Shield).transform.position;
+        var pos = hitPosition != null ? hitPosition.Value : Player.Root.GetEquipment(EquipmentType.Shield).transform.position;
         Managers.Resource.Instantiate("ShieldHit.prefab", pos, null, true);
     }
 
-    public void ClearBattleInfo()
+    public void Clear()
     {
+        IsAttacking = false;
+        IsParrying = false;
+        IsDamaging = false;
         _currentAttackComboCount = 0;
         _hasReservedAttack = false;
-        _canParry = false;
-        IsAttacking = false;
-        IsDamaging = false;
-        Player.Animator.ResetTrigger(_animIDAttack);
-        Player.Animator.ResetTrigger(_animIDParry);
+        _isParryable = false;
     }
 
     private void Attack()
@@ -165,13 +186,13 @@ public class PlayerBattleController : MonoBehaviour
 
         IsAttacking = true;
         Player.Movement.CanRotation = true;
-        Player.Animator.SetTrigger(_animIDAttack);
         Player.Status.SP -= _requiredAttackSP;
+        Player.Animator.SetTrigger(_animIDAttack);
     }
 
     private void Parry()
     {
-        if (!CanAttack)
+        if (!CanParry)
         {
             return;
         }
@@ -187,8 +208,10 @@ public class PlayerBattleController : MonoBehaviour
             CanDefense = false;
         }
 
-        Player.Animator.SetTrigger(_animIDParry);
+        IsParrying = true;
+        Player.Movement.CanRotation = true;
         Player.Status.SP -= _requiredParrySP;
+        Player.Animator.SetTrigger(_animIDParry);
     }
 
     private void Defense()
@@ -211,12 +234,11 @@ public class PlayerBattleController : MonoBehaviour
     private bool GiveDamageToMonster(Vector3 attackOffset, float radius, int damage)
     {
         int monsterCnt = Physics.OverlapSphereNonAlloc(attackOffset, radius, _monsters, 1 << LayerMask.NameToLayer("Monster"));
-
         for (int i = 0; i < monsterCnt; i++)
         {
             if (_monsters[i].GetComponent<Monster>().TakeDamage(damage))
             {
-                Managers.Resource.Instantiate("SwordHit.prefab", _monsters[i].bounds.center, null, true);
+                //Managers.Resource.Instantiate("SwordHit.prefab", _monsters[i].bounds.center, null, true);
             }
         }
 
@@ -225,7 +247,7 @@ public class PlayerBattleController : MonoBehaviour
 
     private bool IsRangeOfDefenseAngle(Vector3 attackedPosition)
     {
-        Vector3 dir = (attackedPosition - transform.position).normalized;
+        var dir = (attackedPosition - transform.position).normalized;
         if (Vector3.Angle(transform.forward, dir) < _defenseAngle)
         {
             return true;
@@ -234,12 +256,25 @@ public class PlayerBattleController : MonoBehaviour
         return false;
     }
 
+    private void OnEnableWeapon()
+    {
+        //CreateAttackEffect();
+        _weapon.Collider.enabled = true;
+        //GiveDamageToMonster(_attackOffset.position,
+        //Player.EquipmentInventory.GetItem(EquipmentType.Weapon).EquipmentData.AttackRadius, Player.Status.Damage);
+    }
+
+    private void OnDisableWeapon()
+    {
+        _weapon.Collider.enabled = false;
+    }
+
     private void OnCanAttackCombo()
     {
         if (IsAttacking)
         {
             int nextCount = _currentAttackComboCount + 1;
-            _currentAttackComboCount = nextCount >= _attackEffectDirection.Count ? 0 : nextCount;
+            _currentAttackComboCount = nextCount >= 4 ? 0 : nextCount;
         }
 
         CanAttack = true;
@@ -251,29 +286,13 @@ public class PlayerBattleController : MonoBehaviour
         Player.Movement.CanRoll = true;
     }
 
-    private void OnEnableWeapon()
-    {
-        CreateAttackEffect();
-        GiveDamageToMonster(_attackOffset.position,
-            Player.EquipmentInventory.GetItem(EquipmentType.Weapon).EquipmentData.AttackRadius, Player.Status.Damage);
-    }
-
     private void OnBeginParry()
     {
-        _canParry = true;
+        _isParryable = true;
     }
 
     private void OnEndParry()
     {
-        _canParry = false;
-    }
-
-    private void CreateAttackEffect()
-    {
-        var euler = transform.rotation.eulerAngles;
-        euler.y += 90f;
-        euler += _attackEffectDirection[_currentAttackComboCount];
-        Managers.Resource.Instantiate("AttackSlash.prefab",
-            Player.Root.GetRoot(EquipmentType.Weapon).position, Quaternion.Euler(euler), null, true);
+        _isParryable = false;
     }
 }

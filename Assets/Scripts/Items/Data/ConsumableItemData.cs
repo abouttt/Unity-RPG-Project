@@ -30,10 +30,10 @@ public class ConsumableItemData : CountableItemData, ICooldownable
 
     private ConsumableItem GetInstance(int count = 1)
     {
-        Type type = Type.GetType(ItemClassName);
-        if (type is not null)
+        var type = Type.GetType(ItemClassName);
+        if (type != null)
         {
-            return (ConsumableItem)Activator.CreateInstance(type, this, count);
+            return Activator.CreateInstance(type, this, count) as ConsumableItem;
         }
 
         return null;

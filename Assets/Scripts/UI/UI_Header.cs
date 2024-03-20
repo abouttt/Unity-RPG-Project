@@ -3,7 +3,8 @@ using UnityEngine.EventSystems;
 
 public class UI_Header : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
-    public bool CanDrag = true;
+    [field: SerializeField]
+    public bool CanDrag { get; set; } = true;
 
     [SerializeField]
     private RectTransform _target;  // 헤더를 잡고 움직이면 따라서 UI들도 움직이게 하기위한 중심 타겟.

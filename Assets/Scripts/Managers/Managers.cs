@@ -36,21 +36,19 @@ public class Managers : Singleton<Managers>
 
     private void LateUpdate()
     {
-        _cooldown.LateUpdate();
+        _cooldown.Cooling();
     }
 
     public static void Init()
     {
         if (s_isInit)
         {
-            Debug.Log("[Managers/Init] Can't init bacause Must clear.");
             return;
         }
 
         Data.Init();
         Input.Init();
         Pool.Init();
-        Quest.Init();
         Sound.Init();
         UI.Init();
 

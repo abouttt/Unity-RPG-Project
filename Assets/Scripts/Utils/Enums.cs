@@ -1,5 +1,6 @@
+using UnityEngine;
 
-public enum BasicMonsterState
+public enum MonsterState
 {
     Idle,
     Tracking,
@@ -12,12 +13,12 @@ public enum BasicMonsterState
 
 public enum Category
 {
+    Scene,
     Item,
     Skill,
     NPC,
     Monster,
     Quest,
-    Scene,
 }
 
 public enum QuestState
@@ -28,12 +29,6 @@ public enum QuestState
     Complete,
 }
 
-public enum SkillType
-{
-    Active,
-    Passive,
-}
-
 public enum SlotType
 {
     Item,
@@ -42,6 +37,12 @@ public enum SlotType
     Quick,
     Shop,
     QuestReward,
+}
+
+public enum SkillType
+{
+    Active,
+    Passive,
 }
 
 public enum ItemType
@@ -90,8 +91,9 @@ public enum SoundType
 public enum AddressableLabel
 {
     Default,
-    MainMenu,
-    Game,
+    MainMenu_Prefab,
+    Game_Prefab,
+    Game_UI,
 }
 
 public enum SceneType

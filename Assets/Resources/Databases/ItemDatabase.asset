@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd45d3245f40a6d4abfc661ea929ae95, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c2fe284678b31c4e8d02de92b8cbca8, type: 3}
   m_Name: ItemDatabase
   m_EditorClassIdentifier: 
   _items:
-  - {fileID: 11400000, guid: de34922a05749ec4595dc9c8a7da9ea9, type: 2}
-  - {fileID: 11400000, guid: 49543d249241ddc47a2c25630219bc32, type: 2}
-  - {fileID: 11400000, guid: cf2be0fb45720354782ea5c31f455047, type: 2}
-  - {fileID: 11400000, guid: 98d7db5f46b28344dadbb818b4ced8a3, type: 2}
+  - {fileID: 11400000, guid: 65a5963d43c1b1e4e8fe8ede9a9a90b5, type: 2}
+  - {fileID: 11400000, guid: 7d715f9368abcd24d984ddf8fa2b6439, type: 2}
+  - {fileID: 11400000, guid: 2f9e080c970c6164b89c3a4061211ba6, type: 2}
+  - {fileID: 11400000, guid: bbf25a892d6b2894785c6bdca6a2df38, type: 2}

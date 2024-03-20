@@ -13,10 +13,10 @@ public class SoundManager
             _root = new GameObject { name = "Sound_Root" }.transform;
             Object.DontDestroyOnLoad(_root);
 
-            var audioTypeNames = System.Enum.GetNames(typeof(SoundType));
-            for (int i = 0; i < audioTypeNames.Length; i++)
+            var names = System.Enum.GetNames(typeof(SoundType));
+            for (int i = 0; i < names.Length; i++)
             {
-                var go = new GameObject { name = audioTypeNames[i] };
+                var go = new GameObject() { name = names[i] };
                 _audioSources.Add(go.AddComponent<AudioSource>());
                 go.transform.parent = _root;
             }
@@ -40,7 +40,7 @@ public class SoundManager
 
         var audioSource = _audioSources[(int)type];
 
-        if (type is SoundType.Bgm)
+        if (type == SoundType.Bgm)
         {
             if (audioSource.isPlaying)
             {

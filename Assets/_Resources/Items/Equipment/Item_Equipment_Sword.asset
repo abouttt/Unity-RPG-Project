@@ -9,21 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afce8032c6a48704183c8ef94e0caca2, type: 3}
+  m_Script: {fileID: 11500000, guid: 57358875ed0bd494fbcad3f226680c02, type: 3}
   m_Name: Item_Equipment_Sword
   m_EditorClassIdentifier: 
   <ItemID>k__BackingField: EQUIPMENT_SWORD
-  <ItemName>k__BackingField: "\uAC80"
+  <ItemName>k__BackingField: "\uC9C1\uAC80"
   <ItemImage>k__BackingField: {fileID: 21300000, guid: 009d4fc67f3ecc341a5229c548eea9a0, type: 3}
   <ItemQuality>k__BackingField: 1
-  <Description>k__BackingField: "\uD3C9\uBC94\uD55C \uAC80\uC774\uB2E4"
+  <Description>k__BackingField: "\uD3C9\uBC94\uD55C \uC9C1\uAC80\uC774\uB2E4."
   <LimitLevel>k__BackingField: 1
   <Price>k__BackingField: 1000
   <EquipmentType>k__BackingField: 4
-  <ItemPrefab>k__BackingField: {fileID: 194264, guid: e6fa756c603368045a35e5b45a1b84cb, type: 3}
+  <ItemPrefab>k__BackingField: {fileID: 131468, guid: ec13bd21183ded04991744d4523f4cc2, type: 3}
   <HP>k__BackingField: 0
   <MP>k__BackingField: 0
   <SP>k__BackingField: 0
   <Damage>k__BackingField: 10
   <Defense>k__BackingField: 0
-  <AttackRadius>k__BackingField: 1.2

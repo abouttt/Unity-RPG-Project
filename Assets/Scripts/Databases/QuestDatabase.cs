@@ -14,21 +14,27 @@ public class QuestDatabase : SingletonScriptableObject<QuestDatabase>
 
     [SerializeField]
     private List<QuestData> _quests;
+
     [SerializeField]
     private SerializedDictionary<string, List<QuestData>> _ownerQuests;
 
-    public QuestData FindQuestBy(string questID) => _quests.FirstOrDefault(q => q.QuestID.Equals(questID));
+    public QuestData FindQuestBy(string questID)
+    {
+        return _quests.FirstOrDefault(quest => quest.QuestID.Equals(questID));
+    }
 
     public List<QuestData> FindQuestsBy(string ownerID)
     {
-        List<QuestData> result = new();
-        if (_ownerQuests.TryGetValue(ownerID, out List<QuestData> quests))
+        var result = new List<QuestData>();
+
+        if (_ownerQuests.TryGetValue(ownerID, out var quests))
         {
-            foreach (var quest in quests)
+            foreach (var questData in quests)
             {
-                result.Add(quest);
+                result.Add(questData);
             }
         }
+
         return result;
     }
 
@@ -43,25 +49,28 @@ public class QuestDatabase : SingletonScriptableObject<QuestDatabase>
     {
         _quests = new();
         _ownerQuests = new();
-        string[] guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
-        foreach (string guid in guids)
+
+        var guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
+        foreach (var guid in guids)
         {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            var quest = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+            var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            T quest = AssetDatabase.LoadAssetAtPath<T>(assetPath);
 
             if (quest.GetType() == typeof(T))
             {
                 _quests.Add(quest);
+
                 if (!_ownerQuests.ContainsKey(quest.OwnerID))
                 {
                     _ownerQuests.Add(quest.OwnerID, new());
                 }
+
                 _ownerQuests[quest.OwnerID].Add(quest);
             }
-
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
         }
+
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssets();
     }
 #endif
 }

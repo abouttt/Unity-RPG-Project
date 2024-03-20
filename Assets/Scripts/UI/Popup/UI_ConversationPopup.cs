@@ -4,28 +4,28 @@ using DG.Tweening;
 
 public class UI_ConversationPopup : UI_Popup, IPointerClickHandler
 {
-    enum Buttons
-    {
-        CloseButton,
-    }
-
     enum Texts
     {
         NPCNameText,
         ScriptText,
     }
 
+    enum Buttons
+    {
+        CloseButton,
+    }
+
     [SerializeField]
     private float _typingSpeed;
-    private NPC _target;
+    private NPC _npc;
     private int _currentIndex = 0;
 
     protected override void Init()
     {
         base.Init();
 
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_ConversationPopup>);
     }
@@ -36,19 +36,20 @@ public class UI_ConversationPopup : UI_Popup, IPointerClickHandler
 
         Closed += () =>
         {
+            _npc = null;
             GetText((int)Texts.ScriptText).DOKill();
-            Managers.UI.Get<UI_NPCMenuPopup>().ToggleMenu(true);
+            Managers.UI.Get<UI_NPCMenuPopup>().PopupRT.gameObject.SetActive(true);
         };
     }
 
     public void SetNPC(NPC npc)
     {
-        _target = npc;
+        _npc = npc;
         _currentIndex = 0;
-        GetText((int)Texts.NPCNameText).text = npc.Name;
+        GetText((int)Texts.NPCNameText).text = npc.NPCName;
         GetText((int)Texts.ScriptText).text = null;
         GetText((int)Texts.ScriptText).DOText(
-            npc.ConversationScripts[_currentIndex], _target.ConversationScripts[_currentIndex].Length / _typingSpeed);
+            npc.ConversationScripts[_currentIndex], _npc.ConversationScripts[_currentIndex].Length / _typingSpeed);
     }
 
     // 대화 도중 클릭시 대사가 나오고 있는 도중이라면 모든 대사가 출력되고
@@ -56,22 +57,22 @@ public class UI_ConversationPopup : UI_Popup, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         var script = GetText((int)Texts.ScriptText);
-        if (script.text.Length == _target.ConversationScripts[_currentIndex].Length)
+        if (script.text.Length == _npc.ConversationScripts[_currentIndex].Length)
         {
             _currentIndex++;
-            if (_currentIndex >= _target.ConversationScripts.Count)
+            if (_currentIndex >= _npc.ConversationScripts.Count)
             {
                 Managers.UI.Close<UI_ConversationPopup>();
                 return;
             }
 
             script.text = null;
-            script.DOText(_target.ConversationScripts[_currentIndex], _target.ConversationScripts[_currentIndex].Length / _typingSpeed);
+            script.DOText(_npc.ConversationScripts[_currentIndex], _npc.ConversationScripts[_currentIndex].Length / _typingSpeed);
         }
         else
         {
             script.DOKill();
-            script.text = _target.ConversationScripts[_currentIndex];
+            script.text = _npc.ConversationScripts[_currentIndex];
         }
     }
 }

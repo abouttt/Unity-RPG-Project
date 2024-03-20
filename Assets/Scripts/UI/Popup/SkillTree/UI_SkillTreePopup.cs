@@ -1,24 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_SkillTreePopup : UI_Popup
 {
+    enum Texts
+    {
+        SkillPointAmountText,
+    }
+
     enum Buttons
     {
         ResetButton,
         CloseButton,
     }
 
-    enum Texts
-    {
-        SkillPointAmountText,
-    }
-
     protected override void Init()
     {
         base.Init();
 
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.ResetButton).onClick.AddListener(Player.SkillTree.ResetSkills);
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_SkillTreePopup>);

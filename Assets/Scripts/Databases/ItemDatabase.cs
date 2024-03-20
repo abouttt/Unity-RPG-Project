@@ -14,29 +14,32 @@ public class ItemDatabase : SingletonScriptableObject<ItemDatabase>
     [SerializeField]
     private List<ItemData> _items;
 
-    public ItemData FindItemBy(string id) => _items.FirstOrDefault(q => q.ItemID.Equals(id));
+    public ItemData FindItemBy(string id)
+    {
+        return _items.FirstOrDefault(item => item.ItemID.Equals(id));
+    }
 
 #if UNITY_EDITOR
     [ContextMenu("Find Items")]
-    private void FindItems()
+    public void FindItems()
     {
         FindItemsBy<ItemData>();
     }
 
     private void FindItemsBy<T>() where T : ItemData
     {
-        _items = new List<ItemData>();
-        string[] guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
-        foreach (string guid in guids)
+        _items = new();
+
+        var guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
+        foreach (var guid in guids)
         {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            var item = AssetDatabase.LoadAssetAtPath<T>(assetPath);
-
+            var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            T item = AssetDatabase.LoadAssetAtPath<T>(assetPath);
             _items.Add(item);
-
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
         }
+
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssets();
     }
 #endif
 }

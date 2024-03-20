@@ -15,10 +15,10 @@ public class Cooldown
         Cooldowned = null;
     }
 
-    public virtual void OnCooldowned()
+    public void OnCooldowned()
     {
         Current = Max;
-        Cooldowned?.Invoke();
         Managers.Cooldown.AddCooldown(this);
+        Cooldowned?.Invoke();
     }
 }

@@ -7,15 +7,15 @@ public class UI_LootSubitem : UI_Base
         ItemImage,
     }
 
-    enum Buttons
-    {
-        LootButton,
-    }
-
     enum Texts
     {
         ItemNameText,
         CountText,
+    }
+
+    enum Buttons
+    {
+        LootButton,
     }
 
     public FieldItem.Data FieldItemDataRef { get; private set; }
@@ -24,12 +24,12 @@ public class UI_LootSubitem : UI_Base
     protected override void Init()
     {
         BindImage(typeof(Images));
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.LootButton).onClick.AddListener(() =>
         {
-            var lootPopup = Managers.UI.Get<UI_LootPopup>();
+            UI_LootPopup lootPopup = Managers.UI.Get<UI_LootPopup>();
             lootPopup.SetTop();
             lootPopup.AddItemToItemInventory(this);
         });
@@ -48,12 +48,12 @@ public class UI_LootSubitem : UI_Base
     {
         if (FieldItemDataRef.ItemData is CountableItemData && FieldItemDataRef.Count > 1)
         {
-            GetText((int)Texts.CountText).enabled = true;
+            GetText((int)Texts.CountText).gameObject.SetActive(true);
             GetText((int)Texts.CountText).text = $"x{FieldItemDataRef.Count}";
         }
         else
         {
-            GetText((int)Texts.CountText).enabled = false;
+            GetText((int)Texts.CountText).gameObject.SetActive(false);
         }
     }
 }

@@ -13,12 +13,16 @@ public class UI_MonsterHPBar : UI_Base
     }
 
     [SerializeField]
+    private float _hpBarHeight;
+
+    [SerializeField]
     private float _showHPBarTime;
+
     [SerializeField]
     private float _showDamageTime;
 
     private Monster _target;
-    private UI_FollowTarget _followTarget;
+    private UI_FollowWorldObject _followTarget;
     private int _targetPrevHP;
     private int _totalDamage;
     private float _currentShowHPBarTime;
@@ -29,9 +33,9 @@ public class UI_MonsterHPBar : UI_Base
     {
         BindImage(typeof(Images));
         BindText(typeof(Texts));
-        _followTarget = GetComponent<UI_FollowTarget>();
+        _followTarget = GetComponent<UI_FollowWorldObject>();
 
-        GetText((int)Texts.DamageText).enabled = false;
+        GetText((int)Texts.DamageText).gameObject.SetActive(false);
     }
 
     private void Update()
@@ -39,7 +43,6 @@ public class UI_MonsterHPBar : UI_Base
         if (_target == null || !_target.gameObject.activeSelf)
         {
             Clear();
-            Managers.Resource.Destroy(gameObject);
             return;
         }
 
@@ -59,7 +62,7 @@ public class UI_MonsterHPBar : UI_Base
                 _currentShowHPBarTime += Time.deltaTime;
                 if (_currentShowHPBarTime >= _showHPBarTime)
                 {
-                    if (Player.Camera.LockOnTarget != transform)
+                    if (Player.Camera.LockOnTarget != _target.transform)
                     {
                         _isChanged = false;
                         gameObject.SetActive(false);
@@ -69,12 +72,12 @@ public class UI_MonsterHPBar : UI_Base
             }
         }
 
-        if (GetText((int)Texts.DamageText).enabled)
+        if (GetText((int)Texts.DamageText).gameObject.activeSelf)
         {
             _currentShowDamageTime += Time.deltaTime;
             if (_currentShowDamageTime >= _showDamageTime)
             {
-                GetText((int)Texts.DamageText).enabled = false;
+                GetText((int)Texts.DamageText).gameObject.SetActive(false);
                 _totalDamage = 0;
             }
         }
@@ -82,20 +85,17 @@ public class UI_MonsterHPBar : UI_Base
 
     public void SetTarget(Monster target)
     {
-        _target = target;
-
-        if (_target == null)
+        if (target == null)
         {
             Clear();
-            Managers.Resource.Destroy(gameObject);
+            return;
         }
-        else
-        {
-            _followTarget.SetTarget(target.transform);
-            _targetPrevHP = _target.CurrentHP;
-            _target.HPChanged += RefreshHP;
-            RefreshHP();
-        }
+
+        _target = target;
+        _followTarget.SetTarget(target.transform, new Vector3(0.0f, target.Collider.bounds.extents.y + _hpBarHeight, 0f));
+        _targetPrevHP = _target.CurrentHP;
+        _target.HPChanged += RefreshHP;
+        RefreshHP();
     }
 
     private void RefreshHP()
@@ -116,7 +116,7 @@ public class UI_MonsterHPBar : UI_Base
             _currentShowDamageTime = 0f;
             _isChanged = true;
             GetText((int)Texts.DamageText).text = _totalDamage.ToString();
-            GetText((int)Texts.DamageText).enabled = true;
+            GetText((int)Texts.DamageText).gameObject.SetActive(true);
         }
     }
 
@@ -130,6 +130,7 @@ public class UI_MonsterHPBar : UI_Base
         _target = null;
         _totalDamage = 0;
         _isChanged = false;
-        GetText((int)Texts.DamageText).enabled = false;
+        GetText((int)Texts.DamageText).gameObject.SetActive(false);
+        Managers.Resource.Destroy(gameObject);
     }
 }

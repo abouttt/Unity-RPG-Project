@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
-using TMPro;
 using DG.Tweening;
+using TMPro;
 
 public class UI_ItemSplitPopup : UI_Popup
 {
@@ -10,18 +10,18 @@ public class UI_ItemSplitPopup : UI_Popup
         ItemPrice,
     }
 
+    enum Texts
+    {
+        GuideText,
+        PriceText,
+    }
+
     enum Buttons
     {
         UpButton,
         DownButton,
         OKButton,
         NOButton,
-    }
-
-    enum Texts
-    {
-        GuideText,
-        PriceText,
     }
 
     enum InputFields
@@ -42,8 +42,8 @@ public class UI_ItemSplitPopup : UI_Popup
         base.Init();
 
         BindObject(typeof(GameObjects));
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
         Bind<TMP_InputField>(typeof(InputFields));
 
         _dotween = PopupRT.GetComponent<DOTweenAnimation>();
@@ -51,8 +51,8 @@ public class UI_ItemSplitPopup : UI_Popup
         Get<TMP_InputField>((int)InputFields.InputField).onValueChanged.AddListener(delegate { OnValueChanged(); });
         Get<TMP_InputField>((int)InputFields.InputField).onEndEdit.AddListener(delegate { OnEndEdit(); });
 
-        GetButton((int)Buttons.UpButton).onClick.AddListener(() => OnClickUpAndDownButton(1));
-        GetButton((int)Buttons.DownButton).onClick.AddListener(() => OnClickUpAndDownButton(-1));
+        GetButton((int)Buttons.UpButton).onClick.AddListener(() => OnClickUpOrDownButton(1));
+        GetButton((int)Buttons.DownButton).onClick.AddListener(() => OnClickUpOrDownButton(-1));
         GetButton((int)Buttons.NOButton).onClick.AddListener(Managers.UI.Close<UI_ItemSplitPopup>);
     }
 
@@ -86,7 +86,6 @@ public class UI_ItemSplitPopup : UI_Popup
     private void OnValueChanged()
     {
         var inputField = Get<TMP_InputField>((int)InputFields.InputField);
-
         CurrentCount = string.IsNullOrEmpty(inputField.text) ? 0 : int.Parse(inputField.text);
 
         if (inputField.text.Length > 0)
@@ -113,7 +112,7 @@ public class UI_ItemSplitPopup : UI_Popup
         inputField.caretPosition = inputField.text.Length;
     }
 
-    private void OnClickUpAndDownButton(int count)
+    private void OnClickUpOrDownButton(int count)
     {
         CurrentCount = Mathf.Clamp(CurrentCount + count, _minCount, _maxCount);
         Get<TMP_InputField>((int)InputFields.InputField).text = CurrentCount.ToString();

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 public class UI_MainMenuFixed : UI_Base
 {
@@ -17,21 +18,21 @@ public class UI_MainMenuFixed : UI_Base
     {
         Managers.UI.Register<UI_MainMenuFixed>(this);
 
-        BindButton((typeof(Buttons)));
+        BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.ContinueButton).onClick.AddListener(() =>
         {
-            Managers.Data.Load<string>(SceneManagerEx.SaveKey, out var json);
-            var saveData = JsonUtility.FromJson<SceneSaveData>(json);
-            var scene = saveData.Scene;
-            Managers.Game.IsDefaultSpawnPosition = false;
+            Managers.Data.Load<JArray>(SceneManagerEx.SaveKey, out var saveData);
+            SceneSaveData sceneSaveData = saveData[0].ToObject<SceneSaveData>();
+            SceneType scene = sceneSaveData.Scene;
+            Managers.Game.IsDefaultSpawn = false;
             Managers.Scene.LoadScene(scene);
         });
 
         GetButton((int)Buttons.NewGameButton).onClick.AddListener(() =>
         {
-            Managers.Data.ClearSaveDatas();
-            Managers.Game.IsDefaultSpawnPosition = true;
+            Managers.Data.ClearSaveData();
+            Managers.Game.IsDefaultSpawn = true;
             Managers.Scene.LoadScene(SceneType.VillageScene);
         });
 
@@ -55,7 +56,7 @@ public class UI_MainMenuFixed : UI_Base
 #endif
         });
 
-        _hasSaveFile = Managers.Data.HasSaveDatas;
+        _hasSaveFile = Managers.Data.HasSaveData;
     }
 
     private void Start()
@@ -63,21 +64,21 @@ public class UI_MainMenuFixed : UI_Base
         ToggleOptionMenu(false);
     }
 
-    private void ToggleOptionMenu(bool show)
+    private void ToggleOptionMenu(bool toggle)
     {
-        if (show)
+        if (toggle)
         {
-            Managers.UI.Show<UI_OptionPopup>();
+            Managers.UI.Show<UI_GameOptionPopup>();
         }
         else
         {
-            Managers.UI.Close<UI_OptionPopup>();
+            Managers.UI.Close<UI_GameOptionPopup>();
         }
 
-        GetButton((int)Buttons.ContinueButton).gameObject.SetActive(!show && _hasSaveFile);
-        GetButton((int)Buttons.NewGameButton).gameObject.SetActive(!show);
-        GetButton((int)Buttons.OptionButton).gameObject.SetActive(!show);
-        GetButton((int)Buttons.BackButton).gameObject.SetActive(show);
-        GetButton((int)Buttons.ExitButton).gameObject.SetActive(!show);
+        GetButton((int)Buttons.ContinueButton).gameObject.SetActive(!toggle && _hasSaveFile);
+        GetButton((int)Buttons.NewGameButton).gameObject.SetActive(!toggle);
+        GetButton((int)Buttons.OptionButton).gameObject.SetActive(!toggle);
+        GetButton((int)Buttons.BackButton).gameObject.SetActive(toggle);
+        GetButton((int)Buttons.ExitButton).gameObject.SetActive(!toggle);
     }
 }

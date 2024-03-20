@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c5e539e90eb6d647810cd1e36d433c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 24f0c9b6678a95f4caaa3196871efa8f, type: 3}
   m_Name: Player Stat Table
   m_EditorClassIdentifier: 
   <StatTable>k__BackingField:
@@ -22,60 +22,60 @@ MonoBehaviour:
   - HP: 120
     MP: 120
     SP: 120
-    XP: 200
+    XP: 300
     Damage: 7
     Defense: 1
   - HP: 140
     MP: 140
     SP: 140
-    XP: 300
+    XP: 500
     Damage: 9
-    Defense: 2
-  - HP: 150
-    MP: 150
-    SP: 150
-    XP: 350
-    Damage: 10
     Defense: 2
   - HP: 160
     MP: 160
     SP: 160
-    XP: 400
+    XP: 700
     Damage: 11
     Defense: 3
   - HP: 180
     MP: 180
     SP: 180
-    XP: 500
+    XP: 900
     Damage: 13
     Defense: 4
   - HP: 200
     MP: 200
     SP: 200
-    XP: 600
+    XP: 1100
     Damage: 15
     Defense: 5
   - HP: 220
     MP: 220
     SP: 220
-    XP: 700
+    XP: 1300
     Damage: 17
     Defense: 6
   - HP: 240
     MP: 240
     SP: 240
-    XP: 800
+    XP: 1500
     Damage: 19
     Defense: 7
   - HP: 260
     MP: 260
     SP: 260
-    XP: 900
+    XP: 1700
     Damage: 21
-    Defense: 8
+    Defense: 9
   - HP: 280
     MP: 280
     SP: 280
-    XP: 1000
+    XP: 1900
     Damage: 23
-    Defense: 9
+    Defense: 11
+  - HP: 300
+    MP: 300
+    SP: 300
+    XP: 2100
+    Damage: 25
+    Defense: 13

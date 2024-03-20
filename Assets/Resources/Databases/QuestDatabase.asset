@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67737de005afb7b47ae3a3d9fd3c892d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b19a5179cebc8c4a94c5353a4896290, type: 3}
   m_Name: QuestDatabase
   m_EditorClassIdentifier: 
   _quests:
-  - {fileID: 11400000, guid: 02d1c4ef826835b439e880db6f49aec4, type: 2}
+  - {fileID: 11400000, guid: 3ab732e6eb6da414f95d633219f4638c, type: 2}
   _ownerQuests:
     _serializedList:
     - Key: FEDDLER
       Value:
-      - {fileID: 11400000, guid: 02d1c4ef826835b439e880db6f49aec4, type: 2}
+      - {fileID: 11400000, guid: 3ab732e6eb6da414f95d633219f4638c, type: 2}

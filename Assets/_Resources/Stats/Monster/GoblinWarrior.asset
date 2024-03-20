@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dc62eed7fcda7540b840a7f03b2000d, type: 3}
+  m_Name: GoblinWarrior
+  m_EditorClassIdentifier: 
+  <MonsterID>k__BackingField: GOBLIN_WARRIOR
+  <MonsterName>k__BackingField: "\uACE0\uBE14\uB9B0 \uC804\uC0AC"
+  <MaxHP>k__BackingField: 100
+  <Damage>k__BackingField: 20
+  <Defense>k__BackingField: 3
+  <DropXP>k__BackingField:
+    Min: 10
+    Max: 20
+  <DropGold>k__BackingField:
+    Min: 5
+    Max: 15
+  <LootItems>k__BackingField:
+  - ItemData: {fileID: 11400000, guid: 65a5963d43c1b1e4e8fe8ede9a9a90b5, type: 2}
+    DropProbability: 100
+    Count:
+      Min: 1
+      Max: 5

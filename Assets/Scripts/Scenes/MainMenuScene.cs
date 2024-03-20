@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class MainMenuScene : BaseScene
 {
@@ -10,9 +11,9 @@ public class MainMenuScene : BaseScene
 
         LoadResourcesAsync(SceneType, () =>
         {
-            InitUIPackage("UIPackage_MainMenu.prefab");
-            Managers.UI.Get<UI_TopCanvas>().FadeInitBG();
-            Managers.Input.ToggleCursor(true);
+            InstantiatePackage("UIPackage_MainMenu.prefab");
+            Managers.Input.CursorLocked = false;
+            GameObject.Find("InitBG").GetComponent<DOTweenAnimation>().DOPlay();
         });
     }
 }

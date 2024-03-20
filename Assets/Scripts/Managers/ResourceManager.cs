@@ -22,7 +22,7 @@ public class ResourceManager
 
     public GameObject Instantiate(string key, Transform parent = null, bool pooling = false)
     {
-        GameObject prefab = Load<GameObject>(key);
+        var prefab = Load<GameObject>(key);
         if (prefab == null)
         {
             Debug.Log($"[ResourceManager/Instantiate] Faild to load prefab : {key}");
@@ -42,14 +42,32 @@ public class ResourceManager
     public GameObject Instantiate(string key, Vector3 position, Transform parent = null, bool pooling = false)
     {
         var go = Instantiate(key, parent, pooling);
-        go.transform.localPosition = position;
+
+        if (parent == null)
+        {
+            go.transform.position = position;
+        }
+        else
+        {
+            go.transform.localPosition = position;
+        }
+
         return go;
     }
 
     public GameObject Instantiate(string key, Vector3 position, Quaternion rotation, Transform parent = null, bool pooling = false)
     {
         var go = Instantiate(key, parent, pooling);
-        go.transform.SetLocalPositionAndRotation(position, rotation);
+
+        if (parent == null)
+        {
+            go.transform.SetPositionAndRotation(position, rotation);
+        }
+        else
+        {
+            go.transform.SetLocalPositionAndRotation(position, rotation);
+        }
+
         return go;
     }
 

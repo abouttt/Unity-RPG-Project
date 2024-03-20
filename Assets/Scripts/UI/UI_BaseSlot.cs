@@ -15,21 +15,21 @@ public abstract class UI_BaseSlot : UI_Base,
     [field: SerializeField]
     public SlotType SlotType { get; private set; }
     public object ObjectRef { get; private set; }
-    public bool HasObject => ObjectRef is not null;
+    public bool HasObject => ObjectRef != null;
 
-    [SerializeField]
+    [field: SerializeField]
     protected bool CanDrag = true;
     protected bool IsPointerDown = false;
 
     protected override void Init()
     {
         BindImage(typeof(Images));
-        GetImage((int)Images.TempImage).enabled = false;
+        GetImage((int)Images.TempImage).gameObject.SetActive(false);
     }
 
     protected void SetObject(object obj, Sprite image)
     {
-        if (obj is null)
+        if (obj == null)
         {
             return;
         }
@@ -37,8 +37,8 @@ public abstract class UI_BaseSlot : UI_Base,
         ObjectRef = obj;
         GetImage((int)Images.SlotImage).sprite = image;
         GetImage((int)Images.TempImage).sprite = image;
-        GetImage((int)Images.SlotImage).enabled = true;
-        GetImage((int)Images.TempImage).enabled = false;
+        GetImage((int)Images.SlotImage).gameObject.SetActive(true);
+        GetImage((int)Images.TempImage).gameObject.SetActive(false);
     }
 
     public virtual void Clear()
@@ -46,13 +46,13 @@ public abstract class UI_BaseSlot : UI_Base,
         ObjectRef = null;
         GetImage((int)Images.SlotImage).sprite = null;
         GetImage((int)Images.TempImage).sprite = null;
-        GetImage((int)Images.SlotImage).enabled = false;
-        GetImage((int)Images.TempImage).enabled = false;
+        GetImage((int)Images.SlotImage).gameObject.SetActive(false);
+        GetImage((int)Images.TempImage).gameObject.SetActive(false);
     }
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        if ((eventData.button is not PointerEventData.InputButton.Left) || !HasObject)
+        if ((eventData.button != PointerEventData.InputButton.Left) || !HasObject)
         {
             return;
         }
@@ -62,7 +62,7 @@ public abstract class UI_BaseSlot : UI_Base,
 
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        if ((eventData.button is not PointerEventData.InputButton.Left) || !HasObject || !CanDrag)
+        if ((eventData.button != PointerEventData.InputButton.Left) || !HasObject || !CanDrag)
         {
             eventData.pointerDrag = null;
             return;
@@ -70,7 +70,7 @@ public abstract class UI_BaseSlot : UI_Base,
 
         IsDragging = true;
 
-        GetImage((int)Images.TempImage).enabled = true;
+        GetImage((int)Images.TempImage).gameObject.SetActive(true);
         GetImage((int)Images.TempImage).transform.SetParent(Managers.UI.Get<UI_TopCanvas>().transform);
         GetImage((int)Images.TempImage).transform.SetAsLastSibling();
         GetImage((int)Images.SlotImage).color -= new Color(0f, 0f, 0f, 0.7f);
@@ -85,7 +85,7 @@ public abstract class UI_BaseSlot : UI_Base,
     {
         IsDragging = false;
 
-        GetImage((int)Images.TempImage).enabled = false;
+        GetImage((int)Images.TempImage).gameObject.SetActive(false);
         GetImage((int)Images.TempImage).transform.SetParent(transform);
         GetImage((int)Images.TempImage).rectTransform.position = transform.position;
         GetImage((int)Images.SlotImage).color = Color.white;

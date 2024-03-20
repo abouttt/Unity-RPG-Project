@@ -2,69 +2,66 @@ using UnityEngine;
 
 public class InteractionDetector : MonoBehaviour
 {
+    public bool IsInteracted => _target != null && _target.IsInteracted;
+    public bool IsKeyGuideShowed => _keyGuide.gameObject.activeSelf;
+
+    [SerializeField]
+    [ReadOnly]
     private Interactive _target;
     private UI_InteractionKeyGuide _keyGuide;
-    private bool _isOnKeyGuide;
+    private bool _isTargetOutTheCollider;
 
     private void Start()
     {
-        _keyGuide = Managers.UI.Get<UI_AutoCanvas>().InteractionKeyGuide;
+        _keyGuide = Managers.Resource.Instantiate("UI_InteractionKeyGuide.prefab").GetComponent<UI_InteractionKeyGuide>();
     }
 
     private void Update()
     {
-        if (!_isOnKeyGuide)
+        if (_target == null)
         {
             return;
         }
-
-        if (Managers.Input.Interaction && _target.CanInteraction)
+        else if (_isTargetOutTheCollider && !_target.IsInteracted)
         {
-            _keyGuide.SetTarget(null);
-            _isOnKeyGuide = false;
+            SetTarget(null);
+            return;
+        }
+
+        if (Managers.Input.Interaction && _target.CanInteraction && !_target.IsInteracted)
+        {
+            _keyGuide.gameObject.SetActive(false);
+            _target.IsInteracted = true;
             _target.Interaction();
         }
     }
 
-    private void SetTarget(Interactive target)
-    {
-        _target = target;
-        _keyGuide.SetTarget(target);
-        _isOnKeyGuide = target != null;
-    }
-
     private void OnTriggerStay(Collider other)
     {
-        if (Managers.UI.IsOn<UI_LootPopup>() || Managers.UI.IsOn<UI_NPCMenuPopup>())
+        if (_target != null)
         {
-            return;
-        }
-
-        if (!other.CompareTag("Interactive"))
-        {
-            return;
+            if (_target.IsInteracted)
+            {
+                return;
+            }
+            else if (!_keyGuide.gameObject.activeSelf)
+            {
+                _keyGuide.gameObject.SetActive(true);
+            }
         }
 
         if (_target == null)
         {
             SetTarget(other.GetComponent<Interactive>());
         }
-        else
+        else if (_target.gameObject != other.gameObject)
         {
-            if (_target.gameObject != other.gameObject)
+            float targetDistance = Vector3.SqrMagnitude(transform.position - _target.transform.position);
+            float otherDistance = Vector3.SqrMagnitude(transform.position - other.transform.position);
+            if (otherDistance < targetDistance)
             {
-                var targetDistance = Vector3.SqrMagnitude(transform.position - _target.transform.position);
-                var otherDistance = Vector3.SqrMagnitude(transform.position - other.transform.position);
-                if (otherDistance < targetDistance)
-                {
-                    SetTarget(other.GetComponent<Interactive>());
-                }
+                SetTarget(other.GetComponent<Interactive>());
             }
-        }
-
-        if (!_isOnKeyGuide)
-        {
-            SetTarget(other.GetComponent<Interactive>());
         }
     }
 
@@ -80,6 +77,30 @@ public class InteractionDetector : MonoBehaviour
             return;
         }
 
+        if (_target.IsInteracted)
+        {
+            _isTargetOutTheCollider = true;
+            return;
+        }
+
+        _target.IsInteracted = false;
         SetTarget(null);
+    }
+
+    private void SetTarget(Interactive target)
+    {
+        if (_target != null)
+        {
+            _target.IsSensed = false;
+        }
+
+        _target = target;
+        _keyGuide.SetTarget(target);
+        _isTargetOutTheCollider = false;
+
+        if (_target != null)
+        {
+            _target.IsSensed = true;
+        }
     }
 }

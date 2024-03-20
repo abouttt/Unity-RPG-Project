@@ -9,7 +9,7 @@ public class UI_GameMenuPopup : UI_Popup
         SkillButton,
         QuestButton,
         ResetPopupPositionButton,
-        OptionButton,
+        GameOptionButton,
         MainMenuButton,
         ExitButton,
         CloseButton,
@@ -54,9 +54,9 @@ public class UI_GameMenuPopup : UI_Popup
             }
         });
 
-        GetButton((int)Buttons.OptionButton).onClick.AddListener(() =>
+        GetButton((int)Buttons.GameOptionButton).onClick.AddListener(() =>
         {
-            Managers.UI.Show<UI_OptionPopup>();
+            Managers.UI.Show<UI_GameOptionPopup>();
             Managers.UI.Close<UI_GameMenuPopup>();
         });
 

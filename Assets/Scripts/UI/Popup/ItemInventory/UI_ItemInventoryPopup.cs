@@ -12,14 +12,19 @@ public class UI_ItemInventoryPopup : UI_Popup
         EtcSlots
     }
 
+    enum Texts
+    {
+        GoldText
+    }
+
     enum Buttons
     {
         CloseButton,
     }
 
-    enum Texts
+    enum ScrollRects
     {
-        GoldText
+        ItemSlotScrollView,
     }
 
     enum Tabs
@@ -29,13 +34,9 @@ public class UI_ItemInventoryPopup : UI_Popup
         EtcTabButton,
     }
 
-    enum ScrollRects
-    {
-        ItemSlotScrollView,
-    }
-
     [SerializeField]
     private float _tabXOffset;
+
     [SerializeField]
     private float _tabClickedXPosition;
 
@@ -47,10 +48,10 @@ public class UI_ItemInventoryPopup : UI_Popup
         base.Init();
 
         BindRT(typeof(RectTransforms));
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
-        Bind<UI_ItemInventoryTab>(typeof(Tabs));
+        BindButton(typeof(Buttons));
         Bind<ScrollRect>(typeof(ScrollRects));
+        Bind<UI_ItemInventoryTab>(typeof(Tabs));
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_ItemInventoryPopup>);
 
@@ -74,10 +75,6 @@ public class UI_ItemInventoryPopup : UI_Popup
 
         InitSlots();
         InitTabs();
-
-        RefreshAllSlots(ItemType.Equipment);
-        RefreshAllSlots(ItemType.Consumable);
-        RefreshAllSlots(ItemType.Etc);
     }
 
     private void Start()
@@ -90,6 +87,10 @@ public class UI_ItemInventoryPopup : UI_Popup
             Get<ScrollRect>((int)ScrollRects.ItemSlotScrollView).verticalScrollbar.value = 1f;
         };
 
+        RefreshAllSlots(ItemType.Equipment);
+        RefreshAllSlots(ItemType.Consumable);
+        RefreshAllSlots(ItemType.Etc);
+
         OpenTheTab(ItemType.Equipment);
     }
 
@@ -99,13 +100,14 @@ public class UI_ItemInventoryPopup : UI_Popup
 
         foreach (var tab in _tabs)
         {
-            var pos = tab.Key.RectTransform.anchoredPosition;
+            var pos = tab.Key.SlotsRT.anchoredPosition;
 
             if (tab.Key.TabType == itemType)
             {
                 Get<ScrollRect>((int)ScrollRects.ItemSlotScrollView).content = tab.Value;
                 pos.x = _tabClickedXPosition;
                 tab.Value.gameObject.SetActive(true);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(tab.Value);
             }
             else
             {
@@ -113,7 +115,7 @@ public class UI_ItemInventoryPopup : UI_Popup
                 tab.Value.gameObject.SetActive(false);
             }
 
-            tab.Key.RectTransform.anchoredPosition = pos;
+            tab.Key.SlotsRT.anchoredPosition = pos;
         }
     }
 
@@ -124,7 +126,7 @@ public class UI_ItemInventoryPopup : UI_Popup
 
     private void RefreshSlot(ItemType itemType, int index)
     {
-        if (Player.ItemInventory.IsNullSlot(itemType, index))
+        if (Player.ItemInventory.IsEmptySlot(itemType, index))
         {
             _slots[itemType][index].Clear();
         }
@@ -159,12 +161,12 @@ public class UI_ItemInventoryPopup : UI_Popup
         _tabs.Add(Get<UI_ItemInventoryTab>((int)Tabs.ConsumableTabButton), GetRT((int)RectTransforms.ConsumableSlots));
         _tabs.Add(Get<UI_ItemInventoryTab>((int)Tabs.EtcTabButton), GetRT((int)RectTransforms.EtcSlots));
 
-        foreach (var tab in _tabs)
+        foreach (var element in _tabs)
         {
-            tab.Key.GetComponent<Button>().onClick.AddListener(() =>
+            element.Key.GetComponent<Button>().onClick.AddListener(() =>
             {
                 SetTop();
-                OpenTheTab(tab.Key.TabType);
+                OpenTheTab(element.Key.TabType);
             });
         }
     }

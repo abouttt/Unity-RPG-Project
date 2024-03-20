@@ -16,8 +16,10 @@ public class UI_ShopPopup : UI_Popup, IDropHandler
 
     [SerializeField]
     private float _itemSellPercentage;
+
     [SerializeField]
     private Vector3 _itemInventoryPos;
+
     private Vector3 _prevItemInventoryPos;
 
     private readonly List<GameObject> _shopSlots = new();
@@ -52,13 +54,13 @@ public class UI_ShopPopup : UI_Popup, IDropHandler
             var itemInventory = Managers.UI.Get<UI_ItemInventoryPopup>();
             itemInventory.PopupRT.anchoredPosition = _prevItemInventoryPos;
             itemInventory.ToggleCloseButton(true);
-            Managers.UI.Get<UI_NPCMenuPopup>().ToggleMenu(true);
+            Managers.UI.Get<UI_NPCMenuPopup>().PopupRT.gameObject.SetActive(true);
         };
     }
 
     public void SetNPCSaleItems(NPC npc)
     {
-        foreach (ItemData itemData in npc.SaleItems)
+        foreach (var itemData in npc.SaleItems)
         {
             CreateShopSlot(itemData);
         }
@@ -93,8 +95,7 @@ public class UI_ShopPopup : UI_Popup, IDropHandler
     private void CreateShopSlot(ItemData itemData)
     {
         var go = Managers.Resource.Instantiate("UI_ShopSlot.prefab", GetObject((int)GameObjects.ShopSlots).transform, true);
-        var slot = go.GetComponent<UI_ShopSlot>();
-        slot.SetItem(itemData);
+        go.GetComponent<UI_ShopSlot>().SetItem(itemData);
         _shopSlots.Add(go);
     }
 

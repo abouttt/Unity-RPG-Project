@@ -3,65 +3,86 @@ using Cinemachine;
 
 public class PlayerCameraController : MonoBehaviour
 {
-    public static readonly string SaveKey = "SaveCamera";
-
     public Transform LockOnTarget
     {
-        get => _targetCamera.LookAt;
+        get => _stateDrivenCamera.LookAt;
         set
         {
-            _targetCamera.LookAt = value;
+            if (IsLockOn && value == null)
+            {
+                _stateDrivenCamera.LookAt.GetComponentInParent<Monster>().IsLockOnTarget = false;
+            }
+
             IsLockOn = value != null;
-            Player.Animator.SetFloat(_animIDLockOn, IsLockOn ? 1f : 0f);
+            _stateDrivenCamera.LookAt = value;
             _stateDrivenCameraAnimator.SetBool(_animIDLockOn, IsLockOn);
-            _lockOnTargetImageFollowTarget.SetTarget(_targetCamera.LookAt);
+            _lockOnTargetImage.SetTarget(_stateDrivenCamera.LookAt);
+            Player.Animator.SetFloat(_animIDLockOn, IsLockOn ? 1f : 0f);
+
+            if (IsLockOn)
+            {
+                _stateDrivenCamera.LookAt.GetComponentInParent<Monster>().IsLockOnTarget = true;
+            }
         }
     }
 
-    public bool IsLockOn { get; private set; } = false;
+    public bool IsLockOn { get; private set; }
 
     [Header("[Rotate]")]
     [SerializeField]
     private GameObject _cinemachineCameraTarget;
+
     [SerializeField]
     private float _sensitivity;
+
     [SerializeField]
     private float _topClamp;
+
     [SerializeField]
     private float _bottomClamp;
 
     [Space(10)]
     [Header("[Lock On]")]
     [SerializeField]
-    private float _radius;
-    [SerializeField, Range(0, 360)]
-    private float _angle;
+    private CinemachineStateDrivenCamera _stateDrivenCamera;
+
+    [SerializeField]
+    private float _viewRadius;
+
+    [Range(0, 360)]
+    [SerializeField]
+    private float _viewAngle;
+
     [SerializeField]
     private LayerMask _targetMask;
-    [SerializeField]
-    private LayerMask _obstructionMask;
-    [SerializeField]
-    private Animator _stateDrivenCameraAnimator;
-    [SerializeField]
-    private CinemachineVirtualCamera _followCamera;
-    [SerializeField]
-    private CinemachineVirtualCamera _targetCamera;
-    private UI_FollowTarget _lockOnTargetImageFollowTarget;
 
-    private readonly Collider[] _lockTargets = new Collider[10];
+    [SerializeField]
+    private LayerMask _obstacleMask;
+
+    private Animator _stateDrivenCameraAnimator;
+    private readonly Collider[] _lockOnTargets = new Collider[10];
     private readonly int _animIDLockOn = Animator.StringToHash("LockOn");
 
-    private float _cinemachineTargetPitch;  // X
-    private float _cinemachineTargetYaw;    // Y
+    private float _cinemachineTargetYaw;
+    private float _cinemachineTargetPitch;
+
+    private const float _threshold = 0.01f;
+
+    private GameObject _mainCamera;
+    private UI_FollowWorldObject _lockOnTargetImage;
 
     private void Awake()
     {
-        LoadSaveData();
+        _mainCamera = Camera.main.gameObject;
+        _stateDrivenCameraAnimator = _stateDrivenCamera.GetComponent<Animator>();
     }
 
     private void Start()
     {
-        _lockOnTargetImageFollowTarget = Managers.UI.Get<UI_AutoCanvas>().LockOnTargetImage.GetComponent<UI_FollowTarget>();
+        _lockOnTargetImage = Managers.Resource.Instantiate
+            ("UI_LockOnTargetImage.prefab", Managers.UI.Get<UI_AutoCanvas>().transform).GetComponent<UI_FollowWorldObject>();
+        _lockOnTargetImage.gameObject.SetActive(false);
+        _cinemachineTargetYaw = _cinemachineCameraTarget.transform.rotation.eulerAngles.y;
     }
 
     private void Update()
@@ -70,60 +91,44 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (IsLockOn)
             {
-                LockOnTarget.GetComponentInParent<Monster>().IsLockOnTarget = false;
                 LockOnTarget = null;
             }
             else
             {
                 FindTarget();
-                if (IsLockOn)
-                {
-                    _targetCamera.LookAt.GetComponentInParent<Monster>().IsLockOnTarget = true;
-                }
             }
         }
     }
 
     private void LateUpdate()
     {
+        CameraRotation();
+
         if (IsLockOn)
         {
-            TrackingTarget();
+            TrackingLockOnTarget();
         }
-
-        CameraRotation();
-    }
-
-    public string GetSaveData()
-    {
-        CameraSaveData saveData = new()
-        {
-            Pitch = _cinemachineTargetPitch,
-            Yaw = _cinemachineTargetYaw,
-        };
-
-        return JsonUtility.ToJson(saveData);
     }
 
     private void CameraRotation()
     {
         if (IsLockOn)
         {
-            _cinemachineCameraTarget.transform.rotation = _followCamera.transform.rotation;
+            _cinemachineCameraTarget.transform.rotation = _stateDrivenCamera.transform.rotation;
             var eulerAngles = _cinemachineCameraTarget.transform.eulerAngles;
             _cinemachineTargetPitch = eulerAngles.x;
             _cinemachineTargetYaw = eulerAngles.y;
         }
         else
         {
-            if (Managers.Input.Look.sqrMagnitude >= 0.01f)
+            if (Managers.Input.Look.sqrMagnitude >= _threshold)
             {
                 _cinemachineTargetYaw += Managers.Input.Look.x * _sensitivity;
                 _cinemachineTargetPitch += Managers.Input.Look.y * _sensitivity;
             }
 
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, _bottomClamp, _topClamp);
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, _bottomClamp, _topClamp);
             _cinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0f);
         }
     }
@@ -133,19 +138,20 @@ public class PlayerCameraController : MonoBehaviour
         float shortestAngle = Mathf.Infinity;
         Transform finalTarget = null;
 
-        int targetCnt = Physics.OverlapSphereNonAlloc(_cinemachineCameraTarget.transform.position, _radius, _lockTargets, _targetMask);
+        int targetCnt = Physics.OverlapSphereNonAlloc(_mainCamera.transform.position, _viewRadius, _lockOnTargets, _targetMask);
         for (int i = 0; i < targetCnt; i++)
         {
-            var directionToTarget = (_lockTargets[i].transform.position - _cinemachineCameraTarget.transform.position).normalized;
-            var currentAngle = Vector3.Angle(_cinemachineCameraTarget.transform.forward, directionToTarget);
-            if (currentAngle < _angle * 0.5f)
+            var dirToTarget = (_lockOnTargets[i].transform.position - _mainCamera.transform.position).normalized;
+            float currentAngle = Vector3.Angle(_mainCamera.transform.forward, dirToTarget);
+
+            if (currentAngle < _viewAngle * 0.5f)
             {
-                float distanceToTarget = Vector3.Distance(_cinemachineCameraTarget.transform.position, _lockTargets[i].transform.position);
+                float dstToTarget = Vector3.Distance(_mainCamera.transform.position, _lockOnTargets[i].transform.position);
                 if (currentAngle < shortestAngle)
                 {
-                    if (!Physics.Raycast(_cinemachineCameraTarget.transform.position, directionToTarget, distanceToTarget, _obstructionMask))
+                    if (!Physics.Raycast(_mainCamera.transform.position, dirToTarget, dstToTarget, _obstacleMask))
                     {
-                        finalTarget = _lockTargets[i].transform;
+                        finalTarget = _lockOnTargets[i].transform;
                         shortestAngle = currentAngle;
                     }
                 }
@@ -155,10 +161,30 @@ public class PlayerCameraController : MonoBehaviour
         LockOnTarget = finalTarget;
     }
 
-    private void TrackingTarget()
+    private void TrackingLockOnTarget()
     {
-        if (!LockOnTarget.gameObject.activeInHierarchy ||
-            Vector3.Distance(_cinemachineCameraTarget.transform.position, LockOnTarget.transform.position) > _radius)
+        if (!LockOnTarget.gameObject.activeInHierarchy)
+        {
+            LockOnTarget = null;
+            return;
+        }
+
+        float distToTarget = Vector3.Distance(_mainCamera.transform.position, LockOnTarget.position);
+        if (distToTarget > _viewRadius)
+        {
+            LockOnTarget = null;
+            return;
+        }
+
+        var dirToTarget = (LockOnTarget.position - _mainCamera.transform.position).normalized;
+        if (Physics.Raycast(_mainCamera.transform.position, dirToTarget, distToTarget, _obstacleMask))
+        {
+            LockOnTarget = null;
+            return;
+        }
+
+        float pitch = ClampAngle(_cinemachineTargetPitch, _bottomClamp, _topClamp);
+        if (_bottomClamp > pitch || pitch > _topClamp)
         {
             LockOnTarget = null;
         }
@@ -170,25 +196,12 @@ public class PlayerCameraController : MonoBehaviour
         {
             return lfAngle - 360f;
         }
-        else if (lfAngle < -180)
+
+        if (lfAngle < -180)
         {
             return lfAngle + 360f;
         }
 
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
-    }
-
-    private void LoadSaveData()
-    {
-        if (Managers.Data.Load<string>(SaveKey, out var json) && !Managers.Game.IsPortalSpawnPosition)
-        {
-            var saveData = JsonUtility.FromJson<CameraSaveData>(json);
-            _cinemachineTargetPitch = saveData.Pitch;
-            _cinemachineTargetYaw = saveData.Yaw;
-        }
-        else
-        {
-            _cinemachineTargetYaw = _cinemachineCameraTarget.transform.rotation.eulerAngles.y;
-        }
     }
 }

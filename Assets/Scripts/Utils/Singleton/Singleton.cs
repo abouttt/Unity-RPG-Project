@@ -13,7 +13,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
                 s_instance = FindObjectOfType<T>();
                 if (s_instance == null)
                 {
-                    var go = new GameObject { name = $"{typeof(T).Name}" };
+                    var go = new GameObject() { name = $"{typeof(T).Name}" };
                     s_instance = go.AddComponent<T>();
                 }
             }
@@ -27,13 +27,11 @@ public class Singleton<T> : MonoBehaviour where T : Component
         if (s_instance == null)
         {
             s_instance = this as T;
+            DontDestroyOnLoad(gameObject);
         }
         else if (s_instance != this)
         {
             Destroy(gameObject);
-            return;
         }
-
-        DontDestroyOnLoad(gameObject);
     }
 }

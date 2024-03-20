@@ -3,15 +3,25 @@ using UnityEngine.InputSystem;
 
 public class InputManager : GameControls.IPlayerActions
 {
+    public bool CursorLocked
+    {
+        get => _cursorLocked;
+        set
+        {
+            _cursorLocked = value;
+            Cursor.visible = !value;
+            SetCursorState(value);
+        }
+    }
+
     // Value
     public Vector2 Move { get; private set; }
     public Vector2 Look { get; private set; }
 
     // Button
     public bool Jump { get; private set; }
-    public bool Roll { get; private set; }
-    public bool Interaction { get; private set; }
     public bool LockOn { get; private set; }
+    public bool Interaction { get; private set; }
     public bool Attack { get; private set; }
     public bool Parry { get; private set; }
 
@@ -19,9 +29,8 @@ public class InputManager : GameControls.IPlayerActions
     public bool Sprint { get; private set; }
     public bool Defense { get; private set; }
 
-    public bool CursorLocked { get; private set; } = true;
-
     private GameControls _controls;
+    private bool _cursorLocked = true;
 
     public void Init()
     {
@@ -34,25 +43,17 @@ public class InputManager : GameControls.IPlayerActions
         _controls.Enable();
     }
 
-    public void ToggleCursor(bool toggle)
-    {
-        CursorLocked = !toggle;
-        Cursor.visible = toggle;
-        SetCursorState(CursorLocked);
-    }
-
     public string GetBindingPath(string actionNameOrId, int bindingIndex = 0)
     {
-        string key = _controls.FindAction(actionNameOrId).bindings[bindingIndex].path;
+        var key = _controls.FindAction(actionNameOrId).bindings[bindingIndex].path;
         return key.GetLastSlashString().ToUpper();
     }
 
     public void ResetActions()
     {
         _controls.Player.Jump.Reset();
-        _controls.Player.Roll.Reset();
-        _controls.Player.Interaction.Reset();
         _controls.Player.LockOn.Reset();
+        _controls.Player.Interaction.Reset();
         _controls.Player.Attack.Reset();
         _controls.Player.Parry.Reset();
     }
@@ -84,14 +85,9 @@ public class InputManager : GameControls.IPlayerActions
         Jump = context.ReadValueAsButton();
     }
 
-    public void OnRoll(InputAction.CallbackContext context)
+    public void OnLockOn(InputAction.CallbackContext context)
     {
-        Roll = context.ReadValueAsButton();
-    }
-
-    public void OnSprint(InputAction.CallbackContext context)
-    {
-        Sprint = context.ReadValueAsButton();
+        LockOn = context.ReadValueAsButton();
     }
 
     public void OnInteraction(InputAction.CallbackContext context)
@@ -121,37 +117,12 @@ public class InputManager : GameControls.IPlayerActions
             return;
         }
 
-        if (Managers.UI.IsOnSelfishPopup)
-        {
-            return;
-        }
-
-        ToggleCursor(CursorLocked);
+        CursorLocked = !_cursorLocked;
     }
 
-    public void OnLockOn(InputAction.CallbackContext context)
+    public void OnSprint(InputAction.CallbackContext context)
     {
-        if (CursorLocked)
-        {
-            LockOn = context.ReadValueAsButton();
-        }
-    }
-
-    public void OnCancel(InputAction.CallbackContext context)
-    {
-        if (!context.performed)
-        {
-            return;
-        }
-
-        if (Managers.UI.ActivePopupCount > 0)
-        {
-            Managers.UI.CloseTopPopup();
-        }
-        else
-        {
-            Managers.UI.Show<UI_GameMenuPopup>();
-        }
+        Sprint = context.ReadValueAsButton();
     }
 
     public void OnItemInventory(InputAction.CallbackContext context)
@@ -181,13 +152,30 @@ public class InputManager : GameControls.IPlayerActions
             return;
         }
 
-        if (Managers.UI.IsOn<UI_ItemSplitPopup>() || Managers.UI.IsOn<UI_NPCMenuPopup>())
+        if (Player.InteractionDetector.IsInteracted || Managers.UI.IsShowed<UI_ItemSplitPopup>())
         {
             return;
         }
 
-        var index = (int)context.ReadValue<float>();
+        int index = (int)context.ReadValue<float>();
         Player.QuickInventory.GetUsable(index)?.Use();
+    }
+
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+        {
+            return;
+        }
+
+        if (Managers.UI.ActivePopupCount > 0)
+        {
+            Managers.UI.CloseTopPopup();
+        }
+        else
+        {
+            Managers.UI.Show<UI_GameMenuPopup>();
+        }
     }
 
     private void SetCursorState(bool newState)
@@ -202,7 +190,7 @@ public class InputManager : GameControls.IPlayerActions
             return;
         }
 
-        if (Managers.UI.IsOn<UI_ItemSplitPopup>())
+        if (Managers.UI.IsShowed<UI_ItemSplitPopup>())
         {
             return;
         }

@@ -4,13 +4,14 @@ using UnityEngine;
 
 public abstract class Skill : IUsable
 {
+    public event Action SkillChanged;
+
     public SkillData Data { get; private set; }
     public bool IsLock { get; private set; } = true;
     public bool IsAcquirable { get; private set; } = false;
     public int CurrentLevel { get; set; }
     public IReadOnlyList<Skill> Parents => _parents;
     public IReadOnlyDictionary<Skill, int> Children => _children;
-    public event Action SkillChanged;
 
     private readonly List<Skill> _parents = new();
     private readonly Dictionary<Skill, int> _children = new();
@@ -20,8 +21,15 @@ public abstract class Skill : IUsable
         Data = data;
     }
 
+    public abstract bool Use();
+
     public void LevelUp()
     {
+        if (!IsAcquirable)
+        {
+            return;
+        }
+
         if (IsLock)
         {
             IsLock = false;
@@ -44,7 +52,7 @@ public abstract class Skill : IUsable
         skill._parents.Add(this);
     }
 
-    public void Check()
+    public void CheckState()
     {
         if (IsLock && CurrentLevel > 0)
         {
@@ -53,11 +61,11 @@ public abstract class Skill : IUsable
             SkillChanged?.Invoke();
         }
 
-        if (IsAcquirable)
+        if (!IsLock)
         {
             foreach (var child in _children)
             {
-                child.Key.Check();
+                child.Key.CheckState();
             }
         }
 
@@ -87,34 +95,45 @@ public abstract class Skill : IUsable
 
     public int ResetSkill()
     {
-        int skillPoint = 0;
-        foreach (var element in _children)
+        int skillPoint = CurrentLevel;
+
+        if (!IsLock)
         {
-            skillPoint += element.Key.ResetSkill();
+            foreach (var element in _children)
+            {
+                skillPoint += element.Key.ResetSkill();
+            }
         }
 
-        skillPoint += CurrentLevel;
+        bool prevAcquirable = IsAcquirable;
         CurrentLevel = 0;
         IsLock = true;
         IsAcquirable = false;
-        SkillChanged?.Invoke();
-        Managers.Quest.ReceiveReport(Category.Skill, Data.SkillID, -1);
+
+        if (prevAcquirable == true)
+        {
+            Managers.Quest.ReceiveReport(Category.Skill, Data.SkillID, -CurrentLevel);
+            SkillChanged?.Invoke();
+        }
 
         return skillPoint;
     }
 
-    public abstract bool Use();
-
-    protected bool CheckCanUse()
+    protected bool CanUse()
     {
-        if (Data.Cooldown.Current > 0)
+        if (Data.SkillType is SkillType.Passive)
         {
             return false;
         }
 
-        if (Player.Status.HP < Data.RequiredHP ||
-            Player.Status.MP < Data.RequiredMP ||
-            Player.Status.SP < Data.RequiredSP)
+        if (Data.Cooldown.Current > 0f)
+        {
+            return false;
+        }
+
+        if (Player.Status.HP < 0 ||
+            Player.Status.MP < 0 ||
+            Player.Status.SP < 0f)
         {
             return false;
         }

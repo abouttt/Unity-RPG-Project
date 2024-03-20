@@ -51,13 +51,20 @@ public class SkillData : ScriptableObject, ICooldownable
 
     public Skill CreateSkill()
     {
-        return GetInstance();
+        var skill = GetInstance();
+        if (skill == null)
+        {
+            Debug.Log($"{SkillName} class name no exist");
+            return null;
+        }
+
+        return skill;
     }
 
     private Skill GetInstance()
     {
-        Type type = Type.GetType(SkillClassName);
-        if (type is not null)
+        var type = Type.GetType(SkillClassName);
+        if (type != null)
         {
             return (Skill)Activator.CreateInstance(type, new object[] { this });
         }

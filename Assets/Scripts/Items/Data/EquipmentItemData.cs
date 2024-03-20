@@ -24,9 +24,6 @@ public class EquipmentItemData : ItemData
     [field: SerializeField]
     public int Defense { get; private set; }
 
-    [field: SerializeField]
-    public float AttackRadius { get; private set; }
-
     public EquipmentItemData()
     {
         ItemType = ItemType.Equipment;

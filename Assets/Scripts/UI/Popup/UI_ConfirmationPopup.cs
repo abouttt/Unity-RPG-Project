@@ -4,17 +4,17 @@ using DG.Tweening;
 
 public class UI_ConfirmationPopup : UI_Popup
 {
-    enum Buttons
-    {
-        OKButton,
-        NOButton,
-    }
-
     enum Texts
     {
         ConfirmationText,
         OKText,
         NOText,
+    }
+
+    enum Buttons
+    {
+        OKButton,
+        NOButton,
     }
 
     private DOTweenAnimation _dotween;
@@ -23,10 +23,10 @@ public class UI_ConfirmationPopup : UI_Popup
     {
         base.Init();
 
-        BindButton(typeof(Buttons));
-        BindText(typeof(Texts));
-
         _dotween = PopupRT.GetComponent<DOTweenAnimation>();
+
+        BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.NOButton).onClick.AddListener(Managers.UI.Close<UI_ConfirmationPopup>);
     }

@@ -9667,7 +9667,7 @@ GameObject:
   - component: {fileID: 4419896134901614}
   - component: {fileID: 198792010525850640}
   - component: {fileID: 199047207903987654}
-  - component: {fileID: 4902459515054176123}
+  - component: {fileID: -5911597201644656791}
   m_Layer: 0
   m_Name: ShieldHit
   m_TagString: Untagged
@@ -14469,7 +14469,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &4902459515054176123
+--- !u!114 &-5911597201644656791
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14478,7 +14478,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1883296549405982}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 834d71ab03604a248ac90a513d681e40, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f41abd18c5dfc84e9d6e1f36e682466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _isPassiveDestruction: 0

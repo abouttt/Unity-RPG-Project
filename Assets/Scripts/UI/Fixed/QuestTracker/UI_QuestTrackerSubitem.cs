@@ -3,27 +3,31 @@ using UnityEngine;
 
 public class UI_QuestTrackerSubitem : UI_Base
 {
-    enum Buttons
-    {
-        CloseButton,
-    }
-
     enum Texts
     {
         QuestNameText,
         QuestTargetText,
     }
 
+    enum Buttons
+    {
+        CloseButton,
+    }
+
+    [SerializeField]
+    private Color _completableTextColor = Color.black;
+
     private Quest _questRef;
     private readonly StringBuilder _sb = new(50);
+    private QuestState _questState;
 
     protected override void Init()
     {
         BindButton(typeof(Buttons));
         BindText(typeof(Texts));
 
-        GetButton((int)Buttons.CloseButton).onClick.AddListener(() => 
-        { 
+        GetButton((int)Buttons.CloseButton).onClick.AddListener(() =>
+        {
             Managers.UI.Get<UI_QuestPopup>().ToggleQuestTracker(_questRef, false);
         });
     }
@@ -31,6 +35,7 @@ public class UI_QuestTrackerSubitem : UI_Base
     public void SetQuest(Quest quest)
     {
         _questRef = quest;
+        _questState = QuestState.Active;
         quest.TargetCountChanged += RefreshTargetText;
         GetText((int)Texts.QuestNameText).text = $"<{quest.Data.QuestName}>";
         RefreshTargetText();
@@ -46,13 +51,29 @@ public class UI_QuestTrackerSubitem : UI_Base
     {
         _sb.Clear();
 
-        foreach (var target in _questRef.Targets)
+        foreach (var element in _questRef.Targets)
         {
-            var completeCount = target.Key.CompleteCount;
-            var currentCount = Mathf.Clamp(target.Value, 0, completeCount);
-            _sb.AppendLine($"- {target.Key.Description} ({currentCount}/{completeCount})");
+            int completeCount = element.Key.CompleteCount;
+            int currentCount = Mathf.Clamp(element.Value, 0, completeCount);
+            _sb.AppendLine($"- {element.Key.Description} ({currentCount}/{completeCount})");
         }
 
         GetText((int)Texts.QuestTargetText).text = _sb.ToString();
+
+        if (_questState != _questRef.State)
+        {
+            _questState = _questRef.State;
+
+            if (_questRef.State is QuestState.Completable)
+            {
+                GetText((int)Texts.QuestNameText).color = _completableTextColor;
+                GetText((int)Texts.QuestTargetText).color = _completableTextColor;
+            }
+            else
+            {
+                GetText((int)Texts.QuestNameText).color = Color.white;
+                GetText((int)Texts.QuestTargetText).color = Color.white;
+            }
+        }
     }
 }

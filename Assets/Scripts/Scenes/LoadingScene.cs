@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LoadingScene : BaseScene
 {
@@ -14,7 +14,7 @@ public class LoadingScene : BaseScene
     {
         base.Init();
 
-        _background.sprite = SceneSetting.GetInstance.Background[Managers.Scene.NextScene];
+        _background.sprite = SceneSettings.GetInstance.BackgroundImages[Managers.Scene.NextScene];
         _background.color = Color.white;
         if (_background.sprite == null)
         {
@@ -27,7 +27,7 @@ public class LoadingScene : BaseScene
 
     private IEnumerator LoadSceneAsync()
     {
-        AsyncOperation op = SceneManager.LoadSceneAsync(Managers.Scene.NextScene.ToString());
+        var op = SceneManager.LoadSceneAsync(Managers.Scene.NextScene.ToString());
         op.allowSceneActivation = false;
 
         float timer = 0f;

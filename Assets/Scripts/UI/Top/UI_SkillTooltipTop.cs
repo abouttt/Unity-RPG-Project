@@ -31,7 +31,7 @@ public class UI_SkillTooltipTop : UI_Base
     }
 
     [SerializeField, Tooltip("Distance from mouse")]
-    private Vector2 _deltaPosition;
+    private Vector2 _offset;
 
     private UI_BaseSlot _target;
     private SkillData _skillData;
@@ -44,6 +44,7 @@ public class UI_SkillTooltipTop : UI_Base
 
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
+
         _rt = GetObject((int)GameObjects.SkillTooltip).GetComponent<RectTransform>();
     }
 
@@ -73,13 +74,16 @@ public class UI_SkillTooltipTop : UI_Base
 
         if (_target.HasObject)
         {
-            if (_target.ObjectRef is Skill skill)
+            if (!GetObject((int)GameObjects.SkillTooltip).activeSelf)
             {
-                SetSkillData(skill);
-            }
-            else
-            {
-                Close();
+                if (_target.ObjectRef is Skill skill)
+                {
+                    SetSkillData(skill);
+                }
+                else
+                {
+                    Close();
+                }
             }
         }
         else if (!_target.HasObject)
@@ -133,10 +137,10 @@ public class UI_SkillTooltipTop : UI_Base
 
     private void SetPosition(Vector3 position)
     {
-        var nextPosition = new Vector3
+        var nextPosition = new Vector3()
         {
-            x = position.x + (_rt.rect.width * 0.5f) + _deltaPosition.x,
-            y = position.y + (_rt.rect.height * 0.5f) + _deltaPosition.y
+            x = position.x + (_rt.rect.width * 0.5f) + _offset.x,
+            y = position.y + (_rt.rect.height * 0.5f) + _offset.y
         };
 
         _rt.position = nextPosition;

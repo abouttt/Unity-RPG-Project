@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
   m_Name: Game_ContentUpdateGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: 73338827b558c4c4183a37effbe61252, type: 2}
+  m_Group: {fileID: 11400000, guid: c3ebfc70a57e1f44187554c2316b3a13, type: 2}
   m_StaticContent: 0

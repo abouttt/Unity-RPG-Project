@@ -12,17 +12,24 @@ public class PlayerRoot : MonoBehaviour
         public GameObject Equipment;
     }
 
+    public Action<EquipmentType> EquipmentChanged;
+
     [SerializeField]
     private SerializedDictionary<EquipmentType, EquipData> _equipDatas;
+
     [SerializeField]
     private RuntimeAnimatorController _basicAnimator;
+
     [SerializeField]
-    private AnimatorOverrideController _battleAnimator;
+    private AnimatorOverrideController _meleeAnimator;
+
+    private void Awake()
+    {
+        Player.EquipmentInventory.InventoryChanged += RefreshEquipmentObject;
+    }
 
     private void Start()
     {
-        Player.EquipmentInventory.EquipmentChanged += RefreshEquipmentObject;
-
         var types = Enum.GetValues(typeof(EquipmentType));
         foreach (EquipmentType type in types)
         {
@@ -50,16 +57,6 @@ public class PlayerRoot : MonoBehaviour
         return null;
     }
 
-    public bool IsEquip(EquipmentType equipmentType)
-    {
-        if (_equipDatas.TryGetValue(equipmentType, out var equipRootData))
-        {
-            return equipRootData.Equipment != null;
-        }
-
-        return false;
-    }
-
     private void RefreshEquipmentObject(EquipmentType equipmentType)
     {
         if (!_equipDatas.TryGetValue(equipmentType, out _))
@@ -69,12 +66,7 @@ public class PlayerRoot : MonoBehaviour
 
         var equipData = _equipDatas[equipmentType];
 
-        if (Player.EquipmentInventory.IsNullSlot(equipmentType))
-        {
-            Destroy(equipData.Equipment);
-            equipData.Equipment = null;
-        }
-        else
+        if (Player.EquipmentInventory.IsEquipped(equipmentType))
         {
             if (equipData.Equipment != null)
             {
@@ -84,21 +76,27 @@ public class PlayerRoot : MonoBehaviour
             var equipment = Instantiate(Player.EquipmentInventory.GetItem(equipmentType).EquipmentData.ItemPrefab, equipData.Root);
             equipData.Equipment = equipment;
         }
+        else
+        {
+            Destroy(equipData.Equipment);
+            equipData.Equipment = null;
+        }
 
         RefreshAnimator();
+        EquipmentChanged?.Invoke(equipmentType);
     }
 
     private void RefreshAnimator()
     {
         bool hasEquipment = false;
 
-        if (_equipDatas[EquipmentType.Weapon].Equipment != null ||
-            _equipDatas[EquipmentType.Shield].Equipment != null)
+        if (Player.EquipmentInventory.IsEquipped(EquipmentType.Weapon) ||
+            Player.EquipmentInventory.IsEquipped(EquipmentType.Shield))
         {
             hasEquipment = true;
         }
 
-        Player.Animator.runtimeAnimatorController = hasEquipment ? _battleAnimator : _basicAnimator;
+        Player.Animator.runtimeAnimatorController = hasEquipment ? _meleeAnimator : _basicAnimator;
 
         if (Player.Camera.IsLockOn)
         {

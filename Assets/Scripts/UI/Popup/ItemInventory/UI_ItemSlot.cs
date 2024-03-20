@@ -75,12 +75,12 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
     {
         if (ObjectRef is CountableItem countableItem && countableItem.CurrentCount > 1)
         {
-            GetText((int)Texts.CountText).enabled = true;
+            GetText((int)Texts.CountText).gameObject.SetActive(true);
             GetText((int)Texts.CountText).text = countableItem.CurrentCount.ToString();
         }
         else
         {
-            GetText((int)Texts.CountText).enabled = false;
+            GetText((int)Texts.CountText).gameObject.SetActive(false);
         }
     }
 
@@ -102,30 +102,35 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
             return;
         }
 
-        if (Managers.UI.IsOn<UI_ShopPopup>())
+        if (Managers.UI.IsShowed<UI_ShopPopup>())
         {
             Managers.UI.Get<UI_ShopPopup>().SellItem(this);
         }
         else
         {
             var item = ObjectRef as Item;
+
             switch (item.Data.ItemType)
             {
                 case ItemType.Equipment:
-                    if (ObjectRef is EquipmentItem equipmentItem)
-                    {
-                        if (Player.EquipmentInventory.IsNullSlot(equipmentItem.EquipmentData.EquipmentType))
-                        {
-                            Player.ItemInventory.RemoveItem(equipmentItem.Data.ItemType, Index);
-                        }
-                        else
-                        {
-                            var otherEquipmentItem = Player.EquipmentInventory.GetItem(equipmentItem.EquipmentData.EquipmentType);
-                            Player.ItemInventory.SetItem(otherEquipmentItem.Data, Index);
-                        }
+                    EquipmentItem equipmentItem = ObjectRef as EquipmentItem;
 
-                        Player.EquipmentInventory.EquipItem(equipmentItem.EquipmentData);
+                    if (equipmentItem.EquipmentData.LimitLevel > Player.Status.Level)
+                    {
+                        return;
                     }
+
+                    if (Player.EquipmentInventory.IsEquipped(equipmentItem.EquipmentData.EquipmentType))
+                    {
+                        EquipmentItem otherEquipmentItem = Player.EquipmentInventory.GetItem(equipmentItem.EquipmentData.EquipmentType);
+                        Player.ItemInventory.SetItem(otherEquipmentItem.Data, Index);
+                    }
+                    else
+                    {
+                        Player.ItemInventory.RemoveItem(equipmentItem.Data.ItemType, Index);
+                    }
+
+                    Player.EquipmentInventory.Equip(equipmentItem.EquipmentData);
                     break;
                 default:
                     if (item is IUsable usable)
@@ -187,29 +192,23 @@ public class UI_ItemSlot : UI_BaseSlot, IDropHandler
         }
     }
 
-    private void OnDropEquipmentSlot(UI_EquipmentSlot otherEquipmentSlot)
+    private void OnDropEquipmentSlot(UI_EquipmentSlot equipmentSlot)
     {
-        var otherEquipmentData = (otherEquipmentSlot.ObjectRef as EquipmentItem).EquipmentData;
+        var otherEquipmentData = (equipmentSlot.ObjectRef as EquipmentItem).EquipmentData;
 
         if (HasObject)
         {
             var thisEquipmentData = (ObjectRef as EquipmentItem).EquipmentData;
-
             if (thisEquipmentData.EquipmentType != otherEquipmentData.EquipmentType)
             {
                 return;
             }
 
-            if (thisEquipmentData.LimitLevel > Player.Status.Level)
-            {
-                return;
-            }
-
-            Player.EquipmentInventory.EquipItem(thisEquipmentData);
+            Player.EquipmentInventory.Equip(thisEquipmentData);
         }
         else
         {
-            Player.EquipmentInventory.UnequipItem(otherEquipmentSlot.EquipmentType);
+            Player.EquipmentInventory.Unequip(equipmentSlot.EquipmentType);
         }
 
         Player.ItemInventory.SetItem(otherEquipmentData, Index);

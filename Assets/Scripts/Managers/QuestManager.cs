@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using Newtonsoft.Json.Linq;
 
-public class QuestManager
+public class QuestManager : ISavable
 {
-    public static readonly string SaveKey = "SaveQuest";
+    public static string SaveKey => "SaveQuest";
 
     private const string ACTIVE_QUEST_SaveKey = "SaveActiveQuest";
     private const string COMPLETE_QUEST_SaveKey = "SaveCompleteQuest";
@@ -22,29 +20,17 @@ public class QuestManager
 
     private readonly List<Quest> _activeQuests = new();
     private readonly List<Quest> _completedQuests = new();
-    private bool _isSaveLoadCleanup;
-
-    public void Init()
-    {
-        LoadSaveData();
-    }
 
     public Quest Register(QuestData questData)
     {
-        if (GetActiveQuest(questData) is not null)
-        {
-            return null;
-        }
-
         var newQuest = new Quest(questData);
         _activeQuests.Add(newQuest);
-        newQuest.RemoveQuestFromOwner();
+        NPC.TryRemoveQuestToNPC(questData.OwnerID, questData);
         QuestRegistered?.Invoke(newQuest);
 
-        newQuest.CheckCompletable();
-        if (newQuest.State is QuestState.Completable)
+        if (newQuest.CheckCompletable())
         {
-            newQuest.AddQuestToCompletableOwner();
+            NPC.TryAddQuestToNPC(questData.CompleteOwnerID, questData);
             QuestCompletabled?.Invoke(newQuest);
         }
 
@@ -53,19 +39,20 @@ public class QuestManager
 
     public void Unregister(Quest quest)
     {
-        if (quest is null)
+        if (quest == null)
         {
             return;
         }
 
         if (_activeQuests.Remove(quest))
         {
-            if (quest.State is QuestState.Completable)
+            if (quest.State == QuestState.Completable)
             {
-                quest.RemoveQuestFromCompletableOwner();
+                NPC.TryRemoveQuestToNPC(quest.Data.CompleteOwnerID, quest.Data);
             }
+
             quest.Cancel();
-            quest.AddQuestToOwner();
+            NPC.TryAddQuestToNPC(quest.Data.OwnerID, quest.Data);
             QuestUnRegistered?.Invoke(quest);
         }
     }
@@ -82,17 +69,17 @@ public class QuestManager
             var prevState = quest.State;
             if (quest.ReceiveReport(category, id, count))
             {
-                if (quest.State is QuestState.Completable)
+                if (quest.State == QuestState.Completable)
                 {
-                    if (prevState is not QuestState.Completable)
+                    if (prevState != QuestState.Completable)
                     {
-                        quest.AddQuestToCompletableOwner();
+                        NPC.TryAddQuestToNPC(quest.Data.CompleteOwnerID, quest.Data);
                         QuestCompletabled?.Invoke(quest);
                     }
                 }
-                else if (prevState is QuestState.Completable)
+                else if (prevState == QuestState.Completable)
                 {
-                    quest.RemoveQuestFromCompletableOwner();
+                    NPC.TryRemoveQuestToNPC(quest.Data.CompleteOwnerID, quest.Data);
                     QuestCompletableCanceled?.Invoke(quest);
                 }
             }
@@ -101,7 +88,7 @@ public class QuestManager
 
     public void Complete(Quest quest)
     {
-        if (quest is null)
+        if (quest == null)
         {
             return;
         }
@@ -110,7 +97,7 @@ public class QuestManager
         {
             _activeQuests.Remove(quest);
             _completedQuests.Add(quest);
-            quest.RemoveQuestFromCompletableOwner();
+            NPC.TryRemoveQuestToNPC(quest.Data.CompleteOwnerID, quest.Data);
             QuestCompleted?.Invoke(quest);
         }
     }
@@ -120,102 +107,66 @@ public class QuestManager
         return _activeQuests.Find(quest => quest.Data.Equals(questData));
     }
 
-    public bool IsCompletable(QuestData questData)
+    public bool IsSameState(QuestData questData, QuestState questState)
     {
         var quest = GetActiveQuest(questData);
-        if (quest is null)
+        if (quest != null)
         {
-            return false;
+            return quest.State == questState;
         }
 
-        return quest.State is QuestState.Completable;
-    }
-
-    public void LoadCleanup()
-    {
-        if (_isSaveLoadCleanup)
-        {
-            return;
-        }
-
-        foreach (var quest in _activeQuests)
-        {
-            quest.RemoveQuestFromOwner();
-            QuestRegistered?.Invoke(quest);
-            if (quest.State is QuestState.Completable)
-            {
-                quest.AddQuestToCompletableOwner();
-                QuestCompletabled?.Invoke(quest);
-            }
-        }
-
-        foreach (var quest in _completedQuests)
-        {
-            quest.RemoveQuestFromOwner();
-        }
-
-        _isSaveLoadCleanup = true;
+        return false;
     }
 
     public void Clear()
     {
         foreach (var quest in _activeQuests)
         {
-            quest.Clear();
+            quest.Cancel();
         }
+
         _activeQuests.Clear();
         _completedQuests.Clear();
+
         QuestRegistered = null;
         QuestCompletabled = null;
         QuestCompletableCanceled = null;
         QuestCompleted = null;
         QuestUnRegistered = null;
-        _isSaveLoadCleanup = false;
     }
 
-    public JObject GetSaveData()
+    public JArray CreateSaveData()
     {
-        return new JObject
+        var saveData = new JArray();
+
+        var questsSaveData = new JObject()
         {
-            { ACTIVE_QUEST_SaveKey, CreateSaveData(_activeQuests) },
-            { COMPLETE_QUEST_SaveKey, CreateSaveData(_completedQuests) },
+            { ACTIVE_QUEST_SaveKey, CreateQuestsSaveData(_activeQuests) },
+            { COMPLETE_QUEST_SaveKey, CreateQuestsSaveData(_completedQuests) },
         };
+
+        saveData.Add(questsSaveData);
+        return saveData;
     }
 
-    private JArray CreateSaveData(IReadOnlyList<Quest> quests)
+    public void LoadSaveData()
     {
-        var saveDatas = new JArray();
-
-        foreach (var quest in quests)
-        {
-            QuestSaveData saveData = new()
-            {
-                QuestID = quest.Data.QuestID,
-                State = quest.State,
-                Counts = quest.Targets.Select(t => t.Value).ToArray(),
-            };
-
-            saveDatas.Add(JObject.FromObject(saveData));
-        }
-
-        return saveDatas;
-    }
-
-    private void LoadSaveData()
-    {
-        if (!Managers.Data.Load<JObject>(SaveKey, out var root))
+        if (!Managers.Data.Load<JArray>(SaveKey, out var saveData))
         {
             return;
         }
 
-        foreach (var element in root)
-        {
-            var datas = root[element.Key] as JArray;
+        var questsSaveData = saveData[0].ToObject<JObject>();
 
-            foreach (var data in datas)
+        foreach (var element in questsSaveData)
+        {
+            var quests = questsSaveData[element.Key] as JArray;
+            foreach (var data in quests)
             {
-                var saveData = data.ToObject<QuestSaveData>();
-                var quest = new Quest(saveData);
+                var questSaveData = data.ToObject<QuestSaveData>();
+                var quest = new Quest(questSaveData);
+                NPC.TryRemoveQuestToNPC(quest.Data.OwnerID, quest.Data);
+
                 if (quest.State is QuestState.Complete)
                 {
                     _completedQuests.Add(quest);
@@ -223,9 +174,40 @@ public class QuestManager
                 else
                 {
                     _activeQuests.Add(quest);
-                    quest.CheckCompletable();
+                    QuestRegistered?.Invoke(quest);
+
+                    if (quest.CheckCompletable())
+                    {
+                        NPC.TryAddQuestToNPC(quest.Data.CompleteOwnerID, quest.Data);
+                        QuestCompletabled?.Invoke(quest);
+                    }
                 }
             }
         }
+    }
+
+    private JArray CreateQuestsSaveData(List<Quest> quests)
+    {
+        var saveData = new JArray();
+
+        foreach (var quest in quests)
+        {
+            var targets = new Dictionary<string, int>();
+            foreach (var element in quest.Targets)
+            {
+                targets.Add(element.Key.TargetID, element.Value);
+            }
+
+            var questSaveData = new QuestSaveData()
+            {
+                QuestID = quest.Data.QuestID,
+                State = quest.State,
+                Targets = targets,
+            };
+
+            saveData.Add(JObject.FromObject(questSaveData));
+        }
+
+        return saveData;
     }
 }

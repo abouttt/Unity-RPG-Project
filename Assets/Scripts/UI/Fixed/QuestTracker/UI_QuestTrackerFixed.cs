@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class UI_QuestTrackerFixed : UI_Base
 {
-    enum Layouts
+    enum Transforms
     {
         QuestTracker,
     }
@@ -18,7 +18,7 @@ public class UI_QuestTrackerFixed : UI_Base
     {
         Managers.UI.Register<UI_QuestTrackerFixed>(this);
 
-        Bind<VerticalLayoutGroup>(typeof(Layouts));
+        BindRT(typeof(Transforms));
     }
 
     public bool AddTracker(Quest quest)
@@ -33,13 +33,12 @@ public class UI_QuestTrackerFixed : UI_Base
             return false;
         }
 
-        var layoutTransform = Get<VerticalLayoutGroup>((int)Layouts.QuestTracker).transform;
-        var go = Managers.Resource.Instantiate("UI_QuestTrackerSubitem.prefab", layoutTransform, true);
-        var tracker = go.GetComponent<UI_QuestTrackerSubitem>();
-        tracker.SetQuest(quest);
-        tracker.gameObject.SetActive(true);
-        _trackers.Add(quest, tracker);
-        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)layoutTransform);
+        var go = Managers.Resource.Instantiate("UI_QuestTrackerSubitem.prefab", GetRT((int)Transforms.QuestTracker), true);
+        var subitem = go.GetComponent<UI_QuestTrackerSubitem>();
+        subitem.SetQuest(quest);
+        subitem.gameObject.SetActive(true);
+        _trackers.Add(quest, subitem);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(GetRT((int)Transforms.QuestTracker));
 
         return true;
     }

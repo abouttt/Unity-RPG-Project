@@ -8,13 +8,12 @@ public class Skill_Punch : Skill
 
     public override bool Use()
     {
-        if (!CheckCanUse())
+        if (!CanUse())
         {
             return false;
         }
 
-        Debug.Log("Skill Punch!!!");
-
+        Debug.Log("Punch");
         return true;
     }
 }

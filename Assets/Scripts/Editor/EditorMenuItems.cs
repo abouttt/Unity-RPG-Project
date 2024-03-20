@@ -5,16 +5,25 @@ using UnityEditor;
 
 public static class EditorMenuItems
 {
+    [MenuItem("Tools/Refresh Databases")]
+    public static void RefreshDatabases()
+    {
+        ItemDatabase.GetInstance.FindItems();
+        SkillDatabase.GetInstance.FindSkills();
+        CooldownableDatabase.GetInstance.FindCooldownable();
+        QuestDatabase.GetInstance.FindQuests();
+    }
+
     [MenuItem("Tools/Clear Save Data")]
     public static void ClearSaveData()
     {
-        var directory = new DirectoryInfo(DataManager.SavePath);
+        DirectoryInfo directory = new(DataManager.SavePath);
         if (!directory.Exists)
         {
             directory.Create();
         }
 
-        foreach (FileInfo file in directory.GetFiles())
+        foreach (var file in directory.GetFiles())
         {
             file.Delete();
         }

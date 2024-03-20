@@ -3,9 +3,9 @@ using System.Text;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 
-public class UI_QuestPopup : UI_Popup
+public class UI_QuestPopup : UI_Popup, ISavable
 {
-    public static readonly string SaveKey = "SaveQuestUI";
+    public static string SaveKey => "SaveQuestUI";
 
     enum GameObjects
     {
@@ -18,13 +18,6 @@ public class UI_QuestPopup : UI_Popup
         QuestRewardSlots,
     }
 
-    enum Buttons
-    {
-        CloseButton,
-        CompleteButton,
-        CancelButton,
-    }
-
     enum Texts
     {
         QuestTitleText,
@@ -32,6 +25,13 @@ public class UI_QuestPopup : UI_Popup
         QuestTargetText,
         QuestRewardText,
         NOQuestText,
+    }
+
+    enum Buttons
+    {
+        CloseButton,
+        CompleteButton,
+        CancelButton,
     }
 
     private Quest _selectedQuest;
@@ -44,8 +44,8 @@ public class UI_QuestPopup : UI_Popup
 
         BindObject(typeof(GameObjects));
         BindRT(typeof(RectTransforms));
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(Managers.UI.Close<UI_QuestPopup>);
         GetButton((int)Buttons.CompleteButton).onClick.AddListener(() => Managers.Quest.Complete(_selectedQuest));
@@ -63,13 +63,12 @@ public class UI_QuestPopup : UI_Popup
     private void Start()
     {
         Managers.UI.Register<UI_QuestPopup>(this);
-
         LoadSaveData();
     }
 
     public void SetQuestDescription(Quest quest)
     {
-        if (quest is null)
+        if (quest == null)
         {
             return;
         }
@@ -88,9 +87,9 @@ public class UI_QuestPopup : UI_Popup
         GetText((int)Texts.QuestDescriptionText).text = quest.Data.Description;
         RefreshTargetText();
         SetRewardText(quest.Data);
-        ToggleCompleteButton(quest, quest.State is QuestState.Completable);
-        GetButton((int)Buttons.CancelButton).gameObject.SetActive(true);
+        ToggleCompleteButton(quest, quest.State == QuestState.Completable);
         GetText((int)Texts.NOQuestText).gameObject.SetActive(false);
+        GetButton((int)Buttons.CancelButton).gameObject.SetActive(true);
     }
 
     public void ToggleQuestTracker(Quest quest, bool toggle)
@@ -101,34 +100,12 @@ public class UI_QuestPopup : UI_Popup
         }
     }
 
-    public JArray GetSaveData()
-    {
-        var saveDatas = new JArray();
-
-        foreach (var element in _titleSubitems)
-        {
-            if (!element.Value.IsShowedTracker())
-            {
-                continue;
-            }
-
-            QuestUISaveData saveData = new()
-            {
-                QuestID = element.Key.Data.QuestID
-            };
-
-            saveDatas.Add(JObject.FromObject(saveData));
-        }
-
-        return saveDatas;
-    }
-
     private void OnQuestRegisterd(Quest quest)
     {
         var go = Managers.Resource.Instantiate("UI_QuestTitleSubitem.prefab", GetRT((int)RectTransforms.QuestTitleSubitems), true);
-        var questTitleSubitem = go.GetComponent<UI_QuestTitleSubitem>();
-        questTitleSubitem.SetQuestTitle(quest);
-        _titleSubitems.Add(quest, questTitleSubitem);
+        var subitem = go.GetComponent<UI_QuestTitleSubitem>();
+        subitem.SetQuestTitle(quest);
+        _titleSubitems.Add(quest, subitem);
     }
 
     private void OnQuestCompletabled(Quest quest)
@@ -168,9 +145,9 @@ public class UI_QuestPopup : UI_Popup
 
         foreach (var target in _selectedQuest.Targets)
         {
-            var completeCount = target.Key.CompleteCount;
-            var currentCount = Mathf.Clamp(target.Value, 0, completeCount);
-            _sb.AppendLine($"{target.Key.Description} ({currentCount}/{completeCount})");
+            int completeCount = target.Key.CompleteCount;
+            int currentCount = Mathf.Clamp(target.Value, 0, completeCount);
+            _sb.AppendLine($"- {target.Key.Description} ({currentCount}/{completeCount})");
         }
 
         GetText((int)Texts.QuestTargetText).text = _sb.ToString();
@@ -210,16 +187,16 @@ public class UI_QuestPopup : UI_Popup
 
     private void Clear()
     {
-        if (_selectedQuest is not null)
+        if (_selectedQuest != null)
         {
             _selectedQuest.TargetCountChanged -= RefreshTargetText;
             _selectedQuest = null;
         }
 
         GetObject((int)GameObjects.QuestInfo).SetActive(false);
+        GetText((int)Texts.NOQuestText).gameObject.SetActive(true);
         GetButton((int)Buttons.CompleteButton).gameObject.SetActive(false);
         GetButton((int)Buttons.CancelButton).gameObject.SetActive(false);
-        GetText((int)Texts.NOQuestText).gameObject.SetActive(true);
 
         foreach (Transform reward in GetRT((int)RectTransforms.QuestRewardSlots))
         {
@@ -232,19 +209,41 @@ public class UI_QuestPopup : UI_Popup
         }
     }
 
-    private void LoadSaveData()
+    public JArray CreateSaveData()
     {
-        if (!Managers.Data.Load<JArray>(SaveKey, out var datas))
+        var saveData = new JArray();
+
+        foreach (var element in _titleSubitems)
+        {
+            if (!element.Value.IsShowedTracker())
+            {
+                continue;
+            }
+
+            var questUISaveData = new QuestUISaveData()
+            {
+                QuestID = element.Key.Data.QuestID
+            };
+
+            saveData.Add(JObject.FromObject(questUISaveData));
+        }
+
+        return saveData;
+    }
+
+    public void LoadSaveData()
+    {
+        if (!Managers.Data.Load<JArray>(SaveKey, out var saveData))
         {
             return;
         }
 
-        foreach (var data in datas)
+        foreach (var token in saveData)
         {
-            var saveData = data.ToObject<QuestUISaveData>();
+            var questUISaveData = token.ToObject<QuestUISaveData>();
             foreach (var element in _titleSubitems)
             {
-                if (element.Key.Data.QuestID.Equals(saveData.QuestID))
+                if (element.Key.Data.QuestID.Equals(questUISaveData.QuestID))
                 {
                     element.Value.ToggleQuestTracker(true);
                 }

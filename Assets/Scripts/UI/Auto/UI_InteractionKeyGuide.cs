@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UI_InteractionKeyGuide : UI_Base
+public class UI_InteractionKeyGuide : UI_Auto
 {
     enum Images
     {
@@ -14,20 +14,21 @@ public class UI_InteractionKeyGuide : UI_Base
         NameText,
     }
 
-    private UI_FollowTarget _followTarget;
+    private UI_FollowWorldObject _followTarget;
 
     protected override void Init()
     {
         BindImage(typeof(Images));
         BindText(typeof(Texts));
-        _followTarget = GetComponent<UI_FollowTarget>();
+
+        _followTarget = GetComponent<UI_FollowWorldObject>();
     }
 
     public void SetTarget(Interactive target)
     {
         if (target != null)
         {
-            _followTarget.SetTarget(target.transform, target.InteractionKeyGuideDeltaPos);
+            _followTarget.SetTarget(target.transform, target.InteractionKeyGuidePos);
             SetText(target);
         }
 
@@ -36,20 +37,20 @@ public class UI_InteractionKeyGuide : UI_Base
 
     private void SetText(Interactive target)
     {
-        GetImage((int)Images.BG).enabled = target.CanInteraction;
-        GetText((int)Texts.KeyText).enabled = target.CanInteraction;
-        GetText((int)Texts.InteractionText).enabled = target.CanInteraction;
+        GetImage((int)Images.BG).gameObject.SetActive(target.CanInteraction);
+        GetText((int)Texts.KeyText).gameObject.SetActive(target.CanInteraction);
         GetText((int)Texts.KeyText).text = Managers.Input.GetBindingPath("Interaction");
+        GetText((int)Texts.InteractionText).gameObject.SetActive(target.CanInteraction);
         GetText((int)Texts.InteractionText).text = target.InteractionMessage;
 
         if (target is NPC npc)
         {
-            GetText((int)Texts.NameText).text = npc.Name;
-            GetText((int)Texts.NameText).enabled = true;
+            GetText((int)Texts.NameText).text = npc.NPCName;
+            GetText((int)Texts.NameText).gameObject.SetActive(true);
         }
         else
         {
-            GetText((int)Texts.NameText).enabled = false;
+            GetText((int)Texts.NameText).gameObject.SetActive(false);
         }
     }
 }

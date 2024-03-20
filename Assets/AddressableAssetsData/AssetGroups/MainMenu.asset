@@ -15,16 +15,16 @@ MonoBehaviour:
   m_GroupName: MainMenu
   m_Data:
     m_SerializedData: []
-  m_GUID: 416019f7f06076b4d8d982e585a35f63
+  m_GUID: 2137623c69b64c642a9a6e50e11962b4
   m_SerializeEntries:
-  - m_GUID: 72423eac555af6d40ad5092c6b89d753
+  - m_GUID: 231075dd467fdc04ba77ca70d478c1fc
     m_Address: UIPackage_MainMenu.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - MainMenu
+    - MainMenu_Prefab
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
+  m_Settings: {fileID: 11400000, guid: 79f589af2fcff9e498e8cd6b33c6d8ce, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: eb6d9e46f0a712247a7e709e37e67d84, type: 2}
-    - {fileID: 11400000, guid: aca8c099eb5f82f4992dd031cf6bf8f7, type: 2}
+    - {fileID: 11400000, guid: b0cb3d2bfe0e0c2498b604084cf6abf6, type: 2}
+    - {fileID: 11400000, guid: 99f083e6db485524c91f665e934b75dd, type: 2}

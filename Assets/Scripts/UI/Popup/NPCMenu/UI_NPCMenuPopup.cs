@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UI_NPCMenuPopup : UI_Popup
 {
-    enum GameObjects
+    enum RectTransforms
     {
         NPCMenuSubitems,
     }
@@ -13,13 +13,14 @@ public class UI_NPCMenuPopup : UI_Popup
         HeaderText
     }
 
+    private NPC _npc;
     private readonly List<UI_NPCMenuSubitem> _subitems = new();
 
     protected override void Init()
     {
         base.Init();
 
-        BindObject(typeof(GameObjects));
+        BindRT(typeof(RectTransforms));
         BindText(typeof(Texts));
     }
 
@@ -32,6 +33,7 @@ public class UI_NPCMenuPopup : UI_Popup
             Player.Movement.CanMove = false;
             Player.Movement.CanRotation = false;
             Player.Movement.CanJump = false;
+            Player.Movement.CanRoll = false;
             Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(false);
         };
 
@@ -42,6 +44,7 @@ public class UI_NPCMenuPopup : UI_Popup
             Player.Movement.CanMove = true;
             Player.Movement.CanRotation = true;
             Player.Movement.CanJump = true;
+            Player.Movement.CanRoll = true;
             Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
         };
     }
@@ -53,13 +56,15 @@ public class UI_NPCMenuPopup : UI_Popup
             return;
         }
 
-        GetText((int)Texts.HeaderText).text = npc.Name;
+        _npc = npc;
+
+        GetText((int)Texts.HeaderText).text = npc.NPCName;
 
         if (npc.Conversation)
         {
             AddSubitem("대화", () =>
             {
-                ToggleMenu(false);
+                PopupRT.gameObject.SetActive(false);
                 Managers.UI.Show<UI_ConversationPopup>().SetNPC(npc);
             });
         }
@@ -68,15 +73,15 @@ public class UI_NPCMenuPopup : UI_Popup
         {
             AddSubitem("상점", () =>
             {
-                ToggleMenu(false);
+                PopupRT.gameObject.SetActive(false);
                 Managers.UI.Show<UI_ShopPopup>().SetNPCSaleItems(npc);
             });
         }
 
         AddSubitem("퀘스트", () =>
         {
-            ToggleMenu(false);
-            Managers.UI.Show<UI_NPCQuestPopup>().SetNPCQuest(npc);
+            PopupRT.gameObject.SetActive(false);
+            Managers.UI.Show<UI_NPCQuestPopup>().SetNPC(npc);
         });
 
         AddSubitem("떠난다", () =>
@@ -85,14 +90,9 @@ public class UI_NPCMenuPopup : UI_Popup
         });
     }
 
-    public void ToggleMenu(bool toggle)
-    {
-        PopupRT.gameObject.SetActive(toggle);
-    }
-
     private void AddSubitem(string text, UnityEngine.Events.UnityAction call)
     {
-        var go = Managers.Resource.Instantiate("UI_NPCMenuSubitem.prefab", GetObject((int)GameObjects.NPCMenuSubitems).transform, true);
+        var go = Managers.Resource.Instantiate("UI_NPCMenuSubitem.prefab", GetRT((int)RectTransforms.NPCMenuSubitems), true);
         var subitem = go.GetComponent<UI_NPCMenuSubitem>();
         subitem.SetEvent(text, call);
         _subitems.Add(subitem);
@@ -106,6 +106,8 @@ public class UI_NPCMenuPopup : UI_Popup
             Managers.Resource.Destroy(subitem.gameObject);
         }
 
+        _npc.IsInteracted = false;
+        _npc = null;
         _subitems.Clear();
     }
 }

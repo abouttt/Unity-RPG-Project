@@ -15,47 +15,71 @@ MonoBehaviour:
   m_GroupName: Game
   m_Data:
     m_SerializedData: []
-  m_GUID: f88537c2a0e8ae044ae6faf13419f74c
+  m_GUID: 2fdff94365ecc84478ca1f24738fba6f
   m_SerializeEntries:
-  - m_GUID: 4cdc642d2937e8641908baf8aca975ae
-    m_Address: UIPackage_Game.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UI
-    - Game
-  - m_GUID: 8d1bd6f4caaab354fb97717e4a386e18
+  - m_GUID: bbf4c0f34b71cfc4382e24647ffe1af5
     m_Address: PlayerPackage.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 9678f9888c159a04f81a3ee7ab555acf
-    m_Address: FieldItem.prefab
+    - Game_Prefab
+  - m_GUID: 398606585acfc374fb54e19700741b24
+    m_Address: EventSystem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 067db487627e74843bd1ae92b8afa7c0
+    - Game_Prefab
+  - m_GUID: 1e46d29a304d4fb4088c5e68f2f4ebad
+    m_Address: UIPackage_Game.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_Prefab
+  - m_GUID: 33d1c171a53fdb442895d58007547cbf
     m_Address: QuestCompletableNotifier.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: e3178602cefa12f4aa3782b42ba87987
+    - Game_Prefab
+  - m_GUID: 60109e39c5311a94c9062fd742b2c00f
     m_Address: QuestPresenceNotifier.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 16573c81735a45744a5c7dc040102e32
-    m_Address: AttackSlash.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Game
-  - m_GUID: e52128cbd871bcf4dae7d6879306114a
+    - Game_Prefab
+  - m_GUID: 9b037fb1ca5643948bb29dd90a1b4b07
     m_Address: MinimapIcon.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
+    - Game_Prefab
+  - m_GUID: beb351332bd98ac4a961c64468746767
+    m_Address: SwordHit.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_Prefab
+  - m_GUID: 14983b2aa0b71004ba8f32b0a926e9a2
+    m_Address: ShieldHit.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_Prefab
+  - m_GUID: dd9b2e096bb0e8040a53de46a9a369cf
+    m_Address: Stunned.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_Prefab
+  - m_GUID: 51ca27960713c244aaa6965e29ac18b5
+    m_Address: FieldItem.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_Prefab
+  - m_GUID: 77d3dda6037187b4e884feddf18b211a
+    m_Address: HealOnceBurst.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_Prefab
+  - m_GUID: 70e45e7677915e440bc9a06f189522bb
+    m_Address: GoblinThrowerThrowingWeapon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_Prefab
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
+  m_Settings: {fileID: 11400000, guid: 79f589af2fcff9e498e8cd6b33c6d8ce, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: ca8fdbd17f7a608468a213747e54f45b, type: 2}
-    - {fileID: 11400000, guid: 7ef1ffcd6ee465044aeda8702ee67b7e, type: 2}
+    - {fileID: 11400000, guid: 709dd6e9b3b3b9a43a885cc29fa2ba05, type: 2}
+    - {fileID: 11400000, guid: 30c5cbd17af775142943899a2bab6c2b, type: 2}

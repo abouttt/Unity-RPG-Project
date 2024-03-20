@@ -12,7 +12,7 @@ public abstract class ConsumableItem : CountableItem, IUsable
 
     public abstract bool Use();
 
-    protected bool CheckCanUseAndSubtractCount()
+    protected bool CheckCanUseAndSubCount()
     {
         if (Player.Status.HP <= 0)
         {
@@ -39,7 +39,7 @@ public abstract class ConsumableItem : CountableItem, IUsable
 
         if (IsEmpty)
         {
-            Player.ItemInventory.RemoveItem(Data.ItemType, Index);
+            Player.ItemInventory.RemoveItem(this);
         }
 
         ConsumableData.Cooldown.OnCooldowned();

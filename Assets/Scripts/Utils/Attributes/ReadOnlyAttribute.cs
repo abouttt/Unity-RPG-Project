@@ -31,6 +31,6 @@ public class ReadOnlyAttribute : PropertyAttribute
 
     public ReadOnlyAttribute(bool runtimeOnly = false)
     {
-        this.RuntimeOnly = runtimeOnly;
+        RuntimeOnly = runtimeOnly;
     }
 }

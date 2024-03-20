@@ -25,7 +25,7 @@ public class UI_EquipmentSlot : UI_BaseSlot, IDropHandler
         }
 
         Player.ItemInventory.AddItem((ObjectRef as Item).Data);
-        Player.EquipmentInventory.UnequipItem(EquipmentType);
+        Player.EquipmentInventory.Unequip(EquipmentType);
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
@@ -37,7 +37,7 @@ public class UI_EquipmentSlot : UI_BaseSlot, IDropHandler
             return;
         }
 
-        if (Managers.UI.IsOn<UI_ItemInventoryPopup>())
+        if (Managers.UI.IsShowed<UI_ItemInventoryPopup>())
         {
             Managers.UI.Get<UI_ItemInventoryPopup>().OpenTheTab(ItemType.Equipment);
         }
@@ -60,9 +60,9 @@ public class UI_EquipmentSlot : UI_BaseSlot, IDropHandler
             return;
         }
 
-        if (eventData.pointerDrag.TryGetComponent<UI_ItemSlot>(out var otherItemSlot))
+        if (eventData.pointerDrag.TryGetComponent<UI_ItemSlot>(out var itemSlot))
         {
-            if (otherItemSlot.ObjectRef is not EquipmentItem otherItem)
+            if (itemSlot.ObjectRef is not EquipmentItem otherItem)
             {
                 return;
             }
@@ -79,14 +79,14 @@ public class UI_EquipmentSlot : UI_BaseSlot, IDropHandler
 
             if (HasObject)
             {
-                Player.ItemInventory.SetItem((ObjectRef as EquipmentItem).EquipmentData, otherItemSlot.Index);
+                Player.ItemInventory.SetItem((ObjectRef as EquipmentItem).EquipmentData, itemSlot.Index);
             }
             else
             {
-                Player.ItemInventory.RemoveItem(ItemType.Equipment, otherItemSlot.Index);
+                Player.ItemInventory.RemoveItem(ItemType.Equipment, itemSlot.Index);
             }
 
-            Player.EquipmentInventory.EquipItem(otherItem.EquipmentData);
+            Player.EquipmentInventory.Equip(otherItem.EquipmentData);
         }
     }
 }

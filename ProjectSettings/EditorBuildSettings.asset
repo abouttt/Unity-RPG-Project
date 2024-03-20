@@ -7,16 +7,16 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/MainMenuScene.unity
-    guid: 788758554e64d564c9bfb69b65e005e2
+    guid: d98f6d43d9dbe5c479d0aa120762ef85
   - enabled: 1
     path: Assets/Scenes/LoadingScene.unity
-    guid: 28dbd4bddfac6d340bfc3a685e2e0f30
+    guid: b6f0cf55f06307340a0dbf01a90c42c1
   - enabled: 1
     path: Assets/Scenes/VillageScene.unity
-    guid: 2591d3d9ec14d0d49ac2b6309497fb7e
+    guid: a7a4d108c71ef7c42b33304171a462a3
   - enabled: 1
     path: Assets/Scenes/DungeonScene.unity
-    guid: 7154c9b6e895c1747b83efa5362cbaf0
+    guid: 97e7600c724dbbb46ace9cfd574273ca
   m_configObjects:
-    com.unity.addressableassets: {fileID: 11400000, guid: d0dcdf6c8997100479585e867e960b81, type: 2}
-    com.unity.input.settings: {fileID: 11400000, guid: 150ceb2fdbb9cb340b42c2d149b98d17, type: 2}
+    com.unity.addressableassets: {fileID: 11400000, guid: c9379f297cd01f7448478a218b1716af, type: 2}
+    com.unity.input.settings: {fileID: 11400000, guid: 1c91ab58657b49b4183817d6b9d465ee, type: 2}

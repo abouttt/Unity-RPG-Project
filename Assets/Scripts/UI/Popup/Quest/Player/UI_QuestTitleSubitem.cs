@@ -1,17 +1,19 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_QuestTitleSubitem : UI_Base
 {
-    enum Buttons
-    {
-        TitleButton,
-    }
-
     enum Texts
     {
         TitleText,
         CompleteText,
+    }
+
+    enum Buttons
+    {
+        TitleButton,
     }
 
     enum Toggles
@@ -23,8 +25,8 @@ public class UI_QuestTitleSubitem : UI_Base
 
     protected override void Init()
     {
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
         Bind<Toggle>(typeof(Toggles));
 
         GetButton((int)Buttons.TitleButton).onClick.AddListener(() => Managers.UI.Get<UI_QuestPopup>().SetQuestDescription(QuestRef));

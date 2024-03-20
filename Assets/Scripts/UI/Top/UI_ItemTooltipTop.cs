@@ -32,15 +32,18 @@ public class UI_ItemTooltipTop : UI_Base
 
     [SerializeField]
     [Tooltip("Distance from mouse")]
-    private Vector2 _deltaPosition;
+    private Vector2 _offset;
 
     [Space(10)]
     [SerializeField]
     private Color _lowColor;
+
     [SerializeField]
     private Color _normalColor;
+
     [SerializeField]
     private Color _rareColor;
+
     [SerializeField]
     private Color _legendaryColor;
 
@@ -55,6 +58,7 @@ public class UI_ItemTooltipTop : UI_Base
 
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
+
         _rt = GetObject((int)GameObjects.ItemTooltip).GetComponent<RectTransform>();
     }
 
@@ -84,20 +88,19 @@ public class UI_ItemTooltipTop : UI_Base
 
         if (_target.HasObject)
         {
-            if (_target.ObjectRef is Item item)
+            if (!GetObject((int)GameObjects.ItemTooltip).activeSelf)
             {
-                SetItemData(item.Data);
-            }
-            else if (_target.ObjectRef is ItemData itemData)
-            {
-                SetItemData(itemData);
-            }
-            else
-            {
-                Close();
+                if (_target.ObjectRef is Item item)
+                {
+                    SetItemData(item.Data);
+                }
+                else if (_target.ObjectRef is ItemData itemData)
+                {
+                    SetItemData(itemData);
+                }
             }
         }
-        else if (!_target.HasObject)
+        else
         {
             Close();
         }
@@ -197,10 +200,10 @@ public class UI_ItemTooltipTop : UI_Base
 
     private void SetPosition(Vector3 position)
     {
-        var nextPosition = new Vector3
+        var nextPosition = new Vector3()
         {
-            x = position.x + (_rt.rect.width * 0.5f) + _deltaPosition.x,
-            y = position.y + (_rt.rect.height * 0.5f) + _deltaPosition.y
+            x = position.x + (_rt.rect.width * 0.5f) + _offset.x,
+            y = position.y + (_rt.rect.height * 0.5f) + _offset.y
         };
 
         _rt.position = nextPosition;

@@ -3,11 +3,6 @@ using UnityEngine.EventSystems;
 
 public class UI_SkillSlot : UI_BaseSlot
 {
-    enum CooldownImages
-    {
-        CooldownImage,
-    }
-
     enum Imagess
     {
         SkillFrame = 2,
@@ -15,14 +10,19 @@ public class UI_SkillSlot : UI_BaseSlot
         LevelUpDisabledImage,
     }
 
+    enum Texts
+    {
+        LevelText,
+    }
+
     enum Buttons
     {
         LevelUpButton,
     }
 
-    enum Texts
+    enum CooldownImages
     {
-        LevelText,
+        CooldownImage,
     }
 
     [field: SerializeField]
@@ -37,12 +37,12 @@ public class UI_SkillSlot : UI_BaseSlot
         CanDrag = false;
 
         BindImage(typeof(Imagess));
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
         Bind<UI_CooldownImage>(typeof(CooldownImages));
 
         GetImage((int)Imagess.SkillFrame).sprite = SkillData.SkillFrame;
-        GetImage((int)Imagess.LevelUpDisabledImage).enabled = false;
+        GetImage((int)Imagess.LevelUpDisabledImage).gameObject.SetActive(false);
         GetButton((int)Buttons.LevelUpButton).gameObject.SetActive(false);
         GetButton((int)Buttons.LevelUpButton).onClick.AddListener(() =>
         {
@@ -52,7 +52,7 @@ public class UI_SkillSlot : UI_BaseSlot
         SkillData.Cooldown.Cooldowned += ActiveCooldownImage;
         Get<UI_CooldownImage>((int)CooldownImages.CooldownImage).SetCooldown(SkillData.Cooldown);
 
-        SetObject(Player.SkillTree.GetSkill(SkillData), SkillData.SkillImage);
+        SetObject(Player.SkillTree.GetSkillBy(SkillData), SkillData.SkillImage);
         SkillRef.SkillChanged += Refresh;
     }
 
@@ -67,25 +67,25 @@ public class UI_SkillSlot : UI_BaseSlot
 
         if (SkillRef.CurrentLevel == SkillData.MaxLevel)
         {
-            GetImage((int)Imagess.LevelUpDisabledImage).enabled = false;
+            GetImage((int)Imagess.LevelUpDisabledImage).gameObject.SetActive(false);
             GetButton((int)Buttons.LevelUpButton).gameObject.SetActive(false);
             return;
         }
 
         CanDrag = !SkillRef.IsLock && SkillData.SkillType is SkillType.Active;
         GetButton((int)Buttons.LevelUpButton).gameObject.SetActive(SkillRef.IsAcquirable);
-        GetImage((int)Imagess.LevelUpDisabledImage).enabled = Player.Status.SkillPoint < SkillData.RequiredSkillPoint;
+        GetImage((int)Imagess.LevelUpDisabledImage).gameObject.SetActive(Player.Status.SkillPoint < SkillData.RequiredSkillPoint);
 
         if (!SkillRef.IsAcquirable && SkillRef.IsLock)
         {
             CanDrag = false;
-            GetImage((int)Imagess.SkillDisabledImage).enabled = true;
-            GetImage((int)Imagess.LevelUpDisabledImage).enabled = false;
+            GetImage((int)Imagess.SkillDisabledImage).gameObject.SetActive(true);
+            GetImage((int)Imagess.LevelUpDisabledImage).gameObject.SetActive(false);
             GetButton((int)Buttons.LevelUpButton).gameObject.SetActive(false);
         }
         else if (!SkillRef.IsLock)
         {
-            GetImage((int)Imagess.SkillDisabledImage).enabled = false;
+            GetImage((int)Imagess.SkillDisabledImage).gameObject.SetActive(false);
         }
     }
 
@@ -97,6 +97,11 @@ public class UI_SkillSlot : UI_BaseSlot
     private void ActiveCooldownImage()
     {
         Get<UI_CooldownImage>((int)CooldownImages.CooldownImage).gameObject.SetActive(true);
+    }
+
+    private bool IsOnPointerSameGameObject(PointerEventData eventData, GameObject gameObject)
+    {
+        return eventData.pointerCurrentRaycast.gameObject == gameObject;
     }
 
     public override void OnPointerDown(PointerEventData eventData)
@@ -135,16 +140,5 @@ public class UI_SkillSlot : UI_BaseSlot
     public override void OnPointerExit(PointerEventData eventData)
     {
         Managers.UI.Get<UI_SkillTooltipTop>().Target = null;
-    }
-
-    private bool IsOnPointerSameGameObject(PointerEventData eventData, GameObject gameObject)
-    {
-        var result = eventData.pointerCurrentRaycast;
-        return result.gameObject == gameObject;
-    }
-
-    private void OnDestroy()
-    {
-        SkillData.Cooldown.Clear();
     }
 }

@@ -15,36 +15,36 @@ MonoBehaviour:
   m_GroupName: Sprite
   m_Data:
     m_SerializedData: []
-  m_GUID: c9010e0a1b499054eaec4dd40248f47e
+  m_GUID: 7ac535c063c7a8c4aae856d52e9dd39c
   m_SerializeEntries:
-  - m_GUID: 1c98c2e35b694c24ebfd8a6ac0297151
+  - m_GUID: 65236054e22619546b3408c69105a8cd
     m_Address: NPCMinimapIcon.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: f370575d72311de4c875699b047a3184
-    m_Address: PlayerMinimapIcon.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Game
-  - m_GUID: 3ac26685c1e95004e9bde23fea2af139
-    m_Address: ItemMinimapIcon.sprite
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Game
-  - m_GUID: 7f70ededc820b6b4e8f164ce27f2d3fd
+    - Game_UI
+  - m_GUID: 6152599c5299a15448af9e6b5860ef84
     m_Address: PortalMinimapIcon.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
-  - m_GUID: 1664a27e00f8e874196dcad5310f5c25
+    - Game_UI
+  - m_GUID: c3f8cf389e729444b9cbdb0baac24197
+    m_Address: ItemMinimapIcon.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_UI
+  - m_GUID: 29324f4b076145044a033399f951f57f
+    m_Address: PlayerMinimapIcon.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game_UI
+  - m_GUID: 34d9fb5bbffff964ca16fe7be552687e
     m_Address: MonsterMinimapIcon.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Game
+    - Game_UI
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: cf8a33bd788ae10468eb43df847ceae1, type: 2}
+  m_Settings: {fileID: 11400000, guid: 79f589af2fcff9e498e8cd6b33c6d8ce, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: ea1e2375fae67c6478dc54ddb1d31d29, type: 2}
-    - {fileID: 11400000, guid: 30401aea897c2964ca5144ce3704af83, type: 2}
+    - {fileID: 11400000, guid: 9398449ec2b621243bb9d2f33b2d745e, type: 2}
+    - {fileID: 11400000, guid: feec573ebced31944beb2d4634bd6a91, type: 2}

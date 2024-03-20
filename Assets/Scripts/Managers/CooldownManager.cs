@@ -6,7 +6,7 @@ public class CooldownManager
     private readonly HashSet<Cooldown> _cooldowns = new();
     private readonly Queue<Cooldown> _cooldownCompleteQueue = new();
 
-    public void LateUpdate()
+    public void Cooling()
     {
         foreach (var cooldown in _cooldowns)
         {
@@ -25,13 +25,23 @@ public class CooldownManager
         }
     }
 
-    public void AddCooldown(Cooldown Cooldownable)
+    public void AddCooldown(Cooldown cooldown)
     {
-        _cooldowns.Add(Cooldownable);
+        _cooldowns.Add(cooldown);
     }
 
     public void Clear()
     {
+        foreach (var itemData in CooldownableDatabase.GetInstance.CooldownableItems)
+        {
+            (itemData as ICooldownable).Cooldown.Clear();
+        }
+
+        foreach (var skillData in CooldownableDatabase.GetInstance.CooldownableSkills)
+        {
+            skillData.Cooldown.Clear();
+        }
+
         _cooldowns.Clear();
         _cooldownCompleteQueue.Clear();
     }

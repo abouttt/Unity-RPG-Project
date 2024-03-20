@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json.Linq;
 
-public class SceneManagerEx
+public class SceneManagerEx : ISavable
 {
-    public static readonly string SaveKey = "SaveScene";
+    public static string SaveKey => "SaveScene";
 
     public BaseScene CurrentScene { get { return Object.FindObjectOfType<BaseScene>(); } }
     public SceneType NextScene { get; private set; } = SceneType.Unknown;
@@ -21,13 +22,21 @@ public class SceneManagerEx
         SceneManager.LoadScene(SceneType.LoadingScene.ToString());
     }
 
-    public string GetSaveData()
+    public JArray CreateSaveData()
     {
-        SceneSaveData saveData = new()
+        var saveData = new JArray();
+
+        var sceneSaveData = new SceneSaveData()
         {
             Scene = Managers.Scene.CurrentScene.SceneType
         };
 
-        return JsonUtility.ToJson(saveData);
+        saveData.Add(JObject.FromObject(sceneSaveData));
+
+        return saveData;
+    }
+
+    public void LoadSaveData()
+    {
     }
 }

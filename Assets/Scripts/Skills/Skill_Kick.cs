@@ -8,13 +8,12 @@ public class Skill_Kick : Skill
 
     public override bool Use()
     {
-        if (!CheckCanUse())
+        if (!CanUse())
         {
             return false;
         }
 
-        Debug.Log("Skill Kick!!!");
-
+        Debug.Log("Kick");
         return true;
     }
 }

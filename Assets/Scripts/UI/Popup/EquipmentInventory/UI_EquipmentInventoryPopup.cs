@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class UI_EquipmentInventoryPopup : UI_Popup
 {
-    enum Buttons
-    {
-        CloseButton,
-    }
-
     enum Texts
     {
         HPText,
@@ -16,6 +11,11 @@ public class UI_EquipmentInventoryPopup : UI_Popup
         SPText,
         DamageText,
         DefenseText,
+    }
+
+    enum Buttons
+    {
+        CloseButton,
     }
 
     enum EquipmentSlots
@@ -34,11 +34,11 @@ public class UI_EquipmentInventoryPopup : UI_Popup
     {
         base.Init();
 
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
         Bind<UI_EquipmentSlot>(typeof(EquipmentSlots));
 
-        Player.EquipmentInventory.EquipmentChanged += RefreshSlot;
+        Player.EquipmentInventory.InventoryChanged += RefreshSlot;
         Player.Status.HPChanged += RefreshHPText;
         Player.Status.MPChanged += RefreshMPText;
         Player.Status.SPChanged += RefreshSPText;
@@ -52,19 +52,20 @@ public class UI_EquipmentInventoryPopup : UI_Popup
     private void Start()
     {
         Managers.UI.Register<UI_EquipmentInventoryPopup>(this);
+
         RefreshAllSlot();
         RefreshAllStatusText();
     }
 
     private void RefreshSlot(EquipmentType equipmentType)
     {
-        if (Player.EquipmentInventory.IsNullSlot(equipmentType))
+        if (Player.EquipmentInventory.IsEquipped(equipmentType))
         {
-            _equipmentSlots[equipmentType].Clear();
+            _equipmentSlots[equipmentType].SetItem(Player.EquipmentInventory.GetItem(equipmentType));
         }
         else
         {
-            _equipmentSlots[equipmentType].SetItem(Player.EquipmentInventory.GetItem(equipmentType));
+            _equipmentSlots[equipmentType].Clear();
         }
     }
 
@@ -72,8 +73,7 @@ public class UI_EquipmentInventoryPopup : UI_Popup
     {
         for (int i = 0; i < (int)EquipmentType.Count; i++)
         {
-            EquipmentType type = (EquipmentType)i;
-            RefreshSlot(type);
+            RefreshSlot((EquipmentType)i);
         }
     }
 
@@ -98,8 +98,8 @@ public class UI_EquipmentInventoryPopup : UI_Popup
         var equipmentSlots = Enum.GetValues(typeof(EquipmentSlots));
         for (int i = 0; i < (int)EquipmentType.Count; i++)
         {
-            var type = (EquipmentType)equipmentTypes.GetValue(i);
-            var slot = (EquipmentSlots)equipmentSlots.GetValue(i);
+            EquipmentType type = (EquipmentType)equipmentTypes.GetValue(i);
+            EquipmentSlots slot = (EquipmentSlots)equipmentSlots.GetValue(i);
             _equipmentSlots.Add(type, Get<UI_EquipmentSlot>((int)slot));
         }
     }

@@ -3,26 +3,26 @@ using UnityEngine.Events;
 
 public class UI_NPCMenuSubitem : UI_Base
 {
+    enum Texts
+    {
+        MenuNameText,
+    }
+
     enum Buttons
     {
         Button,
     }
 
-    enum Texts
-    {
-        Text,
-    }
-
     protected override void Init()
     {
-        BindButton(typeof(Buttons));
         BindText(typeof(Texts));
+        BindButton(typeof(Buttons));
     }
 
-    public void SetEvent(string text, UnityAction call)
+    public void SetEvent(string text, UnityAction callback)
     {
-        GetText((int)Texts.Text).text = text;
-        GetButton((int)Buttons.Button).onClick.AddListener(call);
+        GetText((int)Texts.MenuNameText).text = text;
+        GetButton((int)Buttons.Button).onClick.AddListener(callback);
     }
 
     public void Clear()

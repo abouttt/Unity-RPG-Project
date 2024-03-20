@@ -21,7 +21,7 @@ public class UI_TopCanvas : UI_Base
         BindButton(typeof(Buttons));
 
         GetButton((int)Buttons.GameMenuButton).onClick.AddListener(Managers.UI.ShowOrClose<UI_GameMenuPopup>);
-        GetButton((int)Buttons.GameMenuButton).gameObject.SetActive(false);
+        GetButton((int)Buttons.GameMenuButton).gameObject.SetActive(true);
     }
 
     public void FadeInitBG()
