@@ -9669,7 +9669,7 @@ GameObject:
   - component: {fileID: 199047207903987654}
   - component: {fileID: -5911597201644656791}
   m_Layer: 0
-  m_Name: ShieldHit
+  m_Name: SteelHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

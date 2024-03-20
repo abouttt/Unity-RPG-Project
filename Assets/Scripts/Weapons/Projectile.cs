@@ -13,6 +13,9 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     private float _speed;
 
+    [SerializeField]
+    private string _hitEffectAddressableName;
+
     private Vector3 _dir;
     private bool _hasDir;
 
@@ -52,6 +55,11 @@ public class Projectile : MonoBehaviour
             {
                 Player.Battle.HitShield(other.bounds.ClosestPoint(transform.position));
             }
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Environment"))
+        {
+            Managers.Resource.Instantiate(_hitEffectAddressableName, transform.position, null, true);
         }
 
         Managers.Resource.Destroy(gameObject);

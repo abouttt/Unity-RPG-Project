@@ -130,3 +130,4 @@ MonoBehaviour:
   _player: 0
   _enemy: 1
   _speed: 20
+  _hitEffectAddressableName: SteelHit.prefab

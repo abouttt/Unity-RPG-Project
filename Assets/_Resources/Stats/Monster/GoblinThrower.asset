@@ -15,7 +15,7 @@ MonoBehaviour:
   <MonsterID>k__BackingField: GOBLIN_THROWER
   <MonsterName>k__BackingField: "\uACE0\uBE14\uB9B0 \uD22C\uCC99\uBCD1"
   <MaxHP>k__BackingField: 80
-  <Damage>k__BackingField: 10
+  <Damage>k__BackingField: 20
   <Defense>k__BackingField: 3
   <DropXP>k__BackingField:
     Min: 10

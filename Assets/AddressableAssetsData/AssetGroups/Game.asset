@@ -53,7 +53,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - Game_Prefab
   - m_GUID: 14983b2aa0b71004ba8f32b0a926e9a2
-    m_Address: ShieldHit.prefab
+    m_Address: SteelHit.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Game_Prefab

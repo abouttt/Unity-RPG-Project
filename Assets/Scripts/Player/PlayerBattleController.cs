@@ -108,7 +108,7 @@ public class PlayerBattleController : MonoBehaviour
             {
                 monster.Stunned();
                 Managers.Resource.Instantiate(
-                    "ShieldHit.prefab", Player.Root.GetEquipment(EquipmentType.Shield).transform.position, null, true);
+                    "SteelHit.prefab", Player.Root.GetEquipment(EquipmentType.Shield).transform.position, null, true);
                 return;
             }
         }
@@ -151,7 +151,7 @@ public class PlayerBattleController : MonoBehaviour
         Player.Animator.Play("DefenseDamaged", -1, 0f);
         Player.Status.SP -= _requiredDefenseSP;
         var pos = hitPosition != null ? hitPosition.Value : Player.Root.GetEquipment(EquipmentType.Shield).transform.position;
-        Managers.Resource.Instantiate("ShieldHit.prefab", pos, null, true);
+        Managers.Resource.Instantiate("SteelHit.prefab", pos, null, true);
     }
 
     public void Clear()
