@@ -9,7 +9,7 @@ public class InteractionDetector : MonoBehaviour
     [ReadOnly]
     private Interactive _target;
     private UI_InteractionKeyGuide _keyGuide;
-    private bool _isTargetOutTheCollider;
+    private bool _isColliderOutFromTarget;
 
     private void Start()
     {
@@ -22,7 +22,14 @@ public class InteractionDetector : MonoBehaviour
         {
             return;
         }
-        else if (_isTargetOutTheCollider && !_target.IsInteracted)
+
+        if (!_target.gameObject.activeInHierarchy)
+        {
+            SetTarget(null);
+            return;
+        }
+
+        if (_isColliderOutFromTarget && !_target.IsInteracted)
         {
             SetTarget(null);
             return;
@@ -79,7 +86,7 @@ public class InteractionDetector : MonoBehaviour
 
         if (_target.IsInteracted)
         {
-            _isTargetOutTheCollider = true;
+            _isColliderOutFromTarget = true;
             return;
         }
 
@@ -96,7 +103,7 @@ public class InteractionDetector : MonoBehaviour
 
         _target = target;
         _keyGuide.SetTarget(target);
-        _isTargetOutTheCollider = false;
+        _isColliderOutFromTarget = false;
 
         if (_target != null)
         {
