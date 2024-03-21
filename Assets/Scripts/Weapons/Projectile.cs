@@ -19,6 +19,11 @@ public class Projectile : MonoBehaviour
     private Vector3 _dir;
     private bool _hasDir;
 
+    private void Awake()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Projectile");
+    }
+
     private void Update()
     {
         if (!_hasDir)

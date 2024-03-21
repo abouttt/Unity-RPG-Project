@@ -114,10 +114,12 @@ public class PlayerMovement : MonoBehaviour, ISavable
 
     private void Update()
     {
-        JumpAndGravity();
+        float deltaTime = Time.deltaTime;
+
+        JumpAndGravity(deltaTime);
         GroundedCheck();
         Roll();
-        Move();
+        Move(deltaTime);
     }
 
     public void ClearJump()
@@ -154,7 +156,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
     {
     }
 
-    private void JumpAndGravity()
+    private void JumpAndGravity(float deltaTime)
     {
         if (IsGrounded)
         {
@@ -188,7 +190,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
             // 점프 제한시간
             if (_jumpTimeoutDelta >= 0f)
             {
-                _jumpTimeoutDelta -= Time.deltaTime;
+                _jumpTimeoutDelta -= deltaTime;
             }
         }
         else
@@ -199,7 +201,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
             // 추락 제한시간
             if (_fallTimeoutDelta >= 0f)
             {
-                _fallTimeoutDelta -= Time.deltaTime;
+                _fallTimeoutDelta -= deltaTime;
             }
             else
             {
@@ -210,7 +212,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
         // 터미널 아래에 있는 경우 시간에 따라 중력을 적용
         if (_verticalVelocity < _terminalVelocity)
         {
-            _verticalVelocity += _gravity * Time.deltaTime;
+            _verticalVelocity += _gravity * deltaTime;
         }
     }
 
@@ -234,7 +236,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
         }
     }
 
-    private void Move()
+    private void Move(float deltaTime)
     {
         float targetSpeed = _moveSpeed;
         float requiredSP = 0f;
@@ -249,7 +251,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
         if (Managers.Input.Sprint)
         {
             _isPressedSprint = true;
-            _sprintInputDeltaTime += Time.deltaTime;
+            _sprintInputDeltaTime += deltaTime;
         }
         else if (_isPressedSprint)
         {
@@ -272,7 +274,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
             {
                 IsSprinting = true;
                 targetSpeed = _sprintSpeed;
-                requiredSP = _requiredSprintSP * Time.deltaTime;
+                requiredSP = _requiredSprintSP * deltaTime;
             }
             else
             {
@@ -288,7 +290,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
 
         // 플레이어의 현재 수평 속도에 대한 참조
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0f, _controller.velocity.z).magnitude;
-        float finalSpeedChangeRate = Time.deltaTime * _speedChangeRate;
+        float finalSpeedChangeRate = deltaTime * _speedChangeRate;
         float speedOffset = 0.1f;
 
         // 목표 속도까지 가감속
@@ -366,7 +368,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
 
         // 이동
         var targetDirection = Quaternion.Euler(0f, _cameraTargetRotation, 0f) * Vector3.forward;
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0f, _verticalVelocity, 0f) * Time.deltaTime);
+        _controller.Move(targetDirection.normalized * (_speed * deltaTime) + new Vector3(0f, _verticalVelocity, 0f) * deltaTime);
         Player.Status.SP -= requiredSP;
 
         // 애니메이터 업데이트

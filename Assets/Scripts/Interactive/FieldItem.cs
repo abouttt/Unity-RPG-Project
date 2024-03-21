@@ -17,8 +17,10 @@ public class FieldItem : Interactive
     private List<Data> _items;
     private int _currentCount;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _currentCount = _items.Count;
     }
 

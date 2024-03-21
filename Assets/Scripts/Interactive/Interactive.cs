@@ -16,6 +16,11 @@ public abstract class Interactive : MonoBehaviour
 
     public abstract void Interaction();
 
+    protected virtual void Awake()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Interactive");
+    }
+
     protected void InstantiateMinimapIcon(string spriteName, string iconName, float scale = 1)
     {
         Managers.Resource.Instantiate(

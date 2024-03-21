@@ -41,8 +41,10 @@ public class NPC : Interactive
 
     private bool _originCanInteraction;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         s_NPCs.Add(NPCID, this);
         _quests = QuestDatabase.GetInstance.FindQuestsBy(NPCID);
         _originCanInteraction = CanInteraction;
