@@ -18,7 +18,7 @@ public class Monster_RestoreState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_monster.PlayerDetect())
+        if (_monster.Fov.Detected)
         {
             _monster.Transition(MonsterState.Tracking);
         }

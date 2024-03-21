@@ -17,7 +17,7 @@ public class Monster_IdleState : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_monster.PlayerDetect())
+        if (_monster.Fov.Detected)
         {
             if (_monster.IsThePlayerInAttackRange())
             {

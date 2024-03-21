@@ -3,28 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(FieldOfView))]
 public abstract class Monster : MonoBehaviour
 {
     public event Action HPChanged;
 
     [field: SerializeField]
     public MonsterData Data { get; private set; }
-
-    [field: Header("플레이어 탐지")]
-    [field: SerializeField]
-    public float DetectionRadius { get; private set; }
-
-    [field: SerializeField, Range(0, 360)]
-    public float DetectionAngle { get; private set; }
-
-    [field: SerializeField]
-    public Transform Eyes { get; private set; }
-
-    [field: SerializeField]
-    public LayerMask TargetMask { get; private set; }
-
-    [field: SerializeField]
-    public LayerMask ObstacleMask { get; private set; }
 
     [field: Header("플레이어 추적")]
     [field: SerializeField]
@@ -66,6 +51,7 @@ public abstract class Monster : MonoBehaviour
     public Collider Collider { get; private set; }
     public Animator Animator { get; private set; }
     public NavMeshAgent NavMeshAgent { get; private set; }
+    public FieldOfView Fov { get; private set; }
 
     protected readonly Collider[] PlayerCollider = new Collider[1];
 
@@ -82,6 +68,7 @@ public abstract class Monster : MonoBehaviour
         Collider = GetComponent<Collider>();
         Animator = GetComponent<Animator>();
         NavMeshAgent = GetComponent<NavMeshAgent>();
+        Fov = GetComponent<FieldOfView>();
 
         int lockOnTargetLayer = LayerMask.NameToLayer("LockOnTarget");
         foreach (Transform child in transform)
@@ -116,6 +103,11 @@ public abstract class Monster : MonoBehaviour
         {
             collider.enabled = true;
         }
+    }
+
+    private void Update()
+    {
+        Fov.CheckFieldOfView();
     }
 
     public void Transition(MonsterState state)
@@ -165,29 +157,6 @@ public abstract class Monster : MonoBehaviour
         Transition(MonsterState.Stunned);
     }
 
-    public bool PlayerDetect()
-    {
-        var monsterCenterPos = Collider.bounds.center;
-        int cnt = Physics.OverlapSphereNonAlloc(monsterCenterPos, DetectionRadius, PlayerCollider, TargetMask);
-        if (cnt != 0)
-        {
-            var playerCenterPos = PlayerCollider[0].bounds.center;
-            var centerDir = (playerCenterPos - monsterCenterPos).normalized;
-            if (Vector3.Angle(transform.forward, centerDir) < DetectionAngle * 0.5f)
-            {
-                var monsterEyesPos = Eyes.position;
-                var eyesDir = (playerCenterPos - monsterEyesPos).normalized;
-                var EyesToPlayerCenterDist = Vector3.Distance(monsterEyesPos, playerCenterPos);
-                if (!Physics.Raycast(monsterEyesPos, eyesDir, EyesToPlayerCenterDist, ObstacleMask))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     public bool IsThePlayerInAttackRange()
     {
         return Vector3.Distance(Player.Transform.position, transform.position) <= AttackDistance;
@@ -224,8 +193,8 @@ public abstract class Monster : MonoBehaviour
     {
         if (_hpBar == null)
         {
-            _hpBar = Managers.Resource.Instantiate("UI_MonsterHPBar.prefab",
-                Managers.UI.Get<UI_AutoCanvas>().transform, true).GetComponent<UI_MonsterHPBar>();
+            _hpBar = Managers.Resource.Instantiate(
+                "UI_MonsterHPBar.prefab", Managers.UI.Get<UI_AutoCanvas>().transform, true).GetComponent<UI_MonsterHPBar>();
             _hpBar.SetTarget(this);
         }
         else

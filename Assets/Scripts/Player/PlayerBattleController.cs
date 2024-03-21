@@ -104,7 +104,7 @@ public class PlayerBattleController : MonoBehaviour
 
         if (parry && _isParryable)
         {
-            if (IsRangeOfDefenseAngle(attackedPosition))
+            if (IsInRangeOfDefenseAngle(attackedPosition))
             {
                 monster.Stunned();
                 Managers.Resource.Instantiate(
@@ -114,7 +114,7 @@ public class PlayerBattleController : MonoBehaviour
         }
         else if (IsDefending)
         {
-            if (IsRangeOfDefenseAngle(attackedPosition))
+            if (IsInRangeOfDefenseAngle(attackedPosition))
             {
                 HitShield();
                 return;
@@ -231,24 +231,10 @@ public class PlayerBattleController : MonoBehaviour
         Player.Animator.SetBool(_animIDDefense, false);
     }
 
-    private bool GiveDamageToMonster(Vector3 attackOffset, float radius, int damage)
-    {
-        int monsterCnt = Physics.OverlapSphereNonAlloc(attackOffset, radius, _monsters, 1 << LayerMask.NameToLayer("Monster"));
-        for (int i = 0; i < monsterCnt; i++)
-        {
-            if (_monsters[i].GetComponent<Monster>().TakeDamage(damage))
-            {
-                //Managers.Resource.Instantiate("SwordHit.prefab", _monsters[i].bounds.center, null, true);
-            }
-        }
-
-        return monsterCnt > 0;
-    }
-
-    private bool IsRangeOfDefenseAngle(Vector3 attackedPosition)
+    private bool IsInRangeOfDefenseAngle(Vector3 attackedPosition)
     {
         var dir = (attackedPosition - transform.position).normalized;
-        if (Vector3.Angle(transform.forward, dir) < _defenseAngle)
+        if (Vector3.Angle(transform.forward, dir) <= _defenseAngle * 0.5f)
         {
             return true;
         }
@@ -258,10 +244,7 @@ public class PlayerBattleController : MonoBehaviour
 
     private void OnEnableWeapon()
     {
-        //CreateAttackEffect();
         _weapon.Collider.enabled = true;
-        //GiveDamageToMonster(_attackOffset.position,
-        //Player.EquipmentInventory.GetItem(EquipmentType.Weapon).EquipmentData.AttackRadius, Player.Status.Damage);
     }
 
     private void OnDisableWeapon()
