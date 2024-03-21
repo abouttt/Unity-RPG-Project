@@ -7,8 +7,8 @@ public class GoblinThrower : Monster
 
     private void OnAttack()
     {
-        var weapon = Managers.Resource.Instantiate("GoblinThrowerThrowingWeapon.prefab", _rightHand.position, null, true);
-        weapon.transform.LookAt(PlayerCollider[0].bounds.center);
+        var weapon = Managers.Resource.Instantiate(
+            "GoblinThrowerThrowingWeapon.prefab", _rightHand.position, transform.rotation, null, true);
         weapon.GetComponent<Projectile>().Damage = Data.Damage;
     }
 }

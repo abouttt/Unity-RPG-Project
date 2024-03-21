@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour
     {
         if (!_hasDir)
         {
-            _dir = (transform.localRotation * Vector3.forward);
+            _dir = transform.localRotation * Vector3.forward;
             transform.rotation *= Quaternion.Euler(90f, 0f, 0f);
             _hasDir = true;
         }
@@ -58,7 +58,7 @@ public class Projectile : MonoBehaviour
             }
             else if (other.CompareTag("Shield"))
             {
-                Player.Battle.HitShield(other.bounds.ClosestPoint(transform.position));
+                Player.Battle.HitShield(other.ClosestPoint(transform.position));
             }
         }
 
