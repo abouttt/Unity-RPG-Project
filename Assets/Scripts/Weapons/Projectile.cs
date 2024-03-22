@@ -14,6 +14,7 @@ public class Projectile : MonoBehaviour
     private string _hitEffectAddressableName;
 
     private Rigidbody _rb;
+    private bool _canDestroy;
 
     private void Awake()
     {
@@ -29,11 +30,14 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        _canDestroy = false;
+
         if (_player)
         {
             if (other.CompareTag("Enemy"))
             {
                 other.GetComponent<Monster>().TakeDamage(Damage);
+                _canDestroy = true;
             }
         }
         else if (_enemy)
@@ -46,6 +50,7 @@ public class Projectile : MonoBehaviour
                 }
 
                 Player.Battle.TakeDamage(null, transform.position, Damage, false);
+                _canDestroy = true;
             }
             else if (other.CompareTag("Shield"))
             {
@@ -55,14 +60,19 @@ public class Projectile : MonoBehaviour
                 }
 
                 Player.Battle.HitShield(other.ClosestPoint(transform.position));
+                _canDestroy = true;
             }
         }
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
             Managers.Resource.Instantiate(_hitEffectAddressableName, other.ClosestPoint(transform.position), null, true);
+            _canDestroy = true;
         }
 
-        Managers.Resource.Destroy(gameObject);
+        if (_canDestroy)
+        {
+            Managers.Resource.Destroy(gameObject);
+        }
     }
 }
