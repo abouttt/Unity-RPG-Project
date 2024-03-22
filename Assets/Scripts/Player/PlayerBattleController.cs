@@ -162,6 +162,9 @@ public class PlayerBattleController : MonoBehaviour
         _currentAttackComboCount = 0;
         _hasReservedAttack = false;
         _isParryable = false;
+        Player.Animator.ResetTrigger(_animIDAttack);
+        Player.Animator.ResetTrigger(_animIDParry);
+        Player.Animator.ResetTrigger(_animIDDamaged);
     }
 
     private void Attack()
