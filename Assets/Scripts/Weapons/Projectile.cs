@@ -11,29 +11,20 @@ public class Projectile : MonoBehaviour
     private bool _enemy;
 
     [SerializeField]
-    private float _speed;
-
-    [SerializeField]
     private string _hitEffectAddressableName;
 
-    private Vector3 _dir;
-    private bool _hasDir;
+    private Rigidbody _rb;
 
     private void Awake()
     {
         gameObject.layer = LayerMask.NameToLayer("Projectile");
+        _rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    public void Shoot(Vector3 force)
     {
-        if (!_hasDir)
-        {
-            _dir = transform.localRotation * Vector3.forward;
-            transform.rotation *= Quaternion.Euler(90f, 0f, 0f);
-            _hasDir = true;
-        }
-
-        transform.position += _dir * (Time.deltaTime * _speed);
+        _rb.velocity = Vector3.zero;
+        _rb.AddForce(force, ForceMode.VelocityChange);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -69,14 +60,9 @@ public class Projectile : MonoBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
-            Managers.Resource.Instantiate(_hitEffectAddressableName, transform.position, null, true);
+            Managers.Resource.Instantiate(_hitEffectAddressableName, other.ClosestPoint(transform.position), null, true);
         }
 
         Managers.Resource.Destroy(gameObject);
-    }
-
-    private void OnDisable()
-    {
-        _hasDir = false;
     }
 }
