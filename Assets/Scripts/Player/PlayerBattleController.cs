@@ -234,7 +234,7 @@ public class PlayerBattleController : MonoBehaviour
     private bool IsInRangeOfDefenseAngle(Vector3 attackedPosition)
     {
         var dir = (attackedPosition - transform.position).normalized;
-        if (Vector3.Angle(transform.forward, dir) <= _defenseAngle * 0.5f)
+        if (Vector3.Angle(transform.forward, dir) < _defenseAngle * 0.5f)
         {
             return true;
         }

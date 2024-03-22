@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 408656}
   - component: {fileID: 3327774}
   - component: {fileID: 2369090}
-  - component: {fileID: 5808634599350226517}
+  - component: {fileID: -556737306229270357}
   - component: {fileID: 2675355484160752754}
   - component: {fileID: 4777844573322539462}
   m_Layer: 13
@@ -86,7 +86,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &5808634599350226517
+--- !u!54 &-556737306229270357
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,7 +100,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!65 &2675355484160752754
 BoxCollider:
@@ -129,5 +129,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: 0
   _enemy: 1
-  _speed: 20
+  _speed: 0
   _hitEffectAddressableName: SteelHit.prefab

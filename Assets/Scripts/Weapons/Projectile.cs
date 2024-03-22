@@ -58,6 +58,11 @@ public class Projectile : MonoBehaviour
             }
             else if (other.CompareTag("Shield"))
             {
+                if (!Player.Battle.IsDefending)
+                {
+                    return;
+                }
+
                 Player.Battle.HitShield(other.ClosestPoint(transform.position));
             }
         }

@@ -965,7 +965,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &1885341202143315597
 CapsuleCollider:
@@ -1023,6 +1023,7 @@ MonoBehaviour:
   <AttackOffset>k__BackingField: {fileID: 0}
   <AttackRadius>k__BackingField: 0
   _rightHand: {fileID: 1885341202811210471}
+  _projectileSpeed: 20
 --- !u!114 &1885341202143315601
 MonoBehaviour:
   m_ObjectHideFlags: 0
