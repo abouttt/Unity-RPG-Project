@@ -72,21 +72,18 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        if (Player.EquipmentInventory.IsEquipped(EquipmentType.Shield))
+        if (Managers.Input.Defense && Player.EquipmentInventory.IsEquipped(EquipmentType.Shield))
         {
-            if (Managers.Input.Defense)
-            {
-                Defense();
-            }
-            else if (IsDefending)
-            {
-                OffDefense();
-            }
+            Defense();
+        }
+        else if (IsDefending)
+        {
+            OffDefense();
+        }
 
-            if (Managers.Input.Parry)
-            {
-                Parry();
-            }
+        if (Managers.Input.Parry && Player.EquipmentInventory.IsEquipped(EquipmentType.Shield))
+        {
+            Parry();
         }
     }
 
@@ -121,14 +118,18 @@ public class PlayerBattleController : MonoBehaviour
             }
             else
             {
-                IsDefending = false;
+                OffDefense();
                 CanDefense = false;
-                Player.Animator.SetBool(_animIDDefense, false);
             }
         }
 
         IsDamaging = true;
         Player.Status.HP -= Mathf.Clamp(damage - Player.Status.Defense, 0, damage);
+
+        if (IsAttacking)
+        {
+            _weapon.Collider.enabled = false;
+        }
 
         if (Player.Status.HP <= 0)
         {
@@ -137,7 +138,7 @@ public class PlayerBattleController : MonoBehaviour
         else
         {
             Player.Animator.Play("Damaged", -1, 0f);
-            Player.Animator.SetTrigger(_animIDDamaged);
+            Player.Animator.SetBool(_animIDDamaged, true);
         }
     }
 
@@ -158,13 +159,14 @@ public class PlayerBattleController : MonoBehaviour
     {
         IsAttacking = false;
         IsParrying = false;
+        IsDefending = false;
         IsDamaging = false;
         _currentAttackComboCount = 0;
         _hasReservedAttack = false;
         _isParryable = false;
         Player.Animator.ResetTrigger(_animIDAttack);
         Player.Animator.ResetTrigger(_animIDParry);
-        Player.Animator.ResetTrigger(_animIDDamaged);
+        Player.Animator.SetBool(_animIDDamaged, false);
     }
 
     private void Attack()
