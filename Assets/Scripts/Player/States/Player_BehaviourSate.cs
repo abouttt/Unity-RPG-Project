@@ -23,6 +23,11 @@ public class Player_BehaviourSate : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (!stateInfo.IsName("Damaged") && animator.GetCurrentAnimatorStateInfo(0).IsName("Damaged"))
+        {
+            return;
+        }
+
         if (stateInfo.normalizedTime >= UnLockTime)
         {
             Player.Movement.ClearJump();

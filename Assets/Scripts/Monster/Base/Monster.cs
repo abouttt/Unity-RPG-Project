@@ -53,6 +53,7 @@ public abstract class Monster : MonoBehaviour
     public NavMeshAgent NavMeshAgent { get; private set; }
     public FieldOfView Fov { get; private set; }
 
+    protected MonsterState CurrentState = MonsterState.Idle;
     protected readonly Collider[] PlayerCollider = new Collider[1];
 
     private readonly List<Collider> _lockOnTargetColliders = new();
@@ -98,7 +99,7 @@ public abstract class Monster : MonoBehaviour
     {
         CurrentHP = Data.MaxHP;
         OriginalPosition = transform.position;
-        Collider.enabled = true;
+        Collider.isTrigger = false;
         foreach (var collider in _lockOnTargetColliders)
         {
             collider.enabled = true;
@@ -112,6 +113,8 @@ public abstract class Monster : MonoBehaviour
 
     public void Transition(MonsterState state)
     {
+        CurrentState = state;
+
         if (_stateAnimID[state] == -1)
         {
             Animator.Play(state.ToString(), -1, 0f);

@@ -5,6 +5,7 @@ public class PlayerBattleController : MonoBehaviour
     public bool IsAttacking { get; private set; } = false;
     public bool IsParrying { get; private set; } = false;
     public bool IsDefending { get; private set; } = false;
+    public bool IsDefenseDamaging { get; private set; } = false;
     public bool IsDamaging { get; private set; } = false;
     public bool CanAttack { get; set; } = true;
     public bool CanParry { get; set; } = true;
@@ -76,7 +77,7 @@ public class PlayerBattleController : MonoBehaviour
         {
             Defense();
         }
-        else if (IsDefending)
+        else if (!IsDefenseDamaging)
         {
             OffDefense();
         }
@@ -105,7 +106,7 @@ public class PlayerBattleController : MonoBehaviour
             {
                 monster.Stunned();
                 Managers.Resource.Instantiate(
-                    "SteelHit.prefab", Player.Root.GetEquipment(EquipmentType.Shield).transform.position, null, true);
+                    "ParryHit.prefab", Player.Root.GetEquipment(EquipmentType.Shield).transform.position, null, true);
                 return;
             }
         }
@@ -149,6 +150,7 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
+        IsDefenseDamaging = true;
         Player.Animator.Play("DefenseDamaged", -1, 0f);
         Player.Status.SP -= _requiredDefenseSP;
         var pos = hitPosition != null ? hitPosition.Value : Player.Root.GetEquipment(EquipmentType.Shield).transform.position;
@@ -160,6 +162,7 @@ public class PlayerBattleController : MonoBehaviour
         IsAttacking = false;
         IsParrying = false;
         IsDefending = false;
+        IsDefenseDamaging = false;
         IsDamaging = false;
         _currentAttackComboCount = 0;
         _hasReservedAttack = false;
