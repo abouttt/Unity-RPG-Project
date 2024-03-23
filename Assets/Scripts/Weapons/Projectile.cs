@@ -14,12 +14,14 @@ public class Projectile : MonoBehaviour
     private string _hitEffectAddressableName;
 
     private Rigidbody _rb;
+    private Collider _collider;
     private bool _canDestroy;
 
     private void Awake()
     {
         gameObject.layer = LayerMask.NameToLayer("Projectile");
         _rb = GetComponent<Rigidbody>();
+        _collider = GetComponent<Collider>();
     }
 
     public void Shoot(Vector3 force)
@@ -66,7 +68,7 @@ public class Projectile : MonoBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
-            Managers.Resource.Instantiate(_hitEffectAddressableName, other.ClosestPoint(transform.position), null, true);
+            Managers.Resource.Instantiate(_hitEffectAddressableName, transform.position, null, true);
             _canDestroy = true;
         }
 
