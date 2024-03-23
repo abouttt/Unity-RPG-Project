@@ -9,6 +9,7 @@ public class Player_DeadState : StateMachineBehaviour
         Player.Movement.CanJump = false;
         Player.Movement.CanRoll = false;
         Player.Battle.CanAttack = false;
+        Player.Battle.CanParry = false;
         Player.Battle.CanDefense = false;
     }
 
@@ -22,7 +23,7 @@ public class Player_DeadState : StateMachineBehaviour
                 Player.Status.MP = Player.Status.MaxStat.MP;
                 Managers.Game.IsDefaultSpawn = true;
                 Managers.Scene.LoadScene(SceneType.VillageScene);
-            }, "확인을 누르시면 마을에서 부활하게 됩니다.", "확인", "", true, false);
+            }, "확인을 누르시면 마을에서 부활하게 됩니다.", "확인", null, true, false);
         }
     }
 }
