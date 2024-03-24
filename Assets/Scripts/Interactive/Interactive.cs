@@ -24,6 +24,6 @@ public abstract class Interactive : MonoBehaviour
     protected void InstantiateMinimapIcon(string spriteName, string iconName, float scale = 1)
     {
         Managers.Resource.Instantiate(
-            "MinimapIcon.prefab", transform).GetComponent<MinimapIcon>().Setup(spriteName, iconName);
+            "MinimapIcon.prefab", transform).GetComponent<MinimapIcon>().Setup(spriteName, iconName, scale);
     }
 }
