@@ -14,7 +14,8 @@ public class HealPotion : ConsumableItem
         }
 
         Player.Status.HP += 100;
-        Managers.Resource.Instantiate("HealOnceBurst.prefab", Player.Collider.bounds.center, null, true);
+        Managers.Resource.Instantiate(
+            "HealOnceBurst.prefab", Player.Collider.bounds.center - Player.Transform.position, Player.Transform, true);
 
         return true;
     }
