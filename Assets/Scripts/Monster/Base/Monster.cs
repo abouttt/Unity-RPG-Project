@@ -31,18 +31,7 @@ public abstract class Monster : MonoBehaviour
     [field: SerializeField]
     public float AttackRadius { get; private set; }
 
-    public bool IsLockOnTarget
-    {
-        get => _isLockOnTarget;
-        set
-        {
-            _isLockOnTarget = value;
-            if (_isLockOnTarget)
-            {
-                ShowHPBar();
-            }
-        }
-    }
+    public bool IsLockOnTarget { get; private set; }
 
     public IReadOnlyList<Collider> LockOnTargetColliders => _lockOnTargetColliders;
     public int CurrentHP { get; set; }
@@ -71,13 +60,19 @@ public abstract class Monster : MonoBehaviour
         NavMeshAgent = GetComponent<NavMeshAgent>();
         Fov = GetComponent<FieldOfView>();
 
-        int lockOnTargetLayer = LayerMask.NameToLayer("LockOnTarget");
-        foreach (Transform child in transform)
+        foreach (var lockOnTarget in GetComponentsInChildren<LockOnTarget>())
         {
-            if (child.gameObject.layer == lockOnTargetLayer)
+            lockOnTarget.LockChanged += lockOn =>
             {
-                _lockOnTargetColliders.Add(child.GetComponent<Collider>());
-            }
+                if (lockOn)
+                {
+                    ShowHPBar();
+                }
+
+                IsLockOnTarget = lockOn;
+            };
+
+            _lockOnTargetColliders.Add(lockOnTarget.GetComponent<Collider>());
         }
 
         _stateAnimID.Add(MonsterState.Idle, Animator.StringToHash("Idle"));

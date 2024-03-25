@@ -10,18 +10,18 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (IsLockOn && value == null)
             {
-                _stateDrivenCamera.LookAt.GetComponentInParent<Monster>().IsLockOnTarget = false;
+                _stateDrivenCamera.LookAt.GetComponent<LockOnTarget>().IsLockOn = false;
             }
 
             IsLockOn = value != null;
             _stateDrivenCamera.LookAt = value;
             _stateDrivenCameraAnimator.SetBool(_animIDLockOn, IsLockOn);
             _lockOnTargetImage.SetTarget(_stateDrivenCamera.LookAt);
-            Player.Animator.SetFloat(_animIDLockOn, IsLockOn ? 1f : 0f);
+            Player.Animator.SetBool(_animIDLockOn, IsLockOn);
 
             if (IsLockOn)
             {
-                _stateDrivenCamera.LookAt.GetComponentInParent<Monster>().IsLockOnTarget = true;
+                _stateDrivenCamera.LookAt.GetComponent<LockOnTarget>().IsLockOn = true;
             }
         }
     }
@@ -42,7 +42,7 @@ public class PlayerCameraController : MonoBehaviour
     private float _bottomClamp;
 
     [Space(10)]
-    [Header("[Lock On]")]
+    [Header("[Lock Target]")]
     [SerializeField]
     private CinemachineStateDrivenCamera _stateDrivenCamera;
 
@@ -66,7 +66,7 @@ public class PlayerCameraController : MonoBehaviour
     private float _cinemachineTargetYaw;
     private float _cinemachineTargetPitch;
 
-    private const float _threshold = 0.01f;
+    private readonly float _threshold = 0.01f;
 
     private GameObject _mainCamera;
     private UI_FollowWorldObject _lockOnTargetImage;
@@ -79,8 +79,8 @@ public class PlayerCameraController : MonoBehaviour
 
     private void Start()
     {
-        _lockOnTargetImage = Managers.Resource.Instantiate
-            ("UI_LockOnTargetImage.prefab", Managers.UI.Get<UI_AutoCanvas>().transform).GetComponent<UI_FollowWorldObject>();
+        _lockOnTargetImage = Managers.Resource.Instantiate(
+            "UI_LockOnTargetImage.prefab", Managers.UI.Get<UI_AutoCanvas>().transform).GetComponent<UI_FollowWorldObject>();
         _lockOnTargetImage.gameObject.SetActive(false);
         _cinemachineTargetYaw = _cinemachineCameraTarget.transform.rotation.eulerAngles.y;
     }
@@ -146,10 +146,11 @@ public class PlayerCameraController : MonoBehaviour
 
             if (currentAngle < _viewAngle * 0.5f)
             {
-                float dstToTarget = Vector3.Distance(_mainCamera.transform.position, _lockOnTargets[i].transform.position);
+                float distToTarget = Vector3.Distance(_mainCamera.transform.position, _lockOnTargets[i].transform.position);
+
                 if (currentAngle < shortestAngle)
                 {
-                    if (!Physics.Raycast(_mainCamera.transform.position, dirToTarget, dstToTarget, _obstacleMask))
+                    if (!Physics.Raycast(_mainCamera.transform.position, dirToTarget, distToTarget, _obstacleMask))
                     {
                         finalTarget = _lockOnTargets[i].transform;
                         shortestAngle = currentAngle;
