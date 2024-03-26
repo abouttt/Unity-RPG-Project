@@ -435,7 +435,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3356605695662898004}
-  - component: {fileID: 3356605695662898005}
   m_Layer: 0
   m_Name: Character_Hero_Knight_Male_FixedScale
   m_TagString: Untagged
@@ -460,27 +459,6 @@ Transform:
   m_Father: {fileID: 3356605696882728785}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &3356605695662898005
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3356605695662898007}
-  m_Enabled: 0
-  m_Avatar: {fileID: 9000000, guid: b6ef2f4d0154b2747860a3332fa05f97, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3356605695675404267
 GameObject:
   m_ObjectHideFlags: 0
@@ -2172,7 +2150,7 @@ Animator:
   m_GameObject: {fileID: 3356605696882728784}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b6ef2f4d0154b2747860a3332fa05f97, type: 3}
-  m_Controller: {fileID: 9100000, guid: c56bd2bca4a94be40acfe8e05e0b86e6, type: 2}
+  m_Controller: {fileID: 9100000, guid: 47ead00f91987a74fba0f158f92a9e67, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2257,7 +2235,7 @@ MonoBehaviour:
       Value:
         Root: {fileID: 3764721872734489625}
         Equipment: {fileID: 0}
-  _basicAnimator: {fileID: 9100000, guid: c56bd2bca4a94be40acfe8e05e0b86e6, type: 2}
+  _basicAnimator: {fileID: 9100000, guid: 47ead00f91987a74fba0f158f92a9e67, type: 2}
   _meleeAnimator: {fileID: 22100000, guid: 2d439a983a7ec88468afedb667aaf913, type: 2}
 --- !u!114 &3356605696882728876
 MonoBehaviour:
@@ -2281,9 +2259,9 @@ MonoBehaviour:
   _gravity: -20
   _jumpTimeout: 0.5
   _fallTimeout: 0.4
-  _requiredSprintSP: 15
-  _requiredJumpSP: 10
-  _requiredRollSP: 10
+  _sprintRequiredSP: 15
+  _jumpRequiredSP: 10
+  _rollRequiredSP: 10
   _groundedOffset: 0.08
   _groundedRadius: 0.21
   _groundLayers:
@@ -2326,10 +2304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 356b9306e1240124da43dd21185f8e5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defenseAngle: 45
-  _requiredAttackSP: 15
-  _requiredParrySP: 15
-  _requiredDefenseSP: 15
 --- !u!114 &3356605696882728878
 MonoBehaviour:
   m_ObjectHideFlags: 0
