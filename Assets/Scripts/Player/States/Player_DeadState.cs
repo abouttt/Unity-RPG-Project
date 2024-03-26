@@ -4,13 +4,8 @@ public class Player_DeadState : StateMachineBehaviour
 {
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Player.Movement.CanMove = false;
-        Player.Movement.CanRotation = false;
-        Player.Movement.CanJump = false;
-        Player.Movement.CanRoll = false;
-        Player.Battle.CanAttack = false;
-        Player.Battle.CanParry = false;
-        Player.Battle.CanDefense = false;
+        Player.Movement.Enabled = false;
+        Player.Battle.Enabled = false;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

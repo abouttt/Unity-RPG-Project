@@ -16,6 +16,20 @@ public class PlayerMovement : MonoBehaviour, ISavable
     public bool IsJumping { get; private set; }
     public bool IsRolling { get; private set; }
 
+    public bool Enabled
+    {
+        get => _enabled;
+        set
+        {
+            _enabled = value;
+            CanMove = value;
+            CanRotation = value;
+            CanSprint = value;
+            CanJump = value;
+            CanRoll = value;
+        }
+    }
+
     [SerializeField]
     private float _moveSpeed;
 
@@ -49,13 +63,13 @@ public class PlayerMovement : MonoBehaviour, ISavable
 
     [Space(10)]
     [SerializeField]
-    private float _requiredSprintSP;
+    private float _sprintRequiredSP;
 
     [SerializeField]
-    private float _requiredJumpSP;
+    private float _jumpRequiredSP;
 
     [SerializeField]
-    private float _requiredRollSP;
+    private float _rollRequiredSP;
 
     [Space(10)]
     [SerializeField]
@@ -70,9 +84,9 @@ public class PlayerMovement : MonoBehaviour, ISavable
     private float _speed;
     private float _animationBlend;
     private float _posXBlend;
-    private float _posZBlend;
+    private float _posYBlend;
     private float _targetRotation;
-    private float _cameraTargetRotation;
+    private float _targetMove;
     private float _rotationVelocity;
     private float _verticalVelocity;
     private float _terminalVelocity = 53.0f;
@@ -87,11 +101,11 @@ public class PlayerMovement : MonoBehaviour, ISavable
     private float _sprintInputDeltaTime;
     private bool _isPressedSprint;
 
-    private bool _isPrevLockOn;
+    private bool _enabled = true;
 
     // animation IDs
     private readonly int _animIDPosX = Animator.StringToHash("PosX");
-    private readonly int _animIDPosZ = Animator.StringToHash("PosZ");
+    private readonly int _animIDPosY = Animator.StringToHash("PosY");
     private readonly int _animIDSpeed = Animator.StringToHash("Speed");
     private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
     private readonly int _animIDJump = Animator.StringToHash("Jump");
@@ -110,14 +124,15 @@ public class PlayerMovement : MonoBehaviour, ISavable
     private void Start()
     {
         _targetRotation = Mathf.Atan2(transform.forward.x, transform.forward.z) * Mathf.Rad2Deg;
+        _jumpTimeoutDelta = _jumpTimeout;
+        _fallTimeoutDelta = _fallTimeout;
     }
 
     private void Update()
     {
         float deltaTime = Time.deltaTime;
-
         JumpAndGravity(deltaTime);
-        GroundedCheck();
+        CheckGrounded();
         Roll();
         Move(deltaTime);
     }
@@ -172,17 +187,14 @@ public class PlayerMovement : MonoBehaviour, ISavable
                 _verticalVelocity = -2f;
             }
 
-            // 점프
             if (Managers.Input.Jump && CanJump && _jumpTimeoutDelta <= 0f)
             {
                 if (Player.Status.SP > 0f)
                 {
-                    Player.Status.SP -= _requiredJumpSP;
-
                     IsJumping = true;
-                    // 원하는 높이에 도달하는 데 필요한 속도 = H * -2 * G 의 제곱근.
                     _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
                     _isJumpWithSprint = Managers.Input.Sprint;
+                    Player.Status.SP -= _jumpRequiredSP;
                     Player.Animator.SetBool(_animIDJump, true);
                 }
             }
@@ -216,9 +228,8 @@ public class PlayerMovement : MonoBehaviour, ISavable
         }
     }
 
-    private void GroundedCheck()
+    private void CheckGrounded()
     {
-        // 오프셋을 사용하여 구 위치 설정
         var spherePosition = new Vector3(transform.position.x, transform.position.y - _groundedOffset, transform.position.z);
         IsGrounded = Physics.CheckSphere(spherePosition, _groundedRadius, _groundLayers, QueryTriggerInteraction.Ignore);
         Player.Animator.SetBool(_animIDGrounded, IsGrounded);
@@ -230,6 +241,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
         {
             if (Player.Status.SP > 0f)
             {
+                IsRolling = true;
                 CanRotation = true;
                 Player.Animator.SetBool(_animIDRoll, true);
             }
@@ -240,14 +252,14 @@ public class PlayerMovement : MonoBehaviour, ISavable
     {
         float targetSpeed = _moveSpeed;
         float requiredSP = 0f;
-        bool isZeroMoveInput = Managers.Input.Move == Vector2.zero;
 
+        // 질주로 인해 기력을 다 소비한 후 질주가 불가능 할 때 키를 때면 다시 가능하도록.
         if (!Managers.Input.Sprint && !CanSprint)
         {
             CanSprint = true;
         }
 
-        // 질주, 구르기키가 같으므로 구별하기 위함
+        // 질주, 구르기키가 같으므로 구별하기 위함.
         if (Managers.Input.Sprint)
         {
             _isPressedSprint = true;
@@ -262,7 +274,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
 
         if (_isJumpLand)
         {
-            targetSpeed = _moveSpeed * _jumpLandDecreaseSpeedPercentage;
+            targetSpeed *= _jumpLandDecreaseSpeedPercentage;
         }
         else if (IsJumping && _isJumpWithSprint)
         {
@@ -274,7 +286,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
             {
                 IsSprinting = true;
                 targetSpeed = _sprintSpeed;
-                requiredSP = _requiredSprintSP * deltaTime;
+                requiredSP = _sprintRequiredSP * deltaTime;
             }
             else
             {
@@ -282,22 +294,23 @@ public class PlayerMovement : MonoBehaviour, ISavable
             }
         }
 
+        bool isZeroMoveInput = Managers.Input.Move == Vector2.zero;
+
         if (!IsRolling && (!CanMove || isZeroMoveInput))
         {
             targetSpeed = 0f;
             requiredSP = 0f;
         }
 
-        // 플레이어의 현재 수평 속도에 대한 참조
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0f, _controller.velocity.z).magnitude;
-        float finalSpeedChangeRate = deltaTime * _speedChangeRate;
+        float currentSpeedChangeRate = deltaTime * _speedChangeRate;
         float speedOffset = 0.1f;
 
         // 목표 속도까지 가감속
         if (currentHorizontalSpeed < targetSpeed - speedOffset ||
             currentHorizontalSpeed > targetSpeed + speedOffset)
         {
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, finalSpeedChangeRate);
+            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, currentSpeedChangeRate);
 
             // 속도를 소수점 이하 3자리까지 반올림
             _speed = Mathf.Round(_speed * 1000f) / 1000f;
@@ -307,35 +320,31 @@ public class PlayerMovement : MonoBehaviour, ISavable
             _speed = targetSpeed;
         }
 
-        _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, finalSpeedChangeRate);
-        _posXBlend = Mathf.Lerp(_posXBlend, Managers.Input.Move.x, finalSpeedChangeRate);
-        _posZBlend = Mathf.Lerp(_posZBlend, Managers.Input.Move.y, finalSpeedChangeRate);
+        _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, currentSpeedChangeRate);
+        _posXBlend = Mathf.Lerp(_posXBlend, Managers.Input.Move.x, currentSpeedChangeRate);
+        _posYBlend = Mathf.Lerp(_posYBlend, Managers.Input.Move.y, currentSpeedChangeRate);
         if (_animationBlend < 0.01f)
         {
             _animationBlend = 0f;
         }
 
-        var inputDirection = new Vector3(Managers.Input.Move.x, 0f, Managers.Input.Move.y).normalized;
-
         if (CanRotation && !isZeroMoveInput)
         {
-            _cameraTargetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-            _targetRotation = _cameraTargetRotation;
+            var inputDirection = new Vector3(Managers.Input.Move.x, 0f, Managers.Input.Move.y).normalized;
+            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
+            _targetMove = _targetRotation;
         }
 
-        if (Player.Camera.IsLockOn)
-        {
-            if (!_isPrevLockOn)
-            {
-                _isPrevLockOn = true;
-            }
+        bool isLockOn = Player.Camera.IsLockOn;
+        bool isOnlyRun = !IsSprinting && !IsJumping && !IsRolling;
 
-            // 질주, 점프, 구르기는 락 온시에 인풋 방향으로 회전한다
-            if (!IsSprinting && !IsJumping && !IsRolling)
+        if (isLockOn)
+        {
+            // 질주, 점프, 구르기는 락 온시에 인풋 방향으로 회전한다 아니면 타겟 방향으로 향하도록 회전.
+            if (isOnlyRun)
             {
                 if (!isZeroMoveInput)
                 {
-                    // 타겟 방향으로 향하도록 회전
                     var dirToTarget = (Player.Camera.LockOnTarget.position - transform.position).normalized;
                     _targetRotation = Mathf.Atan2(dirToTarget.x, dirToTarget.z) * Mathf.Rad2Deg;
                 }
@@ -345,20 +354,12 @@ public class PlayerMovement : MonoBehaviour, ISavable
                 // 구르기시 캐릭터가 바라보고 있는 방향으로 구르기 위함
                 if (!isZeroMoveInput)
                 {
-                    _targetRotation = _cameraTargetRotation;
+                    _targetRotation = _targetMove;
                 }
                 else
                 {
-                    _cameraTargetRotation = _targetRotation;
+                    _targetMove = _targetRotation;
                 }
-            }
-        }
-        else
-        {
-            if (_isPrevLockOn)
-            {
-                _cameraTargetRotation = _targetRotation;
-                _isPrevLockOn = false;
             }
         }
 
@@ -367,14 +368,15 @@ public class PlayerMovement : MonoBehaviour, ISavable
         transform.rotation = Quaternion.Euler(0f, rotation, 0f);
 
         // 이동
-        var targetDirection = Quaternion.Euler(0f, _cameraTargetRotation, 0f) * Vector3.forward;
+        var targetDirection = Quaternion.Euler(0f, _targetMove, 0f) * Vector3.forward;
         _controller.Move(targetDirection.normalized * (_speed * deltaTime) + new Vector3(0f, _verticalVelocity, 0f) * deltaTime);
         Player.Status.SP -= requiredSP;
 
         // 애니메이터 업데이트
+        bool isLockAndOnlyRun = isLockOn && isOnlyRun;
         Player.Animator.SetFloat(_animIDSpeed, _animationBlend);
-        Player.Animator.SetFloat(_animIDPosX, _posXBlend);
-        Player.Animator.SetFloat(_animIDPosZ, _posZBlend);
+        Player.Animator.SetFloat(_animIDPosX, isLockAndOnlyRun ? _posXBlend : 0f);
+        Player.Animator.SetFloat(_animIDPosY, isLockAndOnlyRun ? _posYBlend : 1f);
     }
 
     private void OnBeginJumpLand()
@@ -385,16 +387,13 @@ public class PlayerMovement : MonoBehaviour, ISavable
     private void OnBeginRoll()
     {
         ClearJump();
-        Player.Status.SP -= _requiredRollSP;
-        IsRolling = true;
-        CanMove = false;
-        CanRotation = false;
-        CanJump = false;
-        CanRoll = false;
+        Enabled = false;
+        Player.Status.SP -= _rollRequiredSP;
     }
 
     private void OnDrawGizmosSelected()
     {
+        // IsGrounded 판단 시각화
         var spherePosition = new Vector3(transform.position.x, transform.position.y - _groundedOffset, transform.position.z);
         Gizmos.DrawWireSphere(spherePosition, _groundedRadius);
     }

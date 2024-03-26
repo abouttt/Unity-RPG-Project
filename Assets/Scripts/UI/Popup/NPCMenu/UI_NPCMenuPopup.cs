@@ -30,21 +30,14 @@ public class UI_NPCMenuPopup : UI_Popup
 
         Showed += () =>
         {
-            Player.Movement.CanMove = false;
-            Player.Movement.CanRotation = false;
-            Player.Movement.CanJump = false;
-            Player.Movement.CanRoll = false;
+            Player.Movement.Enabled = false;
             Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(false);
         };
 
         Closed += () =>
         {
             Clear();
-
-            Player.Movement.CanMove = true;
-            Player.Movement.CanRotation = true;
-            Player.Movement.CanJump = true;
-            Player.Movement.CanRoll = true;
+            Player.Movement.Enabled = true;
             Managers.UI.Get<UI_TopCanvas>().ToggleGameMenuButton(true);
         };
     }

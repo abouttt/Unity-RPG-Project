@@ -17,7 +17,6 @@ public class PlayerCameraController : MonoBehaviour
             _stateDrivenCamera.LookAt = value;
             _stateDrivenCameraAnimator.SetBool(_animIDLockOn, IsLockOn);
             _lockOnTargetImage.SetTarget(_stateDrivenCamera.LookAt);
-            Player.Animator.SetBool(_animIDLockOn, IsLockOn);
 
             if (IsLockOn)
             {
