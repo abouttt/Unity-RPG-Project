@@ -49,7 +49,6 @@ public abstract class Monster : MonoBehaviour
     private readonly Dictionary<MonsterState, int> _stateAnimID = new();
 
     private UI_MonsterHPBar _hpBar;
-    private bool _isLockOnTarget;
 
     private void Awake()
     {
@@ -81,13 +80,13 @@ public abstract class Monster : MonoBehaviour
         _stateAnimID.Add(MonsterState.Attack, Animator.StringToHash("Attack"));
         _stateAnimID.Add(MonsterState.Stunned, Animator.StringToHash("Stunned"));
         _stateAnimID.Add(MonsterState.Damaged, -1);
-        _stateAnimID.Add(MonsterState.Dead, -1);
+        _stateAnimID.Add(MonsterState.Death, -1);
     }
 
     private void Start()
     {
-        Managers.Resource.Instantiate("MinimapIcon.prefab", transform)
-            .GetComponent<MinimapIcon>().Setup("MonsterMinimapIcon.sprite", Data.MonsterName);
+        Managers.Resource.Instantiate(
+            "MinimapIcon.prefab", transform).GetComponent<MinimapIcon>().Setup("MonsterMinimapIcon.sprite", Data.MonsterName);
     }
 
     private void OnEnable()
@@ -135,7 +134,7 @@ public abstract class Monster : MonoBehaviour
 
         if (CurrentHP <= 0)
         {
-            Transition(MonsterState.Dead);
+            Transition(MonsterState.Death);
         }
         else
         {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Monster_DeadState : StateMachineBehaviour
+public class Monster_DeathState : StateMachineBehaviour
 {
     private Monster _monster;
 

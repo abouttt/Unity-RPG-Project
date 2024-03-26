@@ -8,7 +8,7 @@ public enum MonsterState
     Attack,
     Damaged,
     Stunned,
-    Dead,
+    Death,
 }
 
 public enum Category
