@@ -2,37 +2,48 @@ using UnityEngine;
 
 public class PlayerBattleController : MonoBehaviour
 {
+    public bool CanAttack { get; set; } = true;
+    public bool CanParry { get; set; } = true;
+    public bool CanDefense { get; set; } = true;
+
     public bool IsAttacking { get; private set; } = false;
     public bool IsParrying { get; private set; } = false;
     public bool IsDefending { get; private set; } = false;
     public bool IsDefenseDamaging { get; private set; } = false;
     public bool IsDamaging { get; private set; } = false;
-    public bool CanAttack { get; set; } = true;
-    public bool CanParry { get; set; } = true;
-    public bool CanDefense { get; set; } = true;
+
+    public bool Enabled
+    {
+        get => _enabled;
+        set
+        {
+            _enabled = value;
+            CanAttack = value;
+            CanParry = value;
+            CanDefense = value;
+        }
+    }
 
     [SerializeField]
     private float _defenseAngle;
 
     [SerializeField]
-    private float _requiredAttackSP;
+    private float _attackRequiredSP;
 
     [SerializeField]
-    private float _requiredParrySP;
+    private float _parryRequiredSP;
 
     [SerializeField]
-    private float _requiredDefenseSP;
-
-    private readonly Collider[] _monsters = new Collider[10];
+    private float _defenseDamagedRequiredSP;
 
     private readonly int _animIDAttack = Animator.StringToHash("Attack");
     private readonly int _animIDParry = Animator.StringToHash("Parry");
     private readonly int _animIDDefense = Animator.StringToHash("Defense");
     private readonly int _animIDDamaged = Animator.StringToHash("Damaged");
 
-    private int _currentAttackComboCount;
     private bool _hasReservedAttack = false;
     private bool _isParryable = false;
+    private bool _enabled = true;
 
     private Weapon _weapon;
 
@@ -46,12 +57,19 @@ public class PlayerBattleController : MonoBehaviour
                 {
                     _weapon = Player.Root.GetEquipment(EquipmentType.Weapon).GetComponent<Weapon>();
                 }
+                else
+                {
+                    _weapon = null;
+                }
             }
         };
     }
 
     private void Update()
     {
+        Player.Animator.SetBool(_animIDAttack, false);
+        Player.Animator.SetBool(_animIDParry, false);
+
         if (!Managers.Input.CursorLocked || Player.Movement.IsJumping || Player.Movement.IsRolling)
         {
             if (IsDefending)
@@ -73,22 +91,23 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
+        if (Managers.Input.Parry && Player.EquipmentInventory.IsEquipped(EquipmentType.Shield))
+        {
+            Parry();
+            return;
+        }
+
         if (Managers.Input.Defense && Player.EquipmentInventory.IsEquipped(EquipmentType.Shield))
         {
             Defense();
         }
-        else if (!IsDefenseDamaging)
+        else if (IsDefending)
         {
             OffDefense();
         }
-
-        if (Managers.Input.Parry && Player.EquipmentInventory.IsEquipped(EquipmentType.Shield))
-        {
-            Parry();
-        }
     }
 
-    public void TakeDamage(Monster monster, Vector3 attackedPosition, int damage, bool parry)
+    public void TakeDamage(Monster monster, Vector3 attackedPosition, int damage, bool parryable)
     {
         if (Player.Status.HP <= 0)
         {
@@ -100,7 +119,7 @@ public class PlayerBattleController : MonoBehaviour
             return;
         }
 
-        if (parry && _isParryable)
+        if (parryable && _isParryable)
         {
             if (IsInRangeOfDefenseAngle(attackedPosition))
             {
@@ -125,12 +144,7 @@ public class PlayerBattleController : MonoBehaviour
         }
 
         IsDamaging = true;
-        Player.Status.HP -= Mathf.Clamp(damage - Player.Status.Defense, 0, damage);
-
-        if (IsAttacking)
-        {
-            _weapon.Collider.enabled = false;
-        }
+        Player.Status.HP -= Mathf.Clamp(Util.CalcDamage(damage, Player.Status.Defense), 0, damage);
 
         if (Player.Status.HP <= 0)
         {
@@ -152,7 +166,7 @@ public class PlayerBattleController : MonoBehaviour
 
         IsDefenseDamaging = true;
         Player.Animator.Play("DefenseDamaged", -1, 0f);
-        Player.Status.SP -= _requiredDefenseSP;
+        Player.Status.SP -= _defenseDamagedRequiredSP;
         var pos = hitPosition != null ? hitPosition.Value : Player.Root.GetEquipment(EquipmentType.Shield).transform.position;
         Managers.Resource.Instantiate("SteelHit.prefab", pos, null, true);
     }
@@ -164,11 +178,8 @@ public class PlayerBattleController : MonoBehaviour
         IsDefending = false;
         IsDefenseDamaging = false;
         IsDamaging = false;
-        _currentAttackComboCount = 0;
         _hasReservedAttack = false;
         _isParryable = false;
-        Player.Animator.ResetTrigger(_animIDAttack);
-        Player.Animator.ResetTrigger(_animIDParry);
         Player.Animator.SetBool(_animIDDamaged, false);
     }
 
@@ -194,8 +205,8 @@ public class PlayerBattleController : MonoBehaviour
 
         IsAttacking = true;
         Player.Movement.CanRotation = true;
-        Player.Status.SP -= _requiredAttackSP;
-        Player.Animator.SetTrigger(_animIDAttack);
+        Player.Status.SP -= _attackRequiredSP;
+        Player.Animator.SetBool(_animIDAttack, true);
     }
 
     private void Parry()
@@ -218,8 +229,8 @@ public class PlayerBattleController : MonoBehaviour
 
         IsParrying = true;
         Player.Movement.CanRotation = true;
-        Player.Status.SP -= _requiredParrySP;
-        Player.Animator.SetTrigger(_animIDParry);
+        Player.Status.SP -= _parryRequiredSP;
+        Player.Animator.SetBool(_animIDParry, true);
     }
 
     private void Defense()
@@ -250,6 +261,12 @@ public class PlayerBattleController : MonoBehaviour
         return false;
     }
 
+    private void OnCanAttackCombo()
+    {
+        CanAttack = true;
+        OnCanRoll();
+    }
+
     private void OnEnableWeapon()
     {
         _weapon.Collider.enabled = true;
@@ -260,30 +277,18 @@ public class PlayerBattleController : MonoBehaviour
         _weapon.Collider.enabled = false;
     }
 
-    private void OnCanAttackCombo()
+    private void OnEnableParry()
     {
-        if (IsAttacking)
-        {
-            int nextCount = _currentAttackComboCount + 1;
-            _currentAttackComboCount = nextCount >= 4 ? 0 : nextCount;
-        }
+        _isParryable = true;
+    }
 
-        CanAttack = true;
-        OnCanRoll();
+    private void OnDisableParry()
+    {
+        _isParryable = false;
     }
 
     private void OnCanRoll()
     {
         Player.Movement.CanRoll = true;
-    }
-
-    private void OnBeginParry()
-    {
-        _isParryable = true;
-    }
-
-    private void OnEndParry()
-    {
-        _isParryable = false;
     }
 }

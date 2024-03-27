@@ -127,7 +127,7 @@ public abstract class Monster : MonoBehaviour
         }
 
         ShowHPBar();
-        CurrentDamage = Mathf.Clamp(damage - Data.Defense, 0, damage);
+        CurrentDamage = Mathf.Clamp(Util.CalcDamage(damage, Data.Defense), 0, damage);
         CurrentHP -= CurrentDamage;
         HPChanged?.Invoke();
         CurrentDamage = 0;

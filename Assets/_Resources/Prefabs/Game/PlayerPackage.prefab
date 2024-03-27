@@ -2236,7 +2236,7 @@ MonoBehaviour:
         Root: {fileID: 3764721872734489625}
         Equipment: {fileID: 0}
   _basicAnimator: {fileID: 9100000, guid: 47ead00f91987a74fba0f158f92a9e67, type: 2}
-  _meleeAnimator: {fileID: 22100000, guid: 2d439a983a7ec88468afedb667aaf913, type: 2}
+  _meleeAnimator: {fileID: 22100000, guid: 9e952aa7971396146bdacd2efe838238, type: 2}
 --- !u!114 &3356605696882728876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2304,6 +2304,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 356b9306e1240124da43dd21185f8e5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defenseAngle: 75
+  _attackRequiredSP: 10
+  _parryRequiredSP: 10
+  _defenseDamagedRequiredSP: 10
 --- !u!114 &3356605696882728878
 MonoBehaviour:
   m_ObjectHideFlags: 0

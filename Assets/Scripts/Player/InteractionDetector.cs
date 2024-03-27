@@ -14,6 +14,7 @@ public class InteractionDetector : MonoBehaviour
     private void Start()
     {
         _keyGuide = Managers.Resource.Instantiate("UI_InteractionKeyGuide.prefab").GetComponent<UI_InteractionKeyGuide>();
+        SetTarget(null);
     }
 
     private void Update()

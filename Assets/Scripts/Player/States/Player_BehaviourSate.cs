@@ -20,7 +20,11 @@ public class Player_BehaviourSate : StateMachineBehaviour
     {
         if (stateInfo.normalizedTime >= UnLockTime)
         {
+            Player.Movement.ClearJump();
+            Player.Movement.ClearRoll();
             Player.Movement.Enabled = true;
+
+            Player.Battle.Clear();
             Player.Battle.Enabled = true;
         }
     }
