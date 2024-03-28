@@ -45,10 +45,10 @@ public class NPC : Interactive
     {
         base.Awake();
 
+        InteractionMessage = "대화";
         s_NPCs.Add(NPCID, this);
         _quests = QuestDatabase.GetInstance.FindQuestsBy(NPCID);
         _originCanInteraction = CanInteraction;
-        InteractionMessage = "대화";
     }
 
     private void Start()
