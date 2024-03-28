@@ -391,6 +391,11 @@ public class PlayerMovement : MonoBehaviour, ISavable
         Player.Status.SP -= _rollRequiredSP;
     }
 
+    private void OnEndRoll()
+    {
+        IsRolling = false;
+    }
+
     private void OnDrawGizmosSelected()
     {
         // IsGrounded 판단 시각화
