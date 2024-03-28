@@ -37133,7 +37133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SceneType>k__BackingField: 3
-  _sceneBGM: {fileID: 0}
+  _sceneBGM: {fileID: 8300000, guid: 40ac39dff6e2f354f81de00e760e72fd, type: 3}
   <SceneID>k__BackingField: VILLAGE
   <DefaultSpawnPosition>k__BackingField: {x: -7.565907, y: 0.08138737, z: 14.14608}
   <DefaultSpawnRotationYaw>k__BackingField: 180

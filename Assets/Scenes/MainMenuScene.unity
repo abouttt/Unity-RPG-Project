@@ -11544,7 +11544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SceneType>k__BackingField: 1
-  _sceneBGM: {fileID: 0}
+  _sceneBGM: {fileID: 8300000, guid: 3aa8f1d7601a19d4c88dcaaa262c2e06, type: 3}
 --- !u!1001 &1442508558
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -101,6 +101,8 @@ public class PlayerMovement : MonoBehaviour, ISavable
     private float _sprintInputDeltaTime;
     private bool _isPressedSprint;
 
+    private bool _isRollMoving;
+
     private bool _enabled = true;
 
     // animation IDs
@@ -147,6 +149,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
     public void ClearRoll()
     {
         IsRolling = false;
+        _isRollMoving = false;
         Player.Animator.SetBool(_animIDRoll, false);
     }
 
@@ -280,7 +283,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
         {
             targetSpeed = _sprintSpeed;
         }
-        else if (_isPressedSprint && CanSprint && !IsJumping && !IsRolling && _sprintInputDeltaTime > _rollTimeout)
+        else if (_isPressedSprint && CanSprint && !IsJumping && !_isRollMoving && _sprintInputDeltaTime > _rollTimeout)
         {
             if (Player.Status.SP > 0f)
             {
@@ -296,7 +299,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
 
         bool isZeroMoveInput = Managers.Input.Move == Vector2.zero;
 
-        if (!IsRolling && (!CanMove || isZeroMoveInput))
+        if (!_isRollMoving && (!CanMove || isZeroMoveInput))
         {
             targetSpeed = 0f;
             requiredSP = 0f;
@@ -336,7 +339,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
         }
 
         bool isLockOn = Player.Camera.IsLockOn;
-        bool isOnlyRun = !IsSprinting && !IsJumping && !IsRolling;
+        bool isOnlyRun = !IsSprinting && !IsJumping && !_isRollMoving;
 
         if (isLockOn)
         {
@@ -373,10 +376,10 @@ public class PlayerMovement : MonoBehaviour, ISavable
         Player.Status.SP -= requiredSP;
 
         // 애니메이터 업데이트
-        bool isLockAndOnlyRun = isLockOn && isOnlyRun;
+        bool isLockMoving = isLockOn && !IsSprinting && !IsJumping;
         Player.Animator.SetFloat(_animIDSpeed, _animationBlend);
-        Player.Animator.SetFloat(_animIDPosX, isLockAndOnlyRun ? _posXBlend : 0f);
-        Player.Animator.SetFloat(_animIDPosY, isLockAndOnlyRun ? _posYBlend : 1f);
+        Player.Animator.SetFloat(_animIDPosX, isLockMoving ? _posXBlend : 0f);
+        Player.Animator.SetFloat(_animIDPosY, isLockMoving ? _posYBlend : 1f);
     }
 
     private void OnBeginJumpLand()
@@ -387,7 +390,7 @@ public class PlayerMovement : MonoBehaviour, ISavable
     private void OnBeginRoll()
     {
         ClearJump();
-        Enabled = false;
+        _isRollMoving = true;
         Player.Status.SP -= _rollRequiredSP;
     }
 
