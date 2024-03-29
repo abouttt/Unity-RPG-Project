@@ -132,7 +132,7 @@ public class UI_SkillTooltipTop : UI_Base
 
         _sb.AppendFormat("- 필요 스킬 포인트 : {0}\n", _skillData.RequiredSkillPoint);
         _sb.AppendFormat("- 제한레벨 : {0}\n\n", _skillData.RequiredPlayerLevel);
-        _sb.AppendFormat("{0}\n\n", _skillData.StatDescription);
+        _sb.AppendFormat("{0}\n", _skillData.StatDescription);
 
         GetText((int)Texts.SkillDescText).text = _sb.ToString();
     }

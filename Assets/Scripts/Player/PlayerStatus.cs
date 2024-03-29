@@ -22,7 +22,7 @@ public class PlayerStatus : MonoBehaviour, ISavable
         get => _currentStat.HP;
         set
         {
-            _currentStat.HP = Mathf.Clamp(value, 0, MaxStat.HP);
+            _currentStat.HP = Mathf.Clamp(value, 0, _maxStat.HP);
             HPChanged?.Invoke();
         }
     }
@@ -32,7 +32,7 @@ public class PlayerStatus : MonoBehaviour, ISavable
         get => _currentStat.MP;
         set
         {
-            _currentStat.MP = Mathf.Clamp(value, 0, MaxStat.MP);
+            _currentStat.MP = Mathf.Clamp(value, 0, _maxStat.MP);
             MPChanged?.Invoke();
         }
     }
@@ -43,7 +43,7 @@ public class PlayerStatus : MonoBehaviour, ISavable
         set
         {
             float prevSP = _currentStat.SP;
-            _currentStat.SP = Mathf.Clamp(value, 0f, MaxStat.SP);
+            _currentStat.SP = Mathf.Clamp(value, 0f, _maxStat.SP);
             if (_currentStat.SP < prevSP)
             {
                 _recoverySPDeltaTime = 0f;
@@ -58,7 +58,7 @@ public class PlayerStatus : MonoBehaviour, ISavable
         get => _currentStat.XP;
         set
         {
-            if (IsMaxLevel || MaxStat.XP == 0)
+            if (IsMaxLevel || _maxStat.XP == 0)
             {
                 return;
             }
@@ -66,9 +66,9 @@ public class PlayerStatus : MonoBehaviour, ISavable
             _currentStat.XP = value;
 
             int level = 0;
-            while (_currentStat.XP >= MaxStat.XP)
+            while (_currentStat.XP >= _maxStat.XP)
             {
-                _currentStat.XP -= MaxStat.XP;
+                _currentStat.XP -= _maxStat.XP;
                 level++;
             }
 
@@ -106,11 +106,34 @@ public class PlayerStatus : MonoBehaviour, ISavable
 
     public bool IsMaxLevel => Level >= _playerStatTable.StatTable.Count;
 
-    [ReadOnly]
-    public PlayerStatData ExtraFixedStat = new();
-    [ReadOnly]
-    public PlayerStatData ExtraPerStat = new();
-    public PlayerStatData MaxStat { get; private set; } = new();
+    public int MaxHP => _maxStat.HP;
+    public int MaxMP => _maxStat.MP;
+    public int MaxSP => (int)_maxStat.SP;
+    public int MaxXP => _maxStat.XP;
+    public int MaxDamage => _maxStat.Damage;
+    public int MaxDefense => _maxStat.Defense;
+
+    public PlayerStatData ExtraFixedStat
+    {
+        get => _extraFixedStat;
+        set
+        {
+            _extraFixedStat = value;
+            RefreshAllStat();
+            StatChanged?.Invoke();
+        }
+    }
+
+    public PlayerStatData ExtraPerStat
+    {
+        get => _extraPerStat;
+        set
+        {
+            _extraPerStat = value;
+            RefreshAllStat();
+            StatChanged?.Invoke();
+        }
+    }
 
     [SerializeField]
     private PlayerStatTable _playerStatTable;
@@ -121,7 +144,11 @@ public class PlayerStatus : MonoBehaviour, ISavable
     [SerializeField]
     private float _recoverySPAmount;
 
+    private readonly PlayerStatData _maxStat = new();
     private readonly PlayerStatData _currentStat = new();
+    private PlayerStatData _extraFixedStat = new();
+    private PlayerStatData _extraPerStat = new();
+
     private int _currentGold;
     private int _skillPoint;
     private float _recoverySPDeltaTime;  // SP 회복 현재 딜레이 시간
@@ -133,7 +160,7 @@ public class PlayerStatus : MonoBehaviour, ISavable
         FillCurrentMeleeStat();
         if (Managers.Data.HasSaveData)
         {
-            SP = MaxStat.SP;
+            SP = _maxStat.SP;
         }
         else
         {
@@ -143,21 +170,21 @@ public class PlayerStatus : MonoBehaviour, ISavable
 
     private void Start()
     {
-        Player.EquipmentInventory.InventoryChanged += (equipmentType) =>
+        Player.EquipmentInventory.InventoryChanged += equipmentType =>
         {
             RefreshAllStat();
             FillCurrentMeleeStat();
-            if (_currentStat.HP > MaxStat.HP)
+            if (_currentStat.HP > _maxStat.HP)
             {
-                _currentStat.HP = MaxStat.HP;
+                _currentStat.HP = _maxStat.HP;
             }
-            if (_currentStat.MP > MaxStat.MP)
+            if (_currentStat.MP > _maxStat.MP)
             {
-                _currentStat.MP = MaxStat.MP;
+                _currentStat.MP = _maxStat.MP;
             }
-            if (_currentStat.SP > MaxStat.SP)
+            if (_currentStat.SP > _maxStat.SP)
             {
-                _currentStat.SP = MaxStat.SP;
+                _currentStat.SP = _maxStat.SP;
             }
             StatChanged?.Invoke();
         };
@@ -173,18 +200,53 @@ public class PlayerStatus : MonoBehaviour, ISavable
     public void RefreshAllStat()
     {
         int level = (IsMaxLevel ? _playerStatTable.StatTable.Count : Level) - 1;
-        MaxStat.HP = Util.CalcIncreasePer(_playerStatTable.StatTable[level].HP + ExtraFixedStat.HP, ExtraPerStat.HP);
-        MaxStat.MP = Util.CalcIncreasePer(_playerStatTable.StatTable[level].MP + ExtraFixedStat.MP, ExtraPerStat.MP);
-        MaxStat.SP = Util.CalcIncreasePer((int)(_playerStatTable.StatTable[level].SP + ExtraFixedStat.SP), (int)ExtraPerStat.SP);
-        MaxStat.XP = _playerStatTable.StatTable[level].XP;
-        MaxStat.Damage = Util.CalcIncreasePer(_playerStatTable.StatTable[level].Damage + ExtraFixedStat.Damage, ExtraPerStat.Damage);
-        MaxStat.Defense = Util.CalcIncreasePer(_playerStatTable.StatTable[level].Defense + ExtraFixedStat.Defense, ExtraPerStat.Defense);
+        _maxStat.HP = _playerStatTable.StatTable[level].HP + ExtraFixedStat.HP;
+        _maxStat.MP = _playerStatTable.StatTable[level].MP + ExtraFixedStat.MP;
+        _maxStat.SP = _playerStatTable.StatTable[level].SP + ExtraFixedStat.SP;
+        _maxStat.XP = _playerStatTable.StatTable[level].XP;
+        _maxStat.Damage = _playerStatTable.StatTable[level].Damage + ExtraFixedStat.Damage;
+        _maxStat.Defense = _playerStatTable.StatTable[level].Defense + ExtraFixedStat.Defense;
 
         var types = Enum.GetValues(typeof(EquipmentType));
         foreach (EquipmentType equipmentType in types)
         {
-            AddStatByEquipment(equipmentType);
+            var equipment = Player.EquipmentInventory.GetItem(equipmentType);
+            if (equipment == null)
+            {
+                continue;
+            }
+
+            _maxStat.HP += equipment.EquipmentData.HP;
+            _maxStat.MP += equipment.EquipmentData.MP;
+            _maxStat.SP += equipment.EquipmentData.SP;
+            _maxStat.Damage += equipment.EquipmentData.Damage;
+            _maxStat.Defense += equipment.EquipmentData.Defense;
         }
+
+        _maxStat.HP = Util.CalcIncreasePer(_maxStat.HP, ExtraPerStat.HP);
+        _maxStat.MP = Util.CalcIncreasePer(_maxStat.MP, ExtraPerStat.MP);
+        _maxStat.SP = Util.CalcIncreasePer((int)_maxStat.SP, (int)ExtraPerStat.SP);
+        _maxStat.Damage = _currentStat.Damage = Util.CalcIncreasePer(_maxStat.Damage, ExtraPerStat.Damage);
+        _maxStat.Defense = _currentStat.Defense = Util.CalcIncreasePer(_maxStat.Defense, ExtraPerStat.Defense);
+    }
+
+    public void FillAllStat()
+    {
+        FillCurrentAbilityStat();
+        FillCurrentMeleeStat();
+    }
+
+    public void FillCurrentAbilityStat()
+    {
+        _currentStat.HP = _maxStat.HP;
+        _currentStat.MP = _maxStat.MP;
+        _currentStat.SP = _maxStat.SP;
+    }
+
+    public void FillCurrentMeleeStat()
+    {
+        _currentStat.Damage = _maxStat.Damage;
+        _currentStat.Defense = _maxStat.Defense;
     }
 
     public JArray CreateSaveData()
@@ -223,22 +285,6 @@ public class PlayerStatus : MonoBehaviour, ISavable
         _currentStat.XP = statusSaveData.CurrentXP;
     }
 
-    private void AddStatByEquipment(EquipmentType equipmentType)
-    {
-        if (!Player.EquipmentInventory.IsEquipped(equipmentType))
-        {
-            return;
-        }
-
-        var equipment = Player.EquipmentInventory.GetItem(equipmentType);
-
-        MaxStat.HP += equipment.EquipmentData.HP;
-        MaxStat.MP += equipment.EquipmentData.MP;
-        MaxStat.SP += equipment.EquipmentData.SP;
-        MaxStat.Damage += equipment.EquipmentData.Damage;
-        MaxStat.Defense += equipment.EquipmentData.Defense;
-    }
-
     private void LevelUp(int level)
     {
         if (level <= 0)
@@ -253,25 +299,6 @@ public class PlayerStatus : MonoBehaviour, ISavable
         StatChanged?.Invoke();
     }
 
-    private void FillAllStat()
-    {
-        FillCurrentAbilityStat();
-        FillCurrentMeleeStat();
-    }
-
-    private void FillCurrentAbilityStat()
-    {
-        _currentStat.HP = MaxStat.HP;
-        _currentStat.MP = MaxStat.MP;
-        _currentStat.SP = MaxStat.SP;
-    }
-
-    private void FillCurrentMeleeStat()
-    {
-        _currentStat.Damage = MaxStat.Damage;
-        _currentStat.Defense = MaxStat.Defense;
-    }
-
     // SP 딜레이 시간이 넘으면 SP회복
     private void RecoverySP()
     {
@@ -284,9 +311,9 @@ public class PlayerStatus : MonoBehaviour, ISavable
         _recoverySPDeltaTime += Time.deltaTime;
         if (_recoverySPDeltaTime >= _recoverySPDelay)
         {
-            if (SP < MaxStat.SP)
+            if (SP < _maxStat.SP)
             {
-                SP += Mathf.Clamp(_recoverySPAmount * Time.deltaTime, 0f, MaxStat.SP);
+                SP += Mathf.Clamp(_recoverySPAmount * Time.deltaTime, 0f, _maxStat.SP);
             }
         }
     }

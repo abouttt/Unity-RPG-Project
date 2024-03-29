@@ -86,9 +86,9 @@ public class UI_EquipmentInventoryPopup : UI_Popup
         RefreshDefenseText();
     }
 
-    private void RefreshHPText() => GetText((int)Texts.HPText).text = $"체력 : {Player.Status.HP} / {Player.Status.MaxStat.HP}";
-    private void RefreshMPText() => GetText((int)Texts.MPText).text = $"마력 : {Player.Status.MP} / {Player.Status.MaxStat.MP}";
-    private void RefreshSPText() => GetText((int)Texts.SPText).text = $"기력 : {(int)Player.Status.SP} / {Player.Status.MaxStat.SP}";
+    private void RefreshHPText() => GetText((int)Texts.HPText).text = $"체력 : {Player.Status.HP} / {Player.Status.MaxHP}";
+    private void RefreshMPText() => GetText((int)Texts.MPText).text = $"마력 : {Player.Status.MP} / {Player.Status.MaxMP}";
+    private void RefreshSPText() => GetText((int)Texts.SPText).text = $"기력 : {(int)Player.Status.SP} / {Player.Status.MaxSP}";
     private void RefreshDamageText() => GetText((int)Texts.DamageText).text = $"공격력 : {Player.Status.Damage}";
     private void RefreshDefenseText() => GetText((int)Texts.DefenseText).text = $"방어력 : {Player.Status.Defense}";
 

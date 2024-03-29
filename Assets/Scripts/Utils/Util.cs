@@ -84,6 +84,6 @@ public static class Util
 
     public static int CalcIncreasePer(int value, int per)
     {
-        return (int)(value * (1f + per / 100f));
+        return Mathf.CeilToInt((value * (1f + per / 100f)));
     }
 }
