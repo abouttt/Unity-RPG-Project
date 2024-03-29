@@ -2203,13 +2203,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc91b5e2871506e4cbba5e80ccd47aad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExtraStat:
-    HP: 0
-    MP: 0
-    SP: 0
-    XP: 0
-    Damage: 0
-    Defense: 0
   _playerStatTable: {fileID: 11400000, guid: f37a2a5427556ef4e8b9f0e041a54a92, type: 2}
   _recoverySPDelay: 1
   _recoverySPAmount: 80
@@ -2378,6 +2371,9 @@ MonoBehaviour:
       - Key: {fileID: 11400000, guid: d5b66c80038a89b46b602056e0594ff7, type: 2}
         Value: 1
   - Data: {fileID: 11400000, guid: d5b66c80038a89b46b602056e0594ff7, type: 2}
+    ChildrenData:
+      _serializedList: []
+  - Data: {fileID: 11400000, guid: e546a8fcfda77db4cb0078c7a932c824, type: 2}
     ChildrenData:
       _serializedList: []
 --- !u!1 &3356605696964383317
