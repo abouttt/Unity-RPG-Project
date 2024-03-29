@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Skill/Skill Data", fileName = "Skill_")]
@@ -22,6 +23,9 @@ public class SkillData : ScriptableObject, ICooldownable
     [field: SerializeField, TextArea]
     public string Description { get; private set; }
 
+    [field: SerializeField, TextArea]
+    public string StatDescription { get; set; }
+
     [field: SerializeField]
     public int MaxLevel { get; private set; }
 
@@ -41,6 +45,9 @@ public class SkillData : ScriptableObject, ICooldownable
     public int RequiredSP { get; private set; }
 
     [field: SerializeField]
+    public List<PlayerStatData> StatTable { get; private set; }
+
+    [field: SerializeField]
     public string SkillClassName { get; private set; }
 
     [field: SerializeField]
@@ -48,6 +55,8 @@ public class SkillData : ScriptableObject, ICooldownable
 
     [field: SerializeField]
     public Cooldown Cooldown { get; set; }
+
+    private string _statDescription;
 
     public Skill CreateSkill()
     {
@@ -59,17 +68,6 @@ public class SkillData : ScriptableObject, ICooldownable
         }
 
         return skill;
-    }
-
-    private Skill GetInstance()
-    {
-        var type = Type.GetType(SkillClassName);
-        if (type != null)
-        {
-            return (Skill)Activator.CreateInstance(type, new object[] { this });
-        }
-
-        return null;
     }
 
     public bool Equals(SkillData other)
@@ -90,5 +88,16 @@ public class SkillData : ScriptableObject, ICooldownable
         }
 
         return SkillID.Equals(other.SkillID);
+    }
+
+    private Skill GetInstance()
+    {
+        var type = Type.GetType(SkillClassName);
+        if (type != null)
+        {
+            return (Skill)Activator.CreateInstance(type, new object[] { this });
+        }
+
+        return null;
     }
 }

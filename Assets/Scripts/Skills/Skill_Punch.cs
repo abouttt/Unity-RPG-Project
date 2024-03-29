@@ -16,4 +16,9 @@ public class Skill_Punch : Skill
         Debug.Log("Punch");
         return true;
     }
+
+    protected override void RefreshStatDescription()
+    {
+        Data.StatDescription = "Desc";
+    }
 }

@@ -19,9 +19,11 @@ public abstract class Skill : IUsable
     public Skill(SkillData data)
     {
         Data = data;
+        RefreshStatDescription();
     }
 
     public abstract bool Use();
+    protected abstract void RefreshStatDescription();
 
     public void LevelUp()
     {
@@ -38,6 +40,13 @@ public abstract class Skill : IUsable
 
         CurrentLevel++;
         Player.Status.SkillPoint -= Data.RequiredSkillPoint;
+        RefreshStatDescription();
+
+        if (Data.SkillType == SkillType.Passive)
+        {
+            Use();
+        }
+
         SkillChanged?.Invoke();
     }
 
@@ -93,7 +102,7 @@ public abstract class Skill : IUsable
         }
     }
 
-    public int ResetSkill()
+    public virtual int ResetSkill()
     {
         int skillPoint = CurrentLevel;
 

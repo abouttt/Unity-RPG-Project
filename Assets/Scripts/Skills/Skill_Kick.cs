@@ -16,4 +16,9 @@ public class Skill_Kick : Skill
         Debug.Log("Kick");
         return true;
     }
+
+    protected override void RefreshStatDescription()
+    {
+        Data.StatDescription = "Desc";
+    }
 }
