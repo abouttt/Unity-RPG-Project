@@ -107,7 +107,9 @@ public class PlayerStatus : MonoBehaviour, ISavable
     public bool IsMaxLevel => Level >= _playerStatTable.StatTable.Count;
 
     [ReadOnly]
-    public PlayerStatData ExtraStat = new();
+    public PlayerStatData ExtraFixedStat = new();
+    [ReadOnly]
+    public PlayerStatData ExtraPerStat = new();
     public PlayerStatData MaxStat { get; private set; } = new();
 
     [SerializeField]
@@ -171,13 +173,12 @@ public class PlayerStatus : MonoBehaviour, ISavable
     public void RefreshAllStat()
     {
         int level = (IsMaxLevel ? _playerStatTable.StatTable.Count : Level) - 1;
-
-        MaxStat.HP = _playerStatTable.StatTable[level].HP + ExtraStat.HP;
-        MaxStat.MP = _playerStatTable.StatTable[level].MP + ExtraStat.MP;
-        MaxStat.SP = _playerStatTable.StatTable[level].SP + ExtraStat.SP;
+        MaxStat.HP = Util.CalcIncreasePer(_playerStatTable.StatTable[level].HP + ExtraFixedStat.HP, ExtraPerStat.HP);
+        MaxStat.MP = Util.CalcIncreasePer(_playerStatTable.StatTable[level].MP + ExtraFixedStat.MP, ExtraPerStat.MP);
+        MaxStat.SP = Util.CalcIncreasePer((int)(_playerStatTable.StatTable[level].SP + ExtraFixedStat.SP), (int)ExtraPerStat.SP);
         MaxStat.XP = _playerStatTable.StatTable[level].XP;
-        MaxStat.Damage = _playerStatTable.StatTable[level].Damage + ExtraStat.Damage;
-        MaxStat.Defense = _playerStatTable.StatTable[level].Defense + ExtraStat.Defense;
+        MaxStat.Damage = Util.CalcIncreasePer(_playerStatTable.StatTable[level].Damage + ExtraFixedStat.Damage, ExtraPerStat.Damage);
+        MaxStat.Defense = Util.CalcIncreasePer(_playerStatTable.StatTable[level].Defense + ExtraFixedStat.Defense, ExtraPerStat.Defense);
 
         var types = Enum.GetValues(typeof(EquipmentType));
         foreach (EquipmentType equipmentType in types)

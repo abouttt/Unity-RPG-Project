@@ -81,4 +81,9 @@ public static class Util
     {
         return (int)(damage - (defense * 0.5f));
     }
+
+    public static int CalcIncreasePer(int value, int per)
+    {
+        return (int)(value * (1f + per / 100f));
+    }
 }
